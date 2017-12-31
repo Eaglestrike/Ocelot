@@ -1,0 +1,41 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2018-beta-5b"
+}
+
+repositories {
+    jcenter()
+}
+
+// Define my targets (RoboRIO) and artifacts (deployable files)
+// This is added by GradleRIO's backing project EmbeddedTools.
+deploy {
+    targets {
+        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+            team = 114
+        }
+    }
+    artifacts {
+        artifact("frcJava", jaci.openrio.gradle.frc.FRCJavaArtifact) {
+            targets << "roborio"
+        }
+    }
+}
+
+dependencies {
+    compile wpilib()
+}
+
+// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
+// in order to make them all available at runtime. Also adding the manifest so WPILib
+// knows where to look for our Robot Class.
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest("org.team114.robot.Robot")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "4.4.1"
+}
