@@ -1,0 +1,3 @@
+[submodule "dependencies/lib"]
+	path = dependencies/lib
+	url = https://github.com/Eaglestrike/lib.git
