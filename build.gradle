@@ -28,6 +28,8 @@ dependencies {
     compile wpilib()
     compile navx()
     compile ctre()
+
+    compile project("dependencies:lib")
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
