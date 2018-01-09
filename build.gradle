@@ -37,7 +37,7 @@ dependencies {
 // knows where to look for our Robot Class.
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest("org.team114.robot.Robot")
+    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest("org.team114.robot2018.Robot")
 }
 
 task wrapper(type: Wrapper) {
