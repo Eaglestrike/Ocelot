@@ -1,10 +1,10 @@
-package org.team114.robot2018;
+package org.team114.ocelot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import org.team114.lib.subsystem.SubsystemManager;
 
 /**
- * Main robot2018 class, which acts as the root for ownership and control of the robot2018.
+ * Main ocelot class, which acts as the root for ownership and control of the ocelot.
  */
 public class Robot extends IterativeRobot {
 
