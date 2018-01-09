@@ -10,5 +10,12 @@ gradle
 /out/
 .idea
 
+# Eclipse
+/bin
+/.settings
+/.externalToolBuilders
+.classpath
+.project
+
 # OS Specific
 .DS_Store
