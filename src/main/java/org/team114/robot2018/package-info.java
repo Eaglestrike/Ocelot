@@ -1,4 +1,4 @@
 /**
- * Top-level package for all robot2018 code.
+ * Top-level package for all ocelot code.
  */
-package org.team114.robot2018;
+package org.team114.ocelot;
