@@ -14,7 +14,7 @@ public class EventQueue<T extends Event> {
         queue.addLast(event);
     }
 
-    public synchronized T poll() {
+    public synchronized T pull() {
         T event = queue.pollFirst();
         log.log(event);
         return event;
