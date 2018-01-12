@@ -5,6 +5,7 @@ import org.team114.ocelot.logging.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 
 public class EventQueue<T extends Event> {
     public final Deque<T> queue = new ArrayDeque<>();
@@ -18,5 +19,9 @@ public class EventQueue<T extends Event> {
         T event = queue.pollFirst();
         log.log(event);
         return event;
+    }
+
+    public List<T> getLog(){
+        return log.getLog();
     }
 }
