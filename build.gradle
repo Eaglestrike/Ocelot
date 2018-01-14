@@ -35,6 +35,12 @@ dependencies {
     compile ctre()
 
     compile project("dependencies:lib")
+
+    // nullable annotations
+    compile (
+        ['com.google.code.findbugs:jsr305:2.0.1'],
+        ['com.google.code.findbugs:annotations:2.0.1']
+    )
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
