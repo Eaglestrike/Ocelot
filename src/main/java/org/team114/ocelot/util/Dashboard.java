@@ -45,7 +45,7 @@ public enum Dashboard {
     @Nullable
     public Double getNumber() {
         // since we must give `getNumber` a default value, and it
-        // is a primitive, this is the only way to check if it
+        // expects a primitive, this is the only way to check if it
         // should be null
         if (!SmartDashboard.containsKey(key))
             return null;
@@ -55,7 +55,7 @@ public enum Dashboard {
     @Nullable
     public Boolean getBoolean() {
         // since we must give `getBoolean` a default value, and it
-        // is a primitive, this is the only way to check if it
+        // expects a primitive, this is the only way to check if it
         // should be null
         if (!SmartDashboard.containsKey(key))
             return null;
