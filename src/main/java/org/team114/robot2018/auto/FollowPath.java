@@ -1,5 +1,6 @@
 package org.team114.robot2018.auto;
 
+import org.team114.robot2018.Robot;
 import org.team114.robot2018.geometry.Point;
 import org.team114.robot2018.pathgenerator.Path;
 import org.team114.robot2018.pathgenerator.Polynomial;
@@ -7,17 +8,9 @@ import org.team114.robot2018.subsystems.RobotState.Pose;
 import org.team114.robot2018.util.Epsilon;
 
 public class FollowPath {
-
-
-    private static final double wheelbase = 1.5;
-    private static final double maxVelocity = 8;
-    private static final double maxAccel = 2;
-    private static final double maxCentriAccel = 1;
-
-    
     private Path path;
     private double lastCall = -1;
-    private double k = 0.15 * Math.sqrt(wheelbase);
+    private double k = 0.15 * Math.sqrt(Robot.wheelbase_width);
     private double velocity = 0; //assume initial velocity is 0 for tests
     
     //Easy way to change accuracy/speed of gradient descent
@@ -61,11 +54,13 @@ public class FollowPath {
         //take into account the motion profile
         double targetVelocity = getVelocity(timePassed, distance, velocity);
         
+        
+        
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
-            double r = (left + right) * wheelbase / (left - right) + wheelbase;
-            if (targetVelocity * targetVelocity / r > maxCentriAccel) {
-                targetVelocity = Math.sqrt(maxCentriAccel * r);
+            double r = (left + right) * Robot.wheelbase_width / (left - right) + Robot.wheelbase_width;
+            if (targetVelocity * targetVelocity / r > Robot.maxCentriAccel) {
+                targetVelocity = Math.sqrt(Robot.maxCentriAccel * r);
             }
             
         }
@@ -84,9 +79,9 @@ public class FollowPath {
     }
     
     private static double getVelocity(double t, double d, double v) {
-        if (d > -v * v / (2 * maxAccel)) {
-            double end = v + maxAccel * t;
-            return end > maxVelocity ? maxVelocity : end;
+        if (d > -v * v / (2 * Robot.maxAccel)) {
+            double end = v + Robot.maxAccel * t;
+            return end > Robot.maxVelocity ? Robot.maxVelocity : end;
         } else
             return v - v * v / (2 * d) * t;
     }
