@@ -1,4 +1,4 @@
-package org.team114.robot2018;
+package org.team114.ocelot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.Arrays;
 
-import org.team114.robot2018.auto.FollowPath;
-import org.team114.robot2018.pathgenerator.Path;
-import org.team114.robot2018.subsystems.RobotState;
-import org.team114.robot2018.subsystems.SubsystemManager;
+import org.team114.ocelot.auto.FollowPath;
+import org.team114.ocelot.pathgenerator.Path;
+import org.team114.ocelot.subsystems.RobotState;
+import org.team114.ocelot.subsystems.SubsystemManager;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;

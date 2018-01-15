@@ -1,4 +1,4 @@
-package org.team114.robot2018.pathgenerator;
+package org.team114.ocelot.pathgenerator;
 
 public interface ParametricOneVariableSpline {
     /**

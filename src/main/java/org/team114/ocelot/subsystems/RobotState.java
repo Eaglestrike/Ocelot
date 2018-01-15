@@ -1,10 +1,10 @@
-package org.team114.robot2018.subsystems;
+package org.team114.ocelot.subsystems;
 
 import java.io.InterruptedIOException;
 import java.util.Arrays;
 
-import org.team114.robot2018.geometry.Point;
-import org.team114.robot2018.modules.Gyro;
+import org.team114.ocelot.geometry.Point;
+import org.team114.ocelot.modules.Gyro;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -119,7 +119,7 @@ public class RobotState implements Subsystem {
 
         SmartDashboard.putNumber("x EncoderTicks", currentPose.x());
         SmartDashboard.putNumber("y EncoderTicks", currentPose.y());
-        SmartDashboard.putNumber("heading °", Math.toRadians(currentPose.angle()));
+        SmartDashboard.putNumber("heading ï¿½", Math.toRadians(currentPose.angle()));
 
         SmartDashboard.putNumber("L Accel", lAccel);
         SmartDashboard.putNumber("R Accel", rAccel);

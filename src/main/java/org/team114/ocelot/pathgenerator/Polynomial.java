@@ -1,6 +1,6 @@
-package org.team114.robot2018.pathgenerator;
+package org.team114.ocelot.pathgenerator;
 
-import org.team114.robot2018.util.Epsilon;
+import org.team114.ocelot.util.Epsilon;
 
 import java.util.Arrays;
 

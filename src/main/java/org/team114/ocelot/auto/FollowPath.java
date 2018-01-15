@@ -1,11 +1,11 @@
-package org.team114.robot2018.auto;
+package org.team114.ocelot.auto;
 
-import org.team114.robot2018.Robot;
-import org.team114.robot2018.geometry.Point;
-import org.team114.robot2018.pathgenerator.Path;
-import org.team114.robot2018.pathgenerator.Polynomial;
-import org.team114.robot2018.subsystems.RobotState.Pose;
-import org.team114.robot2018.util.Epsilon;
+import org.team114.ocelot.Robot;
+import org.team114.ocelot.geometry.Point;
+import org.team114.ocelot.pathgenerator.Path;
+import org.team114.ocelot.pathgenerator.Polynomial;
+import org.team114.ocelot.subsystems.RobotState.Pose;
+import org.team114.ocelot.util.Epsilon;
 
 public class FollowPath {
     private Path path;

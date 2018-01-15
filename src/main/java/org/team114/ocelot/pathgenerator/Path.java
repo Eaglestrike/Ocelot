@@ -1,9 +1,9 @@
-package org.team114.robot2018.pathgenerator;
+package org.team114.ocelot.pathgenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.team114.robot2018.geometry.Point;
+import org.team114.ocelot.geometry.Point;
 
 /**
  * An abstract piecewise path section.

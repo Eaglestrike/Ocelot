@@ -1,4 +1,4 @@
-package org.team114.robot2018.pathgenerator;
+package org.team114.ocelot.pathgenerator;
 
 /**
  * A polynomial that is also usable as a spline.

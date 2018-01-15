@@ -1,4 +1,4 @@
-package org.team114.robot2018.pathgenerator;
+package org.team114.ocelot.pathgenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.factory.LinearSolverFactory_DDRM;
 import org.ejml.interfaces.linsol.LinearSolverDense;
-import org.team114.robot2018.geometry.Point;
+import org.team114.ocelot.geometry.Point;
 
 /**
  * A class for creating smooth curves in 2D space, called Paths, and natural splines.
