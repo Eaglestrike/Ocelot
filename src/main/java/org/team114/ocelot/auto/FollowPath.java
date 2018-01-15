@@ -52,9 +52,9 @@ public class FollowPath {
         double timePassed = timeStamp - lastCall;
 
         //take into account the motion profile
-        double targetVelocity = getVelocity(timePassed, distance, velocity);
-        
-        
+        double targetVelocity = getVelocity(timePassed, 0, distance, 0, velocity);
+        double targetAcceleration = getAcceleration(timePassed, 0, distance, 0, velocity);
+        double targetPosition = getPosition(timePassed, 0, distance, 0, velocity);
         
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
@@ -77,13 +77,17 @@ public class FollowPath {
         //Alternative to setting it here, either way the setting code is either here or at robot.java
         return new double[] {left, right};
     }
-    
-    private static double getVelocity(double t, double d, double v) {
-        if (d > -v * v / (2 * Robot.maxAccel)) {
-            double end = v + Robot.maxAccel * t;
-            return end > Robot.maxVelocity ? Robot.maxVelocity : end;
-        } else
-            return v - v * v / (2 * d) * t;
+
+    private static double getVelocity(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
+        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getVelocity();
+    }
+
+    private static double getAcceleration(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
+        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getAcceleration();
+    }
+
+    private static double getPosition(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
+        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getPosition();
     }
 
     /* Gradient Descent logic
