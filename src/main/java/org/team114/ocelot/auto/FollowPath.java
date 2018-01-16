@@ -5,7 +5,7 @@ import org.team114.lib.geometry.Point;
 import org.team114.lib.pathgenerator.Path;
 import org.team114.lib.pathgenerator.Polynomial;
 import org.team114.ocelot.subsystems.RobotState.Pose;
-import org.team114.ocelot.util.Epsilon;
+import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.auto.MotionProfile;
 
 public class FollowPath {
@@ -16,7 +16,6 @@ public class FollowPath {
     
     //Easy way to change accuracy/speed of gradient descent
     private static double speed = 20;
-
 
     public FollowPath(Path path, double timeStamp) {
         this.path = path;
@@ -53,7 +52,7 @@ public class FollowPath {
         double timePassed = timeStamp - lastCall;
 
         //take into account the motion profile
-        double targetVelocity = getVelocity(timePassed, 0, distance, velocity, 0);
+        double targetVelocity = new MotionProfile(timePassed, 0, distance, velocity, 0).getVelocity();
         
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
@@ -75,20 +74,6 @@ public class FollowPath {
         
         //Alternative to setting it here, either way the setting code is either here or at robot.java
         return new double[] {left, right};
-    }
-
-    private static double getVelocity(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
-        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getVelocity();
-    }
-
-    @SuppressWarnings("unused")
-    private static double getAcceleration(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
-        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getAcceleration();
-    }
-
-    @SuppressWarnings("unused")
-    private static double getPosition(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
-        return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getPosition();
     }
 
     /* Gradient Descent logic

@@ -10,6 +10,8 @@ import java.util.Arrays;
 import org.team114.ocelot.auto.FollowPath;
 import org.team114.lib.pathgenerator.Path;
 import org.team114.ocelot.subsystems.RobotState;
+import org.team114.ocelot.util.CheesyDriveHelper;
+import org.team114.ocelot.util.DriveSignal;
 import org.team114.lib.subsystem.SubsystemManager;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -23,7 +25,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 public class Robot extends IterativeRobot {
     public static final double wheelbase_width = 0.55245;
     public static final double maxVelocity = 1;
-    public static final double maxAccel = 2;
+    public static final double maxAcceleration = 2;
     public static final double maxCentriAccel = 1;
 
     private TalonSRX leftMasterTalon;
@@ -37,6 +39,8 @@ public class Robot extends IterativeRobot {
     private FollowPath pathFollower;
 
     private SubsystemManager subsystemManager;
+    
+    private final CheesyDriveHelper cheesyDrive = new CheesyDriveHelper();
 
     @Override
     public void robotInit() {
@@ -82,8 +86,8 @@ public class Robot extends IterativeRobot {
     public void testInit() {
         robotState.resetPosition();
 
-        Path p = new Path(new double[][][]{{{0.0, 1.9999999999999978, 0.0, 12.670138888888895, -13.436631944444448, 3.766493055555556}, {0.0, -1.1102230246251565E-16, 0.0, 3.5868055555555554, -3.4574652777777772, 0.870659722222222}},
-{{4.999999999999998, 6.0963541666666705, -4.444444444444445, -3.2447916666666687, 5.437499999999999, -1.8446180555555542}, {0.9999999999999999, 2.283854166666667, -0.7777777777777781, -1.3697916666666663, 0.9374999999999998, -0.07378472222222217}}});
+        Path p = new Path(new double[][][] {{{0.0, 3.552713678800501E-15, 0.0, 35.46180555555554, -39.863715277777764, 11.901909722222218}, {0.0, 3.1086244689504383E-15, 0.0, 11.08680555555555, -9.082465277777775, 1.9956597222222219}},
+{{7.4999999999999964, 7.440104166666671, -13.277777777777775, -4.807291666666667, 19.68749999999999, -9.042534722222214}, {4.000000000000001, 7.908854166666665, -0.7777777777777799, -5.119791666666664, 0.9375000000000008, 1.0512152777777768}}});
 
         pathFollower = new FollowPath(p, Timer.getFPGATimestamp());
     }
@@ -102,19 +106,23 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        double throttle = -controller.getRawAxis(1); //leftY
-        double turn = controller.getRawAxis(4); //right X
-        leftMasterTalon.set(ControlMode.PercentOutput, (throttle + turn) / 2);
-        rightMasterTalon.set(ControlMode.PercentOutput, (throttle - turn) / 2);
-        SmartDashboard.putNumber("L Command", (throttle + turn) / 2);
-        SmartDashboard.putNumber("R Command", (throttle - turn) / 2);
+        double throttle = -controller.getRawAxis(1);
+        double turn = controller.getRawAxis(4);
+        boolean quickturn = controller.getRawButton(5);
+        DriveSignal d = cheesyDrive.cheesyDrive(throttle, turn, quickturn);
+        leftMasterTalon.set(ControlMode.PercentOutput, d.getLeft());
+        rightMasterTalon.set(ControlMode.PercentOutput, -d.getRight());
+        SmartDashboard.putNumber("L Command", d.getLeft());
+        SmartDashboard.putNumber("R Command", d.getRight());
     }
 
 
     @Override
     public void testPeriodic() {
         double[] out = pathFollower.tick(Timer.getFPGATimestamp(), robotState.currentPose);
-        rightMasterTalon.set(ControlMode.Velocity, out[1]);
         leftMasterTalon.set(ControlMode.Velocity, out[0]);
+        rightMasterTalon.set(ControlMode.Velocity, out[1]);
+        SmartDashboard.putNumber("Path Follow Output Left", out[0]);
+        SmartDashboard.putNumber("Path Follow Output Right", out[1]);
     }
 }
