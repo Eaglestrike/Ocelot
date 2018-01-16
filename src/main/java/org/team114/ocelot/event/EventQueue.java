@@ -1,13 +1,14 @@
 package org.team114.ocelot.event;
 
 
+import org.team114.ocelot.logging.Loggable;
 import org.team114.ocelot.logging.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-public class EventQueue<T extends Event> {
+public class EventQueue<T extends Loggable> {
     public final Deque<T> queue = new ArrayDeque<>();
     public final Logger<T> log = new Logger<>();
 
