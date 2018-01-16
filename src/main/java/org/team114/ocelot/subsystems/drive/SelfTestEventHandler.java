@@ -2,7 +2,7 @@ package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-public class SelfTestEventHandler {
+public class SelfTestEventHandler implements EventHandler {
 
     Drive drive;
 
