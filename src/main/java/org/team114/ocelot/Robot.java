@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 
 import org.team114.ocelot.auto.FollowPath;
-import org.team114.ocelot.pathgenerator.Path;
+import org.team114.lib.pathgenerator.Path;
 import org.team114.ocelot.subsystems.RobotState;
-import org.team114.ocelot.subsystems.SubsystemManager;
+import org.team114.lib.subsystem.SubsystemManager;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;

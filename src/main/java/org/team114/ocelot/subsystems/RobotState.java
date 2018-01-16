@@ -3,7 +3,8 @@ package org.team114.ocelot.subsystems;
 import java.io.InterruptedIOException;
 import java.util.Arrays;
 
-import org.team114.ocelot.geometry.Point;
+import org.team114.lib.geometry.Point;
+import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.modules.Gyro;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;

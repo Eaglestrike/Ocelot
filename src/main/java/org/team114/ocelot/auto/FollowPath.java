@@ -1,11 +1,12 @@
 package org.team114.ocelot.auto;
 
 import org.team114.ocelot.Robot;
-import org.team114.ocelot.geometry.Point;
-import org.team114.ocelot.pathgenerator.Path;
-import org.team114.ocelot.pathgenerator.Polynomial;
+import org.team114.lib.geometry.Point;
+import org.team114.lib.pathgenerator.Path;
+import org.team114.lib.pathgenerator.Polynomial;
 import org.team114.ocelot.subsystems.RobotState.Pose;
 import org.team114.ocelot.util.Epsilon;
+import org.team114.ocelot.auto.MotionProfile;
 
 public class FollowPath {
     private Path path;
@@ -52,9 +53,7 @@ public class FollowPath {
         double timePassed = timeStamp - lastCall;
 
         //take into account the motion profile
-        double targetVelocity = getVelocity(timePassed, 0, distance, 0, velocity);
-        double targetAcceleration = getAcceleration(timePassed, 0, distance, 0, velocity);
-        double targetPosition = getPosition(timePassed, 0, distance, 0, velocity);
+        double targetVelocity = getVelocity(timePassed, 0, distance, velocity, 0);
         
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
@@ -82,10 +81,12 @@ public class FollowPath {
         return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getVelocity();
     }
 
+    @SuppressWarnings("unused")
     private static double getAcceleration(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
         return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getAcceleration();
     }
 
+    @SuppressWarnings("unused")
     private static double getPosition(double time, double initialPosition, double finalPosition, double initialVelocity, double finalVelocity) {
         return new MotionProfile(time, initialPosition, finalPosition, initialVelocity, finalVelocity).getPosition();
     }
