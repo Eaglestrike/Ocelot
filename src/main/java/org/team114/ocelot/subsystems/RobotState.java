@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class RobotState implements Subsystem {
 
     public Pose currentPose = null;
-    
+
     private TalonSRX leftMasterTalon, rightMasterTalon;
     private double lastLeftSpeed, lastRightSpeed;
     private double wheelbase_width;
@@ -30,7 +30,7 @@ public class RobotState implements Subsystem {
             this.y = y;
             this.radians = radians;
         }
-        
+
         public Point point() {
             return new Point(x, y);
         }
@@ -38,7 +38,7 @@ public class RobotState implements Subsystem {
         public double angle() {
             return this.radians;
         }
-        
+
         public double x() {
             return this.x;
         }
@@ -53,12 +53,16 @@ public class RobotState implements Subsystem {
         this.leftMasterTalon = leftMasterTalon;
         this.wheelbase_width = wheelbase_width;
         gyro = new Gyro();
-        while(gyro.isCalibrating());
+        while(gyro.isCalibrating()) {
+            ;
+        }
         try {
             gyro.zeroYaw();
-        } catch (InterruptedIOException e) {}
+        } catch (InterruptedIOException e) {
+            e.printStackTrace();
+        }
     }
-    
+
     public int leftEncoder() {
         return leftMasterTalon.getSelectedSensorPosition(0);
     }
@@ -70,7 +74,7 @@ public class RobotState implements Subsystem {
     public void resetPosition() {
         currentPose = new Pose(0, 0, currentPose.radians);
     }
-    
+
     @Override
     public void onStart(double timestamp) {
         currentPose = new Pose(0, 0, 0);
@@ -84,23 +88,42 @@ public class RobotState implements Subsystem {
 
     @Override
     public void onStep(double timestamp) {
+        System.out.println("Step robot state: " + timestamp);
+
         double currYaw = 0;
         try {
             currYaw = Math.toRadians(gyro.getYaw());
-        } catch (InterruptedIOException e) {}
+        } catch (Exception e) {
+            throw e;
+        }
+
         double vecAngle = (currYaw + currentPose.angle())/2;
-        double L = (double)(leftEncoder()) / (4096 * 2 * Math.PI * 0.1016);
-        double R = (double)(rightEncoder()) / (4096 * 2 * Math.PI * 0.1016);
-        
+        double vecDistance;
+        double L = (double)(leftEncoder()) * Math.PI * 0.1016 / 4096 / 2;
+        double R = (double)(rightEncoder()) * Math.PI * 0.1016 / 4096 / 2;
+
         leftMasterTalon.setSelectedSensorPosition(0, 0, 0);
         rightMasterTalon.setSelectedSensorPosition(0, 0, 0);
-        
-        double arcRadius = (wheelbase_width/2) * (L + R) / (L - R);
-        double arcTheta = L / (arcRadius + (wheelbase_width/2));
-        double vecDistance = arcRadius * Math.sin(arcTheta/2);
-
+        if (true) {
+          vecDistance = (L + R) / 2;
+        } else if (L == R) {
+            vecDistance = R;
+        } else if (L == 0) {
+            double arcTheta = R/wheelbase_width;
+            vecDistance = (wheelbase_width/2) * Math.sin(arcTheta/2);
+        } else if (R == 0) {
+            double arcTheta = L/wheelbase_width;
+            vecDistance = (wheelbase_width/2) * Math.sin(arcTheta/2);
+        } else {
+            double arcRadius = (wheelbase_width / 2) * (L + R) / (R - L);
+            double arcTheta = L / (arcRadius + (wheelbase_width / 2));
+            vecDistance = arcRadius * Math.sin(arcTheta / 2);
+        }
         currentPose = new Pose(currentPose.x() + vecDistance * Math.cos(vecAngle), currentPose.y()
                 + vecDistance * Math.sin(vecAngle), currYaw);
+
+
+
 
         //calculate accel
         double currentTime = timestamp;

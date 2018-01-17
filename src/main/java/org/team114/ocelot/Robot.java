@@ -60,7 +60,7 @@ public class Robot extends IterativeRobot {
         leftSlaveTalon.set(ControlMode.Follower, leftMasterTalon.getDeviceID());
         rightSlaveTalon.set(ControlMode.Follower, rightMasterTalon.getDeviceID());
 
-        RobotState robotState = new RobotState(leftMasterTalon, rightMasterTalon, wheelbase_width);
+        robotState = new RobotState(leftMasterTalon, rightMasterTalon, wheelbase_width);
 
         subsystemManager = new SubsystemManager(robotState);
         subsystemManager.start();
@@ -79,6 +79,7 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         leftMasterTalon.set(ControlMode.PercentOutput, 0);
         rightMasterTalon.set(ControlMode.PercentOutput, 0);
+//        robotState.onStart(Timer.getFPGATimestamp());
     }
 
 
@@ -114,6 +115,8 @@ public class Robot extends IterativeRobot {
         rightMasterTalon.set(ControlMode.PercentOutput, -d.getRight());
         SmartDashboard.putNumber("L Command", d.getLeft());
         SmartDashboard.putNumber("R Command", d.getRight());
+
+//        robotState.onStep(Timer.getFPGATimestamp());
     }
 
 

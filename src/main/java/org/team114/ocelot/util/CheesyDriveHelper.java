@@ -1,12 +1,5 @@
 package org.team114.ocelot.util;
 
-/**
- * Helper class to implement “Cheesy Drive”. “Cheesy Drive” simply means that
- * the “turning” stick controls the curvature of the robot’s path rather than
- * its rate of heading change. This helps make the robot more controllable at
- * high speeds. Also handles the robot’s quick turn functionality - “quick turn”
- * overrides constant-curvature turning for turn-in-place maneuvers.
- */
 public class CheesyDriveHelper {
     public static double limit(double v, double limit) {
         return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
