@@ -1,6 +1,7 @@
 package org.team114.ocelot.event;
 
 
+import com.google.gson.JsonObject;
 import org.team114.ocelot.logging.Loggable;
 import org.team114.ocelot.logging.Logger;
 
@@ -24,5 +25,9 @@ public class EventQueue<T extends Loggable> {
 
     public List<T> getLog(){
         return log.getLog();
+    }
+
+    public List<JsonObject> dumpLogsToJson() {
+        return log.dumpLogsToJson();
     }
 }
