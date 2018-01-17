@@ -7,17 +7,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Enum providing type-safe access to SmartDashboard. String keys are abstracted away.
+ * Class providing access to SmartDashboard, and abstracting away string keys keys.
  * Usage:
  * <pre> {@code
- *      new DashboardHandle(<KEY>).put(<VALUE>)g
+ *      new DashboardHandle(<KEY>).put(<VALUE>);
  *  }</pre>
  */
 public class DashboardHandle  {
     public static Set<String> keys = new HashSet<>();
 
     /**
-     * The string key mapping the value to SmartDashboard.
+     * The string used to access SmartDashboard.
      */
     private String key;
 
