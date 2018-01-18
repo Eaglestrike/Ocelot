@@ -2,7 +2,6 @@ package org.team114.ocelot.util;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import javax.annotation.Nullable;
-import javax.print.DocFlavor;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,16 +13,16 @@ import java.util.Set;
  *  }</pre>
  */
 public class DashboardHandle  {
-    public static Set<String> keys = new HashSet<>();
+    private final static Set<String> keys = new HashSet<>();
 
     /**
      * The string used to access SmartDashboard.
      */
     private String key;
 
-    public DashboardHandle(String key) throws IllegalAccessException {
+    public DashboardHandle(String key) throws IllegalAccessError {
         if (!keys.add(key))
-            throw new IllegalAccessException("Handle to key already exists");
+            throw new IllegalAccessError("Handle to key already exists");
         this.key = key;
     }
 
@@ -49,5 +48,45 @@ public class DashboardHandle  {
 
     public void put(boolean[] values) {
         SmartDashboard.putBooleanArray(key, values);
+    }
+
+    @Nullable
+    public String getString() {
+        return SmartDashboard.getString(key, null);
+    }
+
+    @Nullable
+    public Double getNumber() {
+        // since we must give `getNumber` a default value, and it
+        // is a primitive, this is the only way to check if it
+        // should be null
+        if (!SmartDashboard.containsKey(key))
+            return null;
+        return SmartDashboard.getNumber(key, Double.NaN);
+    }
+
+    @Nullable
+    public Boolean getBoolean() {
+        // since we must give `getBoolean` a default value, and it
+        // is a primitive, this is the only way to check if it
+        // should be null
+        if (!SmartDashboard.containsKey(key))
+            return null;
+        return SmartDashboard.getBoolean(key, false);
+    }
+
+    @Nullable
+    public String[] getStrings() {
+        return SmartDashboard.getStringArray(key, null);
+    }
+
+    @Nullable
+    public double[] getNumbers() {
+        return SmartDashboard.getNumberArray(key, (double[])null);
+    }
+
+    @Nullable
+    public boolean[] getBooleans() {
+        return SmartDashboard.getBooleanArray(key, (boolean[])null);
     }
 }
