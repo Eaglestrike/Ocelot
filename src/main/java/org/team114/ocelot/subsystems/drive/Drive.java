@@ -1,7 +1,7 @@
 package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.event.Event;
 import org.team114.ocelot.event.EventHandler;
 import org.team114.ocelot.event.EventQueue;
@@ -19,8 +19,9 @@ public class Drive implements Subsystem {
         this.talons = talons;
         this.queue = queue;
 
-        handlerMap.put(SelfTestEvent.class, new SelfTestEventHandler(this));
-        handlerMap.put(SetNeutralModeEvent.class, new SetNeutralModeEventHandler(this));
+        handlerMap.put(SelfTestEvent.class, new SelfTestEventHandler());
+        handlerMap.put(SetNeutralModeEvent.class, new SetNeutralModeEventHandler());
+        handlerMap.put(SetSideSpeedEvent.class, new SetSideSpeedEventHandler());
     }
 
     public TalonSRX[] getTalons() {
@@ -31,7 +32,7 @@ public class Drive implements Subsystem {
     public void onStop(double timestamp) { }
 
     public void onStep(double timestamp) {
-        Event next = queue.poll();
+        Event next = queue.pull();
         handlerMap.get(next.getClass()).handle(next);
     }
 
@@ -63,7 +64,7 @@ public class Drive implements Subsystem {
         }
     }
 
-    class LeftDriveEventHandler implements EventHandler<SetSideSpeedEvent> {
+    class SetSideSpeedEventHandler implements EventHandler<SetSideSpeedEvent> {
 
         public void handle(SetSideSpeedEvent event) {
             TalonSRX ltalon = Drive.this.getTalons()[0]; // assumes that the first item in the talons list is a left talon
@@ -73,7 +74,4 @@ public class Drive implements Subsystem {
             ltalon.set(event.mode, event.leftspeed);
         }
     }
-
-
-
 }
