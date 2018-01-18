@@ -2,17 +2,30 @@ package org.team114.ocelot.subsystems;
 
 import java.io.InterruptedIOException;
 
-import org.team114.lib.geometry.Point;
 import org.team114.lib.subsystem.Subsystem;
+import org.team114.ocelot.event.Event;
+import org.team114.ocelot.event.PubSub;
 import org.team114.ocelot.modules.Gyro;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team114.ocelot.util.Pose;
 
 public class RobotState implements Subsystem {
+    public static class PoseEvent extends Event {
+        private Pose pose;
 
-    public Pose currentPose = null;
+        private PoseEvent(Pose pose) {
+            this.pose = pose;
+        }
+
+        public Pose getPose() {
+            return pose;
+        }
+    }
+
+    private Pose currentPose;
 
     private TalonSRX leftMasterTalon, rightMasterTalon;
     private double lastLeftSpeed, lastRightSpeed;
@@ -20,42 +33,12 @@ public class RobotState implements Subsystem {
     private double lastTimeStamp;
     private Gyro gyro;
 
-    public class Pose {
-        double x;
-        double y;
-        double radians;
-
-        public Pose(double x, double y, double radians) {
-            this.x = x;
-            this.y = y;
-            this.radians = radians;
-        }
-
-        public Point point() {
-            return new Point(x, y);
-        }
-
-        public double angle() {
-            return this.radians;
-        }
-
-        public double x() {
-            return this.x;
-        }
-
-        public double y() {
-            return this.y;
-        }
-    }
-
     public RobotState(TalonSRX leftMasterTalon, TalonSRX rightMasterTalon, double wheelbase_width) {
         this.rightMasterTalon = rightMasterTalon;
         this.leftMasterTalon = leftMasterTalon;
         this.wheelbase_width = wheelbase_width;
         gyro = new Gyro();
-        while(gyro.isCalibrating()) {
-            ;
-        }
+        gyro.waitUntilCalibrated();
         try {
             gyro.zeroYaw();
         } catch (InterruptedIOException e) {
@@ -72,7 +55,7 @@ public class RobotState implements Subsystem {
     }
 
     public void resetPosition() {
-        currentPose = new Pose(0, 0, currentPose.radians);
+        currentPose = new Pose(0, 0, currentPose.getHeading());
     }
 
     @Override
@@ -83,7 +66,6 @@ public class RobotState implements Subsystem {
 
     @Override
     public void onStop(double timestamp) {
-
     }
 
     @Override
@@ -94,10 +76,11 @@ public class RobotState implements Subsystem {
         try {
             currYaw = Math.toRadians(gyro.getYaw());
         } catch (Exception e) {
-            throw e;
+            e.printStackTrace();
+            return;
         }
 
-        double vecAngle = (currYaw + currentPose.angle())/2;
+        double vecAngle = (currYaw + currentPose.getHeading())/2;
         double vecDistance;
         double L = (double)(leftEncoder()) * Math.PI * 0.1016 / 4096 / 2;
         double R = (double)(rightEncoder()) * Math.PI * 0.1016 / 4096 / 2;
@@ -119,11 +102,8 @@ public class RobotState implements Subsystem {
             double arcTheta = L / (arcRadius + (wheelbase_width / 2));
             vecDistance = arcRadius * Math.sin(arcTheta / 2);
         }
-        currentPose = new Pose(currentPose.x() + vecDistance * Math.cos(vecAngle), currentPose.y()
+        currentPose = new Pose(currentPose.getX() + vecDistance * Math.cos(vecAngle), currentPose.getY()
                 + vecDistance * Math.sin(vecAngle), currYaw);
-
-
-
 
         //calculate accel
         double currentTime = timestamp;
@@ -135,13 +115,15 @@ public class RobotState implements Subsystem {
         SmartDashboard.putNumber("Periodic Hz", 1/(currentTime - lastTimeStamp));
         lastTimeStamp = currentTime;
 
-        SmartDashboard.putNumber("x", currentPose.x());
-        SmartDashboard.putNumber("y", currentPose.y());
-        SmartDashboard.putNumber("heading", Math.toDegrees(currentPose.angle()));
+        SmartDashboard.putNumber("x", currentPose.getX());
+        SmartDashboard.putNumber("y", currentPose.getY());
+        SmartDashboard.putNumber("heading", Math.toDegrees(currentPose.getHeading()));
 
         SmartDashboard.putNumber("L Accel", lAccel);
         SmartDashboard.putNumber("R Accel", rAccel);
         SmartDashboard.putNumber("L Speed", lastLeftSpeed);
         SmartDashboard.putNumber("R Speed", lastRightSpeed);
+
+        PubSub.shared.publish(new PoseEvent(currentPose));
     }
 }

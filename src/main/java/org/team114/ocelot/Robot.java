@@ -7,8 +7,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.Arrays;
 
-import org.team114.ocelot.auto.FollowPath;
+import org.team114.ocelot.auto.PathFollower;
 import org.team114.lib.pathgenerator.Path;
+import org.team114.ocelot.event.PubSub;
 import org.team114.ocelot.subsystems.RobotState;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.ocelot.util.DriveSignal;
@@ -18,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import org.team114.ocelot.util.Pose;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -34,12 +36,13 @@ public class Robot extends IterativeRobot {
     private TalonSRX rightSlaveTalon;
     private Joystick controller;
 
+    private SubsystemManager subsystemManager;
     private RobotState robotState;
 
-    private FollowPath pathFollower;
+    private PathFollower pathFollower;
 
-    private SubsystemManager subsystemManager;
-    
+    private Pose latestPose;
+
     private final CheesyDriveHelper cheesyDrive = new CheesyDriveHelper();
 
     @Override
@@ -64,6 +67,8 @@ public class Robot extends IterativeRobot {
 
         subsystemManager = new SubsystemManager(robotState);
         subsystemManager.start();
+
+        PubSub.shared.subscribe(RobotState.PoseEvent.class, event -> this.latestPose = event.getPose());
     }
 
     @Override
@@ -90,7 +95,7 @@ public class Robot extends IterativeRobot {
         Path p = new Path(new double[][][] {{{0.0, 3.552713678800501E-15, 0.0, 35.46180555555554, -39.863715277777764, 11.901909722222218}, {0.0, 3.1086244689504383E-15, 0.0, 11.08680555555555, -9.082465277777775, 1.9956597222222219}},
 {{7.4999999999999964, 7.440104166666671, -13.277777777777775, -4.807291666666667, 19.68749999999999, -9.042534722222214}, {4.000000000000001, 7.908854166666665, -0.7777777777777799, -5.119791666666664, 0.9375000000000008, 1.0512152777777768}}});
 
-        pathFollower = new FollowPath(p, Timer.getFPGATimestamp());
+        pathFollower = new PathFollower(p, Timer.getFPGATimestamp());
     }
 
     @Override
@@ -122,7 +127,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void testPeriodic() {
-        double[] out = pathFollower.tick(Timer.getFPGATimestamp(), robotState.currentPose);
+        double[] out = pathFollower.tick(Timer.getFPGATimestamp(), latestPose);
         leftMasterTalon.set(ControlMode.Velocity, out[0]);
         rightMasterTalon.set(ControlMode.Velocity, out[1]);
         SmartDashboard.putNumber("Path Follow Output Left", out[0]);

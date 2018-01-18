@@ -4,22 +4,26 @@ import org.team114.ocelot.Robot;
 import org.team114.lib.geometry.Point;
 import org.team114.lib.pathgenerator.Path;
 import org.team114.lib.pathgenerator.Polynomial;
-import org.team114.ocelot.subsystems.RobotState.Pose;
 import org.team114.lib.util.Epsilon;
-import org.team114.ocelot.auto.MotionProfile;
+import org.team114.ocelot.event.PubSub;
+import org.team114.ocelot.subsystems.RobotState;
+import org.team114.ocelot.util.Pose;
 
-public class FollowPath {
+public class PathFollower {
     private Path path;
     private double lastCall = -1;
     private double k = 0.15 * Math.sqrt(Robot.wheelbase_width);
     private double velocity = 0; //assume initial velocity is 0 for tests
-    
+
     //Easy way to change accuracy/speed of gradient descent
     private static double speed = 20;
 
-    public FollowPath(Path path, double timeStamp) {
+    private Pose latestPose = null;
+
+    public PathFollower(Path path, double timeStamp) {
         this.path = path;
         lastCall = timeStamp;
+        PubSub.shared.subscribe(RobotState.PoseEvent.class, event -> this.latestPose = event.getPose());
     }
 
     public void setCorrectionConstant(double k) {
@@ -29,11 +33,11 @@ public class FollowPath {
     /**
      * Returns an array of two elements representing the speed of each track on the robot.
      * @param timeStamp
-     * @param position
+     * @param pose
      * @return {left tread velocity, right tread velocity}
      */
-    public double[] tick(double timeStamp, Pose position) {
-        double t = getClosestPointOnSpline(position.point(), path);
+    public double[] tick(double timeStamp, Pose pose) {
+        double t = getClosestPointOnSpline(pose.getPoint(), path);
 
         double n = t + 0.15;
         if (n > path.length())
@@ -41,26 +45,25 @@ public class FollowPath {
 
         Point nextPoint = path.getPointAtT(n);
 
-        double error = position.angle() - Math.atan2(nextPoint.y() - position.y(), nextPoint.x() - position.x());
+        double error = pose.getHeading() - Math.atan2(nextPoint.y() - pose.getY(), nextPoint.x() - pose.getX());
 
         //Determine base ratio
         double right = Math.exp(-k * error);
         double left = Math.exp(k * error);
 
-        double distance = nextPoint.dist(position.point());
+        double distance = nextPoint.dist(pose.getPoint());
 
         double timePassed = timeStamp - lastCall;
 
         //take into account the motion profile
         double targetVelocity = new MotionProfile(timePassed, 0, distance, velocity, 0).getVelocity();
-        
+
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
             double r = (left + right) * Robot.wheelbase_width / (left - right) + Robot.wheelbase_width;
             if (targetVelocity * targetVelocity / r > Robot.maxCentriAccel) {
                 targetVelocity = Math.sqrt(Robot.maxCentriAccel * r);
             }
-            
         }
 
         double ratio = left / right;
@@ -71,13 +74,13 @@ public class FollowPath {
 
         lastCall = timeStamp;
         velocity = targetVelocity;
-        
+
         //Alternative to setting it here, either way the setting code is either here or at robot.java
         return new double[] {left, right};
     }
 
     /* Gradient Descent logic
-     * 
+     *
      * Like the logic we wrote previously but this version works by recursively finding the best
      * area first in order to reduce error due to peaks. It then does less iterations of gradient
      * descent in order to find a solution within that area.

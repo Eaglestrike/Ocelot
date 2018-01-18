@@ -29,6 +29,10 @@ public class Gyro {
         navx.zeroYaw();
     }
 
+    public void waitUntilCalibrated() {
+        while (isCalibrating());
+    }
+
     public boolean isCalibrating() {
         if (isCalibrating) {
             isCalibrating = navx.isCalibrating();
