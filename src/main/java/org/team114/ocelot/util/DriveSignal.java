@@ -4,37 +4,37 @@ package org.team114.ocelot.util;
  * A drivetrain command consisting of the left, right motor settings and whether the brake mode is enabled.
  */
 public class DriveSignal {
-    protected double mLeftMotor;
-    protected double mRightMotor;
-    protected boolean mBrakeMode;
+    public static DriveSignal NEUTRAL = new DriveSignal(0, 0);
+    public static DriveSignal BRAKE = new DriveSignal(0, 0, true);
+
+    protected double leftMotor;
+    protected double rightMotor;
+    protected boolean brakeMode;
 
     public DriveSignal(double left, double right) {
         this(left, right, false);
     }
 
     public DriveSignal(double left, double right, boolean brakeMode) {
-        mLeftMotor = left;
-        mRightMotor = right;
-        mBrakeMode = brakeMode;
+        leftMotor = left;
+        rightMotor = right;
+        this.brakeMode = brakeMode;
     }
 
-    public static DriveSignal NEUTRAL = new DriveSignal(0, 0);
-    public static DriveSignal BRAKE = new DriveSignal(0, 0, true);
-
     public double getLeft() {
-        return mLeftMotor;
+        return leftMotor;
     }
 
     public double getRight() {
-        return mRightMotor;
+        return rightMotor;
     }
 
     public boolean getBrakeMode() {
-        return mBrakeMode;
+        return brakeMode;
     }
 
     @Override
     public String toString() {
-        return "L: " + mLeftMotor + ", R: " + mRightMotor + (mBrakeMode ? ", BRAKE" : "");
+        return "L: " + leftMotor + ", R: " + rightMotor + (brakeMode ? ", BRAKE" : "");
     }
 }
