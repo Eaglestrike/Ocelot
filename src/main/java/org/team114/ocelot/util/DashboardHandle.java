@@ -20,9 +20,14 @@ public class DashboardHandle  {
      */
     private String key;
 
-    public DashboardHandle(String key) throws IllegalAccessError {
+    /**
+     * Create a dashboard handle that wraps around the given key.
+     * @param key string to be used as key
+     * @throws IllegalArgumentException if the key has already been used
+     */
+    public DashboardHandle(String key) {
         if (!keys.add(key))
-            throw new IllegalAccessError("Handle to key already exists");
+            throw new IllegalArgumentException("Handle to key already exists");
         this.key = key;
     }
 
