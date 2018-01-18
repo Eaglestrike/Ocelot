@@ -4,7 +4,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class Logger<T extends Loggable> {
     private ArrayList<T> list = new ArrayList<>();
@@ -20,6 +21,6 @@ public class Logger<T extends Loggable> {
     public List<JsonObject> dumpLogsToJson() {
         return list.stream()
                 .map(p -> p.toJson())
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 }

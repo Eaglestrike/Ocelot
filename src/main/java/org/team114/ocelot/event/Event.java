@@ -14,7 +14,7 @@ public abstract class Event implements Loggable {
     protected Event(String typeId) {
         this.typeId = "event." + typeId;
         if (typeId == null) {
-            throw new IllegalArgumentException("Type ID must be non-null.");
+            throw new NullPointerException("Type ID must be non-null.");
         }
     }
 
