@@ -62,7 +62,7 @@ public class Drive implements Subsystem {
     };
 
 
-    Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
+    private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
         TalonSRX ltalon = Drive.this.getTalons()[0]; // assumes that the first item in the talons list is a left talon
         TalonSRX rtalon = Drive.this.getTalons()[1]; // assumes that the second item in the talons list is a right talon
 
