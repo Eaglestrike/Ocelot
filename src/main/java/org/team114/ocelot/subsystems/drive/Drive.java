@@ -11,10 +11,9 @@ import java.util.function.Consumer;
 
 public class Drive implements Subsystem {
 
-    private final EventQueue queue;
+    private final EventQueue<DriveEvent> queue;
     private final Map<Class, Consumer> handlerMap = new HashMap<>();
     private final TalonSRX[] talons;
-//    private final Encoder encoder;
 
     public Drive(TalonSRX[] talons, EventQueue queue, int  encoderIdA, int encoderIdB) {
         this.talons = talons;
@@ -25,8 +24,12 @@ public class Drive implements Subsystem {
         handlerMap.put(SetSideSpeedEvent.class, setSideSpeedEventHandler);
     }
 
-    public TalonSRX[] getTalons() {
-        return talons;
+    private TalonSRX getRightTalon() {
+        return talons[1]; //assumes second item is a right talon
+    }
+
+    private TalonSRX getLeftTalon() {
+        return talons[0]; //assumes second item is a right talon
     }
 
     public void onStart(double timestamp) { }
@@ -34,22 +37,21 @@ public class Drive implements Subsystem {
 
     @SuppressWarnings("unchecked")
     public void onStep(double timestamp) {
-        Event next = queue.pull();
+        DriveEvent next = queue.pull();
         handlerMap.get(next.getClass()).accept(next);
     }
 
     //Handlers below
 
     private Consumer<SetNeutralModeEvent> setNeutralModeEventHandler = (event) -> {
-        TalonSRX[] talons = Drive.this.getTalons();
-        for (TalonSRX talon : talons) {
+        for (TalonSRX talon : Drive.this.talons) {
             talon.setNeutralMode(event.neutralMode);
         }
     };
 
 
     private Consumer<SelfTestEvent> selfTestEventHandler = (event) -> {
-        TalonSRX[] talons = Drive.this.getTalons();
+        TalonSRX[] talons = Drive.this.talons;
         for (TalonSRX talon: talons) {
             int id = talon.getDeviceID();
             if (id == 0) {
@@ -63,10 +65,10 @@ public class Drive implements Subsystem {
 
 
     private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
-        TalonSRX ltalon = Drive.this.getTalons()[0]; // assumes that the first item in the talons list is a left talon
-        TalonSRX rtalon = Drive.this.getTalons()[1]; // assumes that the second item in the talons list is a right talon
+        TalonSRX leftTalon = Drive.this.getRightTalon();
+        TalonSRX rightTalon = Drive.this.getLeftTalon();
 
-        rtalon.set(event.mode, event.rightspeed);
-        ltalon.set(event.mode, event.leftspeed);
+        rightTalon.set(event.mode, event.rightspeed);
+        leftTalon.set(event.mode, event.leftspeed);
     };
 }
