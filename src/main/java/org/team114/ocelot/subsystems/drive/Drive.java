@@ -3,15 +3,16 @@ package org.team114.ocelot.subsystems.drive;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.event.Event;
-import org.team114.ocelot.event.EventHandler;
 import org.team114.ocelot.event.EventQueue;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class Drive implements Subsystem {
 
     private final EventQueue queue;
-    private Map<Class, EventHandler> handlerMap;
+    private final Map<Class, Consumer> handlerMap = new HashMap<>();
     private final TalonSRX[] talons;
 //    private final Encoder encoder;
 
@@ -19,9 +20,9 @@ public class Drive implements Subsystem {
         this.talons = talons;
         this.queue = queue;
 
-        handlerMap.put(SelfTestEvent.class, new SelfTestEventHandler());
-        handlerMap.put(SetNeutralModeEvent.class, new SetNeutralModeEventHandler());
-        handlerMap.put(SetSideSpeedEvent.class, new SetSideSpeedEventHandler());
+        handlerMap.put(SelfTestEvent.class, selfTestEventHandler);
+        handlerMap.put(SetNeutralModeEvent.class, setNeutralModeEventHandler);
+        handlerMap.put(SetSideSpeedEvent.class, setSideSpeedEventHandler);
     }
 
     public TalonSRX[] getTalons() {
@@ -31,47 +32,41 @@ public class Drive implements Subsystem {
     public void onStart(double timestamp) { }
     public void onStop(double timestamp) { }
 
+    @SuppressWarnings("unchecked")
     public void onStep(double timestamp) {
         Event next = queue.pull();
-        handlerMap.get(next.getClass()).handle(next);
+        handlerMap.get(next.getClass()).accept(next);
     }
 
     //Handlers below
 
-    class SetNeutralModeEventHandler implements EventHandler<SetNeutralModeEvent> {
+    private Consumer<SetNeutralModeEvent> setNeutralModeEventHandler = (event) -> {
+        TalonSRX[] talons = Drive.this.getTalons();
+        for (TalonSRX talon : talons) {
+            talon.setNeutralMode(event.neutralMode);
+        }
+    };
 
-        public void handle(SetNeutralModeEvent event) {
-            TalonSRX[] talons = Drive.this.getTalons();
-            for (TalonSRX talon: talons) {
-                talon.setNeutralMode(event.neutralMode);
+
+    private Consumer<SelfTestEvent> selfTestEventHandler = (event) -> {
+        TalonSRX[] talons = Drive.this.getTalons();
+        for (TalonSRX talon: talons) {
+            int id = talon.getDeviceID();
+            if (id == 0) {
+                System.out.println("Talon " + id + " has not been configured.");
+            }
+            else if (id > 62 || id < 1) {
+                System.out.println("Talon " + id + " has an ID that is outside of ID bounds.");
             }
         }
-    }
+    };
 
-    class SelfTestEventHandler implements EventHandler<SelfTestEvent> {
 
-        public void handle(SelfTestEvent event) {
-            TalonSRX[] talons = Drive.this.getTalons();
-            for (TalonSRX talon: talons) {
-                int id = talon.getDeviceID();
-                if (id == 0) {
-                    System.out.println("Talon " + id + " has not been configured.");
-                }
-                else if (id > 62 || id < 1) {
-                    System.out.println("Talon " + id + " has an ID that is outside of ID bounds.");
-                }
-            }
-        }
-    }
+    Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
+        TalonSRX ltalon = Drive.this.getTalons()[0]; // assumes that the first item in the talons list is a left talon
+        TalonSRX rtalon = Drive.this.getTalons()[1]; // assumes that the second item in the talons list is a right talon
 
-    class SetSideSpeedEventHandler implements EventHandler<SetSideSpeedEvent> {
-
-        public void handle(SetSideSpeedEvent event) {
-            TalonSRX ltalon = Drive.this.getTalons()[0]; // assumes that the first item in the talons list is a left talon
-            TalonSRX rtalon = Drive.this.getTalons()[1]; // assumes that the second item in the talons list is a right talon
-
-            rtalon.set(event.mode, event.rightspeed);
-            ltalon.set(event.mode, event.leftspeed);
-        }
-    }
+        rtalon.set(event.mode, event.rightspeed);
+        ltalon.set(event.mode, event.leftspeed);
+    };
 }
