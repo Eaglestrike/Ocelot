@@ -10,15 +10,15 @@ import org.team114.ocelot.subsystems.RobotState;
 import org.team114.ocelot.util.Pose;
 
 public class PathFollower {
-    private Path path;
+    //Easy way to change accuracy/speed of gradient descent
+    private static double speed = 20;
+
     private double lastCall = -1;
     private double k = 0.15 * Math.sqrt(Robot.wheelbase_width);
     private double velocity = 0; //assume initial velocity is 0 for tests
 
-    //Easy way to change accuracy/speed of gradient descent
-    private static double speed = 20;
-
-    private Pose latestPose = null;
+    private Path path;
+    private Pose latestPose;
 
     public PathFollower(Path path, double timeStamp) {
         this.path = path;
