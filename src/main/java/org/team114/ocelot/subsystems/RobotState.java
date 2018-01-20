@@ -31,13 +31,12 @@ public class RobotState implements Subsystem {
     private double lastLeftSpeed, lastRightSpeed;
     private double wheelbase_width;
     private double lastTimeStamp;
-    private Gyro gyro;
+    private Gyro gyro = Gyro.shared;
 
     public RobotState(TalonSRX leftMasterTalon, TalonSRX rightMasterTalon, double wheelbase_width) {
         this.rightMasterTalon = rightMasterTalon;
         this.leftMasterTalon = leftMasterTalon;
         this.wheelbase_width = wheelbase_width;
-        gyro = new Gyro();
         gyro.waitUntilCalibrated();
         try {
             gyro.zeroYaw();

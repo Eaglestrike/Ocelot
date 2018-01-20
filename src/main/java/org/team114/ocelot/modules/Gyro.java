@@ -6,10 +6,12 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import java.io.InterruptedIOException;
 
 public class Gyro {
-    AHRS navx;
-    boolean isCalibrating;
+    public static Gyro shared = new Gyro();
 
-    public Gyro() {
+    private AHRS navx;
+    private boolean isCalibrating;
+
+    private Gyro() {
         navx = new AHRS(Port.kMXP);
         navx.zeroYaw();
         isCalibrating = true;
