@@ -33,6 +33,8 @@ dependencies {
     compile wpilib()
     compile navx()
     compile ctre()
+    
+    compile group: 'org.ejml', name: 'ejml-all', version: '0.32'
 
     compile project("dependencies:lib")
 

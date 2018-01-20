@@ -16,6 +16,8 @@ gradle
 /.externalToolBuilders
 .classpath
 .project
+/dependencies/.settings
+/Ocelot
 
 # OS Specific
 .DS_Store

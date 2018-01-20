@@ -1,6 +1,5 @@
 package org.team114.ocelot.event;
 
-
 import org.team114.ocelot.logging.Logger;
 
 import java.util.ArrayDeque;
