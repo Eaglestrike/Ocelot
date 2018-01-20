@@ -1,9 +1,10 @@
 package org.team114.ocelot.subsystems.drive;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.subsystem.Subsystem;
-import org.team114.ocelot.event.Event;
 import org.team114.ocelot.event.EventQueue;
+import org.team114.ocelot.modules.DriveTalons;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +14,9 @@ public class Drive implements Subsystem {
 
     private final EventQueue<DriveEvent> queue;
     private final Map<Class, Consumer> handlerMap = new HashMap<>();
-    private final TalonSRX[] talons;
+    private final DriveTalons talons;
 
-    public Drive(TalonSRX[] talons, EventQueue queue, int  encoderIdA, int encoderIdB) {
+    public Drive(DriveTalons talons, EventQueue queue) {
         this.talons = talons;
         this.queue = queue;
 
@@ -24,16 +25,17 @@ public class Drive implements Subsystem {
         handlerMap.put(SetSideSpeedEvent.class, setSideSpeedEventHandler);
     }
 
-    private TalonSRX getRightTalon() {
-        return talons[1]; //assumes second item is a right talon
+    private void reset() {
+        setSideSpeedEventHandler.accept(new SetSideSpeedEvent(ControlMode.PercentOutput, 0, 0));
     }
 
-    private TalonSRX getLeftTalon() {
-        return talons[0]; //assumes second item is a right talon
+    public void onStart(double timestamp) {
+        reset();
     }
 
-    public void onStart(double timestamp) { }
-    public void onStop(double timestamp) { }
+    public void onStop(double timestamp) {
+        reset();
+    }
 
     @SuppressWarnings("unchecked")
     public void onStep(double timestamp) {
@@ -41,34 +43,28 @@ public class Drive implements Subsystem {
         handlerMap.get(next.getClass()).accept(next);
     }
 
-    //Handlers below
+    // MARK: Handlers
 
     private Consumer<SetNeutralModeEvent> setNeutralModeEventHandler = (event) -> {
-        for (TalonSRX talon : Drive.this.talons) {
+        for (TalonSRX talon : Drive.this.talons.getMasters()) {
             talon.setNeutralMode(event.neutralMode);
         }
     };
 
-
     private Consumer<SelfTestEvent> selfTestEventHandler = (event) -> {
-        TalonSRX[] talons = Drive.this.talons;
-        for (TalonSRX talon: talons) {
+        for (TalonSRX talon : Drive.this.talons.getMasters()) {
+            // TODO: Publish an error event instead
             int id = talon.getDeviceID();
             if (id == 0) {
                 System.out.println("Talon " + id + " has not been configured.");
-            }
-            else if (id > 62 || id < 1) {
+            } else if (id > 62 || id < 1) {
                 System.out.println("Talon " + id + " has an ID that is outside of ID bounds.");
             }
         }
     };
 
-
     private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
-        TalonSRX leftTalon = Drive.this.getRightTalon();
-        TalonSRX rightTalon = Drive.this.getLeftTalon();
-
-        rightTalon.set(event.mode, event.rightspeed);
-        leftTalon.set(event.mode, event.leftspeed);
+        Drive.this.talons.getLeft().set(event.mode, event.rightspeed);
+        Drive.this.talons.getRight().set(event.mode, event.leftspeed);
     };
 }
