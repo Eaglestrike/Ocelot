@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.util.Pose;
 
 public class RobotState implements Subsystem {
-    public static class PoseEvent extends AbstractEvent {
+    public final static class PoseEvent extends AbstractEvent {
         private Pose pose;
 
         private PoseEvent(Pose pose) {

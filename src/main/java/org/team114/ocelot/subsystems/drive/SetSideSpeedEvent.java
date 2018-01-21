@@ -2,7 +2,7 @@ package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
-public class SetSideSpeedEvent extends DriveEvent {
+public final class SetSideSpeedEvent extends DriveEvent {
 
     public final ControlMode mode;
     public final double leftspeed;
