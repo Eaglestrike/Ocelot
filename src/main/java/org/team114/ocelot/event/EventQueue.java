@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-public class EventQueue<T extends Loggable> {
+public class EventQueue<T extends Event> {
     public final Deque<T> queue = new ArrayDeque<>();
     public final Logger<T> log = new Logger<>();
 

@@ -34,10 +34,6 @@ public abstract class Event implements Loggable {
     }
 
     public JsonObject toJson() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", this.getId().toString());
-        jsonObject.addProperty("type", getTypeId());
-        jsonObject.addProperty("timestamp", this.getTimestamp().toString());
-        return jsonObject;
+       return Loggable.super.toJson();
     }
 }
