@@ -13,9 +13,10 @@ import java.util.function.Consumer;
 public class Drive implements Subsystem {
 
     private final EventQueue<DriveEvent> queue;
-    private final Map<Class, Consumer> handlerMap = new HashMap<>();
+    private final Map<Class<? extends DriveEvent>, Consumer> handlerMap = new HashMap<>();
     private final DriveTalons talons;
 
+    @SuppressWarnings("unchecked")
     public Drive(DriveTalons talons, EventQueue queue) {
         this.talons = talons;
         this.queue = queue;
