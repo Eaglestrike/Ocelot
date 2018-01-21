@@ -16,8 +16,7 @@ public class Drive implements Subsystem {
     private final Map<Class<? extends DriveEvent>, Consumer> handlerMap = new HashMap<>();
     private final DriveTalons talons;
 
-    @SuppressWarnings("unchecked")
-    public Drive(DriveTalons talons, EventQueue queue) {
+    public Drive(DriveTalons talons, EventQueue<DriveEvent> queue) {
         this.talons = talons;
         this.queue = queue;
 
