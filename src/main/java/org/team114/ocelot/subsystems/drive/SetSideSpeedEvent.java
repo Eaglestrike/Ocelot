@@ -1,7 +1,6 @@
 package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import org.team114.ocelot.event.Event;
 
 public class SetSideSpeedEvent extends DriveEvent {
 
@@ -10,6 +9,7 @@ public class SetSideSpeedEvent extends DriveEvent {
     public final double rightspeed;
 
     public SetSideSpeedEvent(ControlMode mode, double leftspeed, double rightspeed) {
+        super(SetSideSpeedEvent.class.getCanonicalName());
         this.mode = mode;
         this.leftspeed = leftspeed;
         this.rightspeed = rightspeed;

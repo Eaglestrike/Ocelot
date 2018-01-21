@@ -1,7 +1,9 @@
 package org.team114.ocelot.subsystems.drive;
 
-import org.team114.ocelot.event.Event;
+import org.team114.ocelot.event.AbstractEvent;
 
-public class DriveEvent extends Event {
-
+public abstract class DriveEvent extends AbstractEvent {
+    public DriveEvent(String typeId) {
+        super(typeId);
+    }
 }
