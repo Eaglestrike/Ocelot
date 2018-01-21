@@ -33,10 +33,22 @@ dependencies {
     compile wpilib()
     compile navx()
     compile ctre()
+    
+    compile group: 'org.ejml', name: 'ejml-all', version: '0.32'
 
     compile 'com.google.code.gson:gson:2.8.2'
 
     compile project("dependencies:lib")
+
+    // nullable annotations
+    compile (
+        ['com.google.code.findbugs:jsr305:2.0.1'],
+        ['com.google.code.findbugs:annotations:2.0.1']
+    )
+
+    // testing and mocking
+    testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:2.+"
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

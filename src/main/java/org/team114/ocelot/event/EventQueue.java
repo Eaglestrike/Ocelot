@@ -1,8 +1,6 @@
 package org.team114.ocelot.event;
 
-
 import com.google.gson.JsonObject;
-import org.team114.ocelot.logging.Loggable;
 import org.team114.ocelot.logging.Logger;
 
 import java.util.ArrayDeque;
