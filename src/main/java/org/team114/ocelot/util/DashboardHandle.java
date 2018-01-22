@@ -27,7 +27,7 @@ public class DashboardHandle  {
      */
     public DashboardHandle(String key) {
         if (!keys.add(key))
-            throw new IllegalArgumentException("Handle to key already exists");
+            throw new IllegalArgumentException("Handle to key already exists: " + key);
         this.key = key;
     }
 
