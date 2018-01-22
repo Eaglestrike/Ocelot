@@ -4,11 +4,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public final class SetSideSpeedEvent extends DriveEvent {
 
-    public final double leftspeed;
-    public final double rightspeed;
+    private final double leftspeed;
+    private final double rightspeed;
 
     public SetSideSpeedEvent(double leftspeed, double rightspeed) {
         this.leftspeed = leftspeed;
         this.rightspeed = rightspeed;
+    }
+
+    public double getLeftspeed() {
+        return leftspeed;
+    }
+
+    public double getRightspeed() {
+        return rightspeed;
     }
 }

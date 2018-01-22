@@ -7,6 +7,7 @@ public class Pose {
     private double y;
     /**
      * The direction it is facing, in radians.
+     * TODO: @dan - what does heading=0 mean?
      */
     private double heading;
 

@@ -75,9 +75,9 @@ public class Drive implements Subsystem {
 
     private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
         DriveSideSettings left = this.controlModeMap.get(Side.LEFT);
-        left.setSpeed(event.leftspeed);
+        left.setSpeed(event.getLeftspeed());
         DriveSideSettings right = this.controlModeMap.get(Side.RIGHT);
-        right.setSpeed(event.rightspeed);
+        right.setSpeed(event.getRightspeed());
     };
 
     private Consumer<SetControlModeEvent> setControlModeEventHandler = (event) -> {
