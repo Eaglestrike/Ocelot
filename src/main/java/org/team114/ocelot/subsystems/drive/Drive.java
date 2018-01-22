@@ -42,6 +42,8 @@ public class Drive implements Subsystem {
 
     @SuppressWarnings("unchecked")
     public void onStep(double timestamp) {
+        // TODO: @aris @rebecca : need to pull more than 1 event. Otherwise there will be a lag
+        // maybe pull for a certain amount of time. or until queue empty?
         DriveEvent next = queue.pull();
         handlerMap.get(next.getClass()).accept(next);
     }
