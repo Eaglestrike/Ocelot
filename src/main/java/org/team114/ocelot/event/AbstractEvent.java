@@ -8,14 +8,7 @@ import java.util.UUID;
 public abstract class AbstractEvent implements Event {
     private final UUID id = UUID.randomUUID();
     private final Instant timestamp = Instant.now();
-    private final String typeId;
-
-    protected AbstractEvent(String typeId) {
-        this.typeId = typeId;
-        if (typeId == null) {
-            throw new NullPointerException("Type ID must be non-null.");
-        }
-    }
+    private final String typeId = this.getClass().getCanonicalName();
 
     @Override
     public final UUID getId() {

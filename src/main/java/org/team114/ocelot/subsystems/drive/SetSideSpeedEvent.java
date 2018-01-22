@@ -9,7 +9,6 @@ public final class SetSideSpeedEvent extends DriveEvent {
     public final double rightspeed;
 
     public SetSideSpeedEvent(ControlMode mode, double leftspeed, double rightspeed) {
-        super(SetSideSpeedEvent.class.getCanonicalName());
         this.mode = mode;
         this.leftspeed = leftspeed;
         this.rightspeed = rightspeed;

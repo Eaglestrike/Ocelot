@@ -17,7 +17,6 @@ public class RobotState implements Subsystem {
         private Pose pose;
 
         private PoseEvent(Pose pose) {
-            super(PoseEvent.class.getCanonicalName());
             this.pose = pose;
         }
 

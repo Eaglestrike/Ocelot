@@ -3,12 +3,12 @@ package org.team114.ocelot.event;
 import com.google.gson.JsonObject;
 import org.team114.ocelot.logging.Logger;
 
-import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class EventQueue<T extends Event> {
-    public final Deque<T> queue = new ArrayDeque<>();
+    public final Deque<T> queue = new ConcurrentLinkedDeque<>();
     public final Logger<T> log = new Logger<>();
 
     public synchronized void push(T event) {

@@ -7,7 +7,6 @@ public final class SetNeutralModeEvent extends DriveEvent {
     public final NeutralMode neutralMode;
 
     public SetNeutralModeEvent(NeutralMode mode) {
-        super(SetNeutralModeEvent.class.getCanonicalName());
         this.neutralMode = mode;
     }
 }
