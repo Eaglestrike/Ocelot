@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Used in events to indicate if the vent should apply to the left, right or both.
+ * Used in events to indicate if the event should apply to the left, right or both.
  */
 public enum Side implements Iterable<Side> {
     LEFT,
@@ -22,7 +22,12 @@ public enum Side implements Iterable<Side> {
     Side(List<Side> sides) {
         this.sides = sides;
     }
-    
+
+    /**
+     * Allows the user to target the Side or Sides as represented by this enum instance.
+     * In particular note that an event with BOTH can easily target both drive sides.
+     * @return
+     */
     @Override
     public Iterator<Side> iterator() {
         return this.sides.iterator();
