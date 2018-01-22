@@ -42,10 +42,6 @@ public class DriveSideSettings {
         refresh();
     }
 
-    public void refresh() {
-        this.masterTalonSRX.set(this.getControlMode(), this.getSpeed());
-    }
-
     public TalonSRX getMasterTalonSRX() {
         return masterTalonSRX;
     }
@@ -61,5 +57,9 @@ public class DriveSideSettings {
 
     public List<? extends TalonSRX> getTalonSRXs() {
         return Arrays.asList(this.masterTalonSRX, this.slaveTalonSRX);
+    }
+
+    public void refresh() {
+        this.masterTalonSRX.set(this.getControlMode(), this.getSpeed());
     }
 }
