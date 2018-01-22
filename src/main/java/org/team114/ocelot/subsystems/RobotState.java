@@ -3,7 +3,7 @@ package org.team114.ocelot.subsystems;
 import java.io.InterruptedIOException;
 
 import org.team114.lib.subsystem.Subsystem;
-import org.team114.ocelot.event.Event;
+import org.team114.ocelot.event.AbstractEvent;
 import org.team114.ocelot.event.PubSub;
 import org.team114.ocelot.modules.Gyro;
 
@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.util.Pose;
 
 public class RobotState implements Subsystem {
-    public static class PoseEvent extends Event {
+    public final static class PoseEvent extends AbstractEvent {
         private Pose pose;
 
         private PoseEvent(Pose pose) {

@@ -36,6 +36,8 @@ dependencies {
     
     compile group: 'org.ejml', name: 'ejml-all', version: '0.32'
 
+    compile 'com.google.code.gson:gson:2.8.2'
+
     // nullable annotations
     compile (
         ['com.google.code.findbugs:jsr305:2.0.1'],

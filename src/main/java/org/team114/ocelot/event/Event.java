@@ -1,20 +1,10 @@
 package org.team114.ocelot.event;
 
+import com.google.gson.JsonObject;
 import org.team114.ocelot.logging.Loggable;
 
-import java.util.UUID;
-
-public abstract class Event implements Loggable {
-    public UUID id = UUID.randomUUID();
-    public double timestamp = System.currentTimeMillis();
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-    
-    @Override
-    public double getTimestamp() {
-        return timestamp;
+public interface Event extends Loggable {
+    default JsonObject toJson() {
+        return Loggable.super.toJson();
     }
 }
