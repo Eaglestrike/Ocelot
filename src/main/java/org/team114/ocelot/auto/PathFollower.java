@@ -1,11 +1,11 @@
 package org.team114.ocelot.auto;
 
-import org.team114.ocelot.Robot;
 import org.team114.lib.geometry.Point;
 import org.team114.lib.pathgenerator.Path;
 import org.team114.lib.pathgenerator.Polynomial;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.event.PubSub;
+import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.subsystems.RobotState;
 import org.team114.ocelot.util.Pose;
 
@@ -14,7 +14,7 @@ public class PathFollower {
     private static double speed = 20;
 
     private double lastCall = -1;
-    private double k = 0.15 * Math.sqrt(Robot.wheelbase_width);
+    private double k = 0.15 * Math.sqrt(RobotSettings.WHEELBASE_WIDTH);
     private double velocity = 0; //assume initial velocity is 0 for tests
 
     private Path path;
@@ -60,9 +60,9 @@ public class PathFollower {
 
         //Take into account turn speed
         if(!Epsilon.epsilonEquals(right, left)) {
-            double r = (left + right) * Robot.wheelbase_width / (left - right) + Robot.wheelbase_width;
-            if (targetVelocity * targetVelocity / r > Robot.maxCentriAccel) {
-                targetVelocity = Math.sqrt(Robot.maxCentriAccel * r);
+            double r = (left + right) * RobotSettings.WHEELBASE_WIDTH / (left - right) + RobotSettings.WHEELBASE_WIDTH;
+            if (targetVelocity * targetVelocity / r > RobotSettings.MAX_CENTRI_ACCEL) {
+                targetVelocity = Math.sqrt(RobotSettings.MAX_CENTRI_ACCEL * r);
             }
         }
 

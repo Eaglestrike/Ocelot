@@ -7,10 +7,6 @@ import org.team114.lib.subsystem.SubsystemManager;
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
  */
 public class Robot extends IterativeRobot {
-    public static final double wheelbase_width = 0.55245;
-    public static final double maxVelocity = 1;
-    public static final double maxAcceleration = 2;
-    public static final double maxCentriAccel = 1;
 
     SubsystemManager subsystemManager = new SubsystemManager();
 
