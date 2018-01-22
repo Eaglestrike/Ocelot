@@ -23,6 +23,7 @@ public class Drive implements Subsystem {
         handlerMap.put(SelfTestEvent.class, selfTestEventHandler);
         handlerMap.put(SetNeutralModeEvent.class, setNeutralModeEventHandler);
         handlerMap.put(SetSideSpeedEvent.class, setSideSpeedEventHandler);
+        handlerMap.put(SetControlModeEvent.class, setControlModeEventHandler);
         controlModeMap.put(Side.LEFT, leftSide);
         controlModeMap.put(Side.RIGHT, rightSide);
     }
@@ -44,6 +45,8 @@ public class Drive implements Subsystem {
     public void onStep(double timestamp) {
         // TODO: @aris @rebecca : need to pull more than 1 event. Otherwise there will be a lag
         // maybe pull for a certain amount of time. or until queue empty?
+        // concerns: the drive monopolizing the thread if the queue is flooded.
+        // queue may have to filter redundant events.
         DriveEvent next = queue.pull();
         handlerMap.get(next.getClass()).accept(next);
     }
