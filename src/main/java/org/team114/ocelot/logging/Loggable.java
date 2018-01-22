@@ -6,7 +6,7 @@ import java.util.UUID;
 public interface Loggable {
 
     public UUID getId();
-    public double getTimestamp();
+    public long getTimestamp();
 
 
 }
