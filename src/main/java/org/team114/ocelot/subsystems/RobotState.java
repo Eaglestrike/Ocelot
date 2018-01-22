@@ -37,12 +37,6 @@ public class RobotState implements Subsystem {
         this.rightMasterTalon = rightMasterTalon;
         this.leftMasterTalon = leftMasterTalon;
         this.wheelbase_width = wheelbase_width;
-        gyro.waitUntilCalibrated();
-        try {
-            gyro.zeroYaw();
-        } catch (InterruptedIOException e) {
-            e.printStackTrace();
-        }
     }
 
     public int leftEncoder() {
@@ -59,6 +53,13 @@ public class RobotState implements Subsystem {
 
     @Override
     public void onStart(double timestamp) {
+        // nothing that throws an exception can be in a constructor
+        gyro.waitUntilCalibrated();
+        try {
+            gyro.zeroYaw();
+        } catch (InterruptedIOException e) {
+            e.printStackTrace();
+        }
         currentPose = new Pose(0, 0, 0);
         lastTimeStamp = timestamp;
     }
