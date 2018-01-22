@@ -38,8 +38,6 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.8.2'
 
-    compile project("dependencies:lib")
-
     // nullable annotations
     compile (
         ['com.google.code.findbugs:jsr305:2.0.1'],
