@@ -5,7 +5,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import java.util.Arrays;
+import java.util.List;
 
+/**
+ * This class encapsulates one side of the drive motors.
+ * This class is responsible for ensuring that the master and slave talons are linked.
+ * Coupled with {@link Side}
+ */
 public class DriveSideSettings {
     private final TalonSRX masterTalonSRX;
     private final TalonSRX slaveTalonSRX;
@@ -53,7 +59,7 @@ public class DriveSideSettings {
         this.masterTalonSRX.setNeutralMode(this.neutralMode);
     }
 
-    public Iterable<? extends TalonSRX> getTalonSRXs() {
+    public List<? extends TalonSRX> getTalonSRXs() {
         return Arrays.asList(this.masterTalonSRX, this.slaveTalonSRX);
     }
 }
