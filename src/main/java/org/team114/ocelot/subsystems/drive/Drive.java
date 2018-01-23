@@ -14,10 +14,10 @@ public class Drive implements Subsystem {
 
     private final EventQueue<DriveEvent> queue;
     private final Map<Class<? extends DriveEvent>, Consumer> handlerMap = new HashMap<>();
-    private final Map<Side, DriveSideSettings> controlModeMap =
-            new EnumMap<Side, DriveSideSettings>(Side.class);
+    private final Map<Side, RobotSide> controlModeMap =
+            new EnumMap<Side, RobotSide>(Side.class);
 
-    public Drive(DriveSideSettings leftSide, DriveSideSettings rightSide, EventQueue<DriveEvent> queue) {
+    public Drive(RobotSide leftSide, RobotSide rightSide, EventQueue<DriveEvent> queue) {
         this.queue = queue;
 
         handlerMap.put(SelfTestEvent.class, selfTestEventHandler);
@@ -54,15 +54,15 @@ public class Drive implements Subsystem {
     // MARK: Handlers
 
     private Consumer<SetNeutralModeEvent> setNeutralModeEventHandler = (event) -> {
-        for (DriveSideSettings driveSideSettings : Drive.this.controlModeMap.values()) {
-            driveSideSettings.setNeutralMode(event.neutralMode);
+        for (RobotSide robotSide : Drive.this.controlModeMap.values()) {
+            robotSide.setNeutralMode(event.getNeutralMode());
         }
     };
 
     private Consumer<SelfTestEvent> selfTestEventHandler = (event) -> {
-        for (DriveSideSettings driveSideSettings : Drive.this.controlModeMap.values()) {
+        for (RobotSide robotSide : Drive.this.controlModeMap.values()) {
             // TODO: Publish an error event instead
-            for (TalonSRX talon : driveSideSettings.getTalonSRXs()) {
+            for (TalonSRX talon : robotSide.getTalonSRXs()) {
                 int id = talon.getDeviceID();
                 if (id == 0) {
                     System.out.println("Talon " + id + " has not been configured.");
@@ -74,15 +74,15 @@ public class Drive implements Subsystem {
     };
 
     private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
-        DriveSideSettings left = this.controlModeMap.get(Side.LEFT);
-        left.setSpeed(event.getLeftspeed());
-        DriveSideSettings right = this.controlModeMap.get(Side.RIGHT);
-        right.setSpeed(event.getRightspeed());
+        RobotSide left = this.controlModeMap.get(Side.LEFT);
+        left.setLastSpeedSet(event.getLeftspeed());
+        RobotSide right = this.controlModeMap.get(Side.RIGHT);
+        right.setLastSpeedSet(event.getRightspeed());
     };
 
     private Consumer<SetControlModeEvent> setControlModeEventHandler = (event) -> {
-        for (Side side : event.side) {
-            this.controlModeMap.get(side).setControlMode(event.mode);
+        for (Side side : event.getSide()) {
+            this.controlModeMap.get(side).setControlMode(event.getControlMode());
         }
     };
 
