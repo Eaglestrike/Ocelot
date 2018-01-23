@@ -1,4 +1,4 @@
-package org.team114.ocelot.subsystems.drive;
+package org.team114.ocelot.util;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,8 +26,8 @@ public enum Side implements Iterable<Side> {
     /**
      * Allows the user to target the Side or Sides as represented by this enum instance.
      * In particular note that an event with BOTH can easily target both drive sides.
-     * @return
-     */
+     * @return An iterator of the sides this enum represents.
+g     */
     @Override
     public Iterator<Side> iterator() {
         return this.sides.iterator();
