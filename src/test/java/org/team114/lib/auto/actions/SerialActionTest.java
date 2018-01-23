@@ -14,12 +14,12 @@ public class SerialActionTest {
      */
     @Test
     public void testSerialRun() {
-        Action spy1 = Mockito.mock(Action.class);
-        Action spy2 = Mockito.mock(Action.class);
-        Action spy3 = Mockito.mock(Action.class);
+        Runnable spy1 = Mockito.mock(Runnable.class);
+        Runnable spy2 = Mockito.mock(Runnable.class);
+        Runnable spy3 = Mockito.mock(Runnable.class);
         InOrder inOrder = Mockito.inOrder(spy1, spy2, spy3);
 
-        Action serial = new SerialAction(spy1, spy2, spy3);
+        Runnable serial = new SerialAction(spy1, spy2, spy3);
         serial.run();
 
         inOrder.verify(spy1).run();
