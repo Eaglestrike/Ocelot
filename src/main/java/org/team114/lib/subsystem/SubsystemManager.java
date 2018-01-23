@@ -17,8 +17,8 @@ public class SubsystemManager {
      */
     public static final double STEP_PERIOD = 0.005; //200 times a second
 
-    private final List<Subsystem> subsystems;
-    private final Notifier notifier = new Notifier(this::step);
+    protected final List<Subsystem> subsystems;
+    protected final Notifier notifier = new Notifier(this::step);
 
     /**
      * Creates a new manager from a list of subsystems.
@@ -27,6 +27,7 @@ public class SubsystemManager {
     public SubsystemManager(List<? extends Subsystem> subsystems) {
         this.subsystems = new ArrayList<>(subsystems);
     }
+
     /**
      * Creates a new manager with subsystems, using a variadic constructor.
      *
@@ -43,8 +44,19 @@ public class SubsystemManager {
         return Timer.getFPGATimestamp();
     }
 
+    private void remove(Subsystem subsystem) {
+        subsystem.onStop(timestamp());
+        subsystems.remove(subsystem);
+    }
+
     private void step() {
-        subsystems.forEach(system -> system.onStep(timestamp()));
+        subsystems.forEach(system -> {
+            system.onStep(timestamp());
+            if (system.finished())
+                remove(system);
+        });
+        if (subsystems.isEmpty())
+            stop();
     }
 
     /**

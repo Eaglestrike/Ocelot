@@ -16,9 +16,5 @@ package org.team114.lib.auto.actions;
  * simple way.</p>
  *
  */
-public abstract class Action implements Runnable {
-    /**
-     * Run this action.
-     */
-    public abstract void run();
+public interface Action extends Runnable {
 }
