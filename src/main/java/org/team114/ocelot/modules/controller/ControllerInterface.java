@@ -28,11 +28,13 @@ public class ControllerInterface {
         return right.getX();
     }
 
-    public double speed(){
+    //This might be changed later depending on what we want speed to be
+    public double speed() {
         return leftY() * k;
     }
 
-    public double getAngleOfTurn(){
+    //This might be changed later depending on what we want the angle of the turn to be
+    public double getAngleOfTurn() {
         return angleRight();
     }
 
