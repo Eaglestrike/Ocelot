@@ -4,9 +4,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public final class SetNeutralModeEvent extends DriveEvent {
 
-    public final NeutralMode neutralMode;
+    private final NeutralMode neutralMode;
 
     public SetNeutralModeEvent(NeutralMode mode) {
         this.neutralMode = mode;
+    }
+
+    public NeutralMode getNeutralMode() {
+        return neutralMode;
     }
 }

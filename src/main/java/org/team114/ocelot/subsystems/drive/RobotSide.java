@@ -12,14 +12,14 @@ import java.util.List;
  * This class is responsible for ensuring that the master and slave talons are linked.
  * Coupled with {@link Side}
  */
-public class DriveSideSettings {
+public class RobotSide {
     private final TalonSRX masterTalonSRX;
     private final TalonSRX slaveTalonSRX;
     private ControlMode controlMode;
-    private double speed;
+    private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public DriveSideSettings(TalonSRX masterTalonSRX, TalonSRX slaveTalonSRX) {
+    public RobotSide(TalonSRX masterTalonSRX, TalonSRX slaveTalonSRX) {
         this.masterTalonSRX = masterTalonSRX;
         this.slaveTalonSRX = slaveTalonSRX;
         slaveTalonSRX.set(ControlMode.Follower, masterTalonSRX.getDeviceID());
@@ -33,12 +33,12 @@ public class DriveSideSettings {
         refresh();
     }
 
-    public double getSpeed() {
-        return speed;
+    public double getLastSpeedSet() {
+        return lastSpeedSet;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
+    public void setLastSpeedSet(double lastSpeedSet) {
+        this.lastSpeedSet = lastSpeedSet;
         refresh();
     }
 
@@ -60,6 +60,6 @@ public class DriveSideSettings {
     }
 
     public void refresh() {
-        this.masterTalonSRX.set(this.getControlMode(), this.getSpeed());
+        this.masterTalonSRX.set(this.getControlMode(), this.getLastSpeedSet());
     }
 }

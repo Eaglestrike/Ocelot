@@ -1,7 +1,7 @@
 package org.team114.ocelot.util;
 
 /**
- * A drivetrain command consisting of the left, right motor settings and whether the brake mode is enabled.
+ * A drivetrain command consisting of the left, right motor settings and whether the brake controlMode is enabled.
  */
 public class DriveSignal {
     public static DriveSignal NEUTRAL = new DriveSignal(0, 0);

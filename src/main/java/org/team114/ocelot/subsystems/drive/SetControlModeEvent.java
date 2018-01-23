@@ -4,11 +4,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 
 public final class SetControlModeEvent extends DriveEvent {
 
-    public final ControlMode mode;
-    public final Side side;
+    private final ControlMode controlMode;
+    private final Side side;
 
-    public SetControlModeEvent(Side side, ControlMode mode) {
+    public SetControlModeEvent(Side side, ControlMode controlMode) {
         this.side = side;
-        this.mode = mode;
+        this.controlMode = controlMode;
+    }
+
+    public ControlMode getControlMode() {
+        return controlMode;
+    }
+
+    public Side getSide() {
+        return side;
     }
 }
