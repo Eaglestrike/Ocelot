@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.event.EventQueue;
+import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.util.Side;
 
 import java.util.EnumMap;
 import java.util.HashMap;
