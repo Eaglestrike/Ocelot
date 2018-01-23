@@ -7,14 +7,15 @@ public class ControllerInterface {
 
     private Joystick left;
     private Joystick right;
+    private double k;
 
     public ControllerInterface(int port1, int port2) {
         left = new Joystick(port1);
         right = new Joystick(port2);
+        k = 1;
     }
 
 
-    //Is there really a need for all of these?
     public double leftX() {
         return left.getX();
     }
@@ -27,9 +28,22 @@ public class ControllerInterface {
         return right.getX();
     }
 
+    public double speed(){
+        return leftY() * k;
+    }
+
+    public double getAngleOfTurn(){
+        return angleRight();
+    }
+
     public double rightY() {
         return right.getY();
     }
+
+    public void setSpeed(int a) {
+        k = a;
+    }
+
 
     public double angleRight() {
         return right.getDirectionDegrees();
