@@ -7,7 +7,7 @@ public class Pose {
     private double y;
     /**
      * The direction it is facing, in radians.
-     * TODO: @dan - what does heading=0 mean?
+     * When heading is zero, it means the robot is facing directly forwards.
      */
     private double heading;
 
