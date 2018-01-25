@@ -50,13 +50,14 @@ public class SubsystemManager {
     }
 
     private void step() {
-        subsystems.forEach(system -> {
+        boolean done = true;
+        for(Subsystem system: subsystems) {
             system.onStep(timestamp());
-            if (system.finished())
-                remove(system);
-        });
-        if (subsystems.isEmpty())
+            done &=system.finished();
+        }
+        if (done) {
             stop();
+        }
     }
 
     /**
