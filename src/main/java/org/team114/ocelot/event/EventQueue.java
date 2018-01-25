@@ -8,10 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class EventQueue<T extends Event> implements Iterable<T> {
-    public final Deque<T> queue = new ConcurrentLinkedDeque<>();
-    public final Logger<T> log = new Logger<>();
+public class EventQueue<T extends Event> implements EventDispatcher<T>, Iterable<T> {
+    private final Deque<T> queue = new ConcurrentLinkedDeque<>();
+    protected final Logger<T> log = new Logger<>();
 
+    @Override
     public synchronized void push(T event) {
         queue.addLast(event);
     }
