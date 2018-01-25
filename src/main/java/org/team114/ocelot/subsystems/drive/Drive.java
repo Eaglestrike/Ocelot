@@ -4,8 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.event.EventQueue;
-import org.team114.ocelot.modules.DriveTalons;
+import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.util.Side;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -14,19 +16,23 @@ public class Drive implements Subsystem {
 
     private final EventQueue<DriveEvent> queue;
     private final Map<Class<? extends DriveEvent>, Consumer> handlerMap = new HashMap<>();
-    private final DriveTalons talons;
+    private final Map<Side, RobotSide> controlModeMap =
+            new EnumMap<Side, RobotSide>(Side.class);
 
-    public Drive(DriveTalons talons, EventQueue<DriveEvent> queue) {
-        this.talons = talons;
+    public Drive(RobotSide leftSide, RobotSide rightSide, EventQueue<DriveEvent> queue) {
         this.queue = queue;
 
         handlerMap.put(SelfTestEvent.class, selfTestEventHandler);
         handlerMap.put(SetNeutralModeEvent.class, setNeutralModeEventHandler);
         handlerMap.put(SetSideSpeedEvent.class, setSideSpeedEventHandler);
+        handlerMap.put(SetControlModeEvent.class, setControlModeEventHandler);
+        controlModeMap.put(Side.LEFT, leftSide);
+        controlModeMap.put(Side.RIGHT, rightSide);
     }
 
     private void reset() {
-        setSideSpeedEventHandler.accept(new SetSideSpeedEvent(ControlMode.PercentOutput, 0, 0));
+        setControlModeEventHandler.accept(new SetControlModeEvent(Side.BOTH, ControlMode.PercentOutput));
+        setSideSpeedEventHandler.accept(new SetSideSpeedEvent(0, 0));
     }
 
     public void onStart(double timestamp) {
@@ -39,6 +45,10 @@ public class Drive implements Subsystem {
 
     @SuppressWarnings("unchecked")
     public void onStep(double timestamp) {
+        // TODO: @aris @rebecca : need to pull more than 1 event. Otherwise there will be a lag
+        // maybe pull for a certain amount of time. or until queue empty?
+        // concerns: the drive monopolizing the thread if the queue is flooded.
+        // queue may have to filter redundant events.
         DriveEvent next = queue.pull();
         handlerMap.get(next.getClass()).accept(next);
     }
@@ -46,25 +56,36 @@ public class Drive implements Subsystem {
     // MARK: Handlers
 
     private Consumer<SetNeutralModeEvent> setNeutralModeEventHandler = (event) -> {
-        for (TalonSRX talon : Drive.this.talons.getMasters()) {
-            talon.setNeutralMode(event.neutralMode);
+        for (RobotSide robotSide : Drive.this.controlModeMap.values()) {
+            robotSide.setNeutralMode(event.getNeutralMode());
         }
     };
 
     private Consumer<SelfTestEvent> selfTestEventHandler = (event) -> {
-        for (TalonSRX talon : Drive.this.talons.getMasters()) {
+        for (RobotSide robotSide : Drive.this.controlModeMap.values()) {
             // TODO: Publish an error event instead
-            int id = talon.getDeviceID();
-            if (id == 0) {
-                System.out.println("Talon " + id + " has not been configured.");
-            } else if (id > 62 || id < 1) {
-                System.out.println("Talon " + id + " has an ID that is outside of ID bounds.");
+            for (TalonSRX talon : robotSide.getTalonSRXs()) {
+                int id = talon.getDeviceID();
+                if (id == 0) {
+                    System.out.println("Talon " + id + " has not been configured.");
+                } else if (id > 62 || id < 1) {
+                    System.out.println("Talon " + id + " has an ID that is outside of ID bounds.");
+                }
             }
         }
     };
 
     private Consumer<SetSideSpeedEvent> setSideSpeedEventHandler = (event) -> {
-        Drive.this.talons.getLeft().set(event.mode, event.rightspeed);
-        Drive.this.talons.getRight().set(event.mode, event.leftspeed);
+        RobotSide left = this.controlModeMap.get(Side.LEFT);
+        left.setLastSpeedSet(event.getLeftspeed());
+        RobotSide right = this.controlModeMap.get(Side.RIGHT);
+        right.setLastSpeedSet(event.getRightspeed());
     };
+
+    private Consumer<SetControlModeEvent> setControlModeEventHandler = (event) -> {
+        for (Side side : event.getSide()) {
+            this.controlModeMap.get(side).setControlMode(event.getControlMode());
+        }
+    };
+
 }
