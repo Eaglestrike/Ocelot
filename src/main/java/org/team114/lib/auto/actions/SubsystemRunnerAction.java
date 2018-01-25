@@ -5,20 +5,29 @@ import org.team114.lib.subsystem.SubsystemManager;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class SubsystemRunnerAction implements Action {
+public class SubsystemRunnerAction implements Runnable {
 
     private static class AutonomousSubsystemManager extends SubsystemManager {
-        public Object lock = new Object();
+        public Lock lock = new ReentrantLock();
 
         public AutonomousSubsystemManager(List<? extends Subsystem> subsystems) {
             super(subsystems);
         }
 
         @Override
+        public void start() {
+            lock.lock();
+            super.start();
+        }
+
+        @Override
         public void stop() {
             super.stop();
-            lock.notify();
+            lock.unlock();
         }
     }
 
@@ -35,10 +44,8 @@ public class SubsystemRunnerAction implements Action {
     @Override
     public void run() {
         manager.start();
-        // 15 seconds in milliseconds (length of autonomous period)
-        long timeout = 15 * 1000;
         try {
-            manager.lock.wait(timeout);
+            manager.lock.tryLock(15, TimeUnit.SECONDS);
         } catch (InterruptedException exception) {
             // ignore, it means thread got killed.
             // still print the error for debugging purposes
