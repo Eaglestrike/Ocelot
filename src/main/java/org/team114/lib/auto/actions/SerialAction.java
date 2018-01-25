@@ -13,7 +13,7 @@ public class SerialAction extends CompositeAction {
      * Create a new instance of this class from actions given as parameters, using a variadic constructor.
      * @param actions the actions to be executed
      */
-    public SerialAction(Action ...actions) {
+    public SerialAction(Runnable ...actions) {
         super(actions);
     }
 
@@ -21,7 +21,7 @@ public class SerialAction extends CompositeAction {
      * Create a new instance of this class from a list of actions.
      * @param actions a list of the action to be executed
      */
-    public SerialAction(List<? extends Action> actions) {
+    public SerialAction(List<? extends Runnable> actions) {
         super(actions);
     }
 
@@ -30,7 +30,7 @@ public class SerialAction extends CompositeAction {
      */
     @Override
     public void run() {
-        for (Action action: actions) {
+        for (Runnable action: actions) {
              action.run();
         }
     }

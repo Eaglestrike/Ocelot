@@ -20,7 +20,7 @@ public class ParallelAction extends CompositeAction {
      * Create a new instance of this class from actions given as parameters, using a variadic constructor.
      * @param actions the actions to be executed
      */
-    public ParallelAction(Action ...actions) {
+    public ParallelAction(Runnable ...actions) {
         super(actions);
     }
 
@@ -28,7 +28,7 @@ public class ParallelAction extends CompositeAction {
      * Create a new instance of this class from a list of actions.
      * @param actions a list of the action to be executed
      */
-    public ParallelAction(List<? extends Action> actions) {
+    public ParallelAction(List<? extends Runnable> actions) {
         super(actions);
     }
 
@@ -41,7 +41,7 @@ public class ParallelAction extends CompositeAction {
 
         List<Future<Object>> futures = new ArrayList<>();
 
-        for (Action action : actions) {
+        for (Runnable action : actions) {
             futures.add(executor.submit(action, null));
         }
 
