@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules.controller;
+package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.geometry.Point;
