@@ -3,7 +3,7 @@ package org.team114.ocelot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.lib.subsystem.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.util.Pose;
@@ -12,7 +12,7 @@ import org.team114.ocelot.util.Side;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class Drive implements AbstractDrive, Subsystem {
+public class Drive implements AbstractDrive {
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
     private Gyro gyro;
@@ -56,6 +56,10 @@ public class Drive implements AbstractDrive, Subsystem {
             latestState.getY() + (distance * Math.sin(angle)),
             newHeading
         );
+
+        SmartDashboard.putNumber("x", latestState.getX());
+        SmartDashboard.putNumber("y", latestState.getY());
+        SmartDashboard.putNumber("heading", latestState.getHeading());
     }
 
     private synchronized void reset() {

@@ -2,10 +2,11 @@ package org.team114.ocelot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
 
-public interface AbstractDrive {
+public interface AbstractDrive extends Subsystem {
     Pose getLatestState();
 
     void setSideSpeed(Side sides, double speed);

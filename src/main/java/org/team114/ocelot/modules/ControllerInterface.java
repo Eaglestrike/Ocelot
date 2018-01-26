@@ -13,34 +13,25 @@ public class ControllerInterface {
     private final EdgeDetector endClimb = new EdgeDetector(this::endClimb);
     private final EdgeDetector sensitivty = new EdgeDetector(this::sensitivity);
 
-    private double velocityConstant;
-    private Joystick right;
+    private double velocityConstant = 1;
     private Joystick left;
+    private Joystick right;
 
-    public ControllerInterface(int port1, int port2) {
-        left = new Joystick(port1);
-        right = new Joystick(port2);
-        velocityConstant = 1;
+    public ControllerInterface(Joystick left, Joystick right) {
+        this.left = left;
+        this.right = right;
     }
 
     public void setSpeed(double a) {
         velocityConstant = a;
     }
 
-    public double leftX() {
-        return left.getX();
-    }
-
-    public double leftY() {
+    public double throttle() {
         return left.getY();
     }
 
-    public double rightX() {
+    public double wheel() {
         return right.getX();
-    }
-
-    public double rightY() {
-        return right.getY();
     }
 
     public double angleLeft() {
@@ -56,7 +47,7 @@ public class ControllerInterface {
     */
 
     public double speed() {
-        return leftY() * velocityConstant;
+        return left.getY() * velocityConstant;
     }
 
     /*
@@ -79,17 +70,20 @@ public class ControllerInterface {
         return left.getRawButton(3);
     }
 
-    public boolean startClimb() {
+    public boolean quickTurn() {
         return right.getRawButton(1);
     }
 
-    public boolean endClimb() {
+    public boolean startClimb() {
         return right.getRawButton(2);
     }
 
-    public boolean sensitivity() {
+    public boolean endClimb() {
         return right.getRawButton(3);
     }
 
+    public boolean sensitivity() {
+        return right.getRawButton(4);
+    }
 }
 
