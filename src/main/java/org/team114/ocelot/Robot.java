@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.subsystem.SubsystemManager;
-import org.team114.ocelot.modules.ControllerInterface;
+import org.team114.ocelot.modules.Controller;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.subsystems.AbstractDrive;
@@ -20,7 +20,7 @@ public class Robot extends IterativeRobot {
 
     SubsystemManager subsystemManager;
     AbstractDrive drive;
-    ControllerInterface controller;
+    Controller controller;
     CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
     Gyro gyro = Gyro.shared;
 
@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
             new TalonSRX(4)
         );
 
-        controller = new ControllerInterface(new Joystick(0), new Joystick(1));
+        controller = new Controller(new Joystick(0), new Joystick(1));
         drive = new Drive(leftSide, rightSide, gyro);
 
         subsystemManager = new SubsystemManager(drive);

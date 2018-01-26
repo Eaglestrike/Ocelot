@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.geometry.Point;
 import org.team114.lib.util.EdgeDetector;
 
-public class ControllerInterface {
+public class Controller {
 
     private final EdgeDetector startLift = new EdgeDetector(this::startLift);
     private final EdgeDetector endLift = new EdgeDetector(this::endLift);
@@ -17,7 +17,7 @@ public class ControllerInterface {
     private Joystick left;
     private Joystick right;
 
-    public ControllerInterface(Joystick left, Joystick right) {
+    public Controller(Joystick left, Joystick right) {
         this.left = left;
         this.right = right;
     }
