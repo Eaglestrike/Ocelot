@@ -13,16 +13,19 @@ public class ControllerInterface {
     private final EdgeDetector endClimb = new EdgeDetector(this::endClimb);
     private final EdgeDetector sensitivty = new EdgeDetector(this::sensitivity);
 
-    private double k;
+    private double velocityConstant;
     private Joystick right;
     private Joystick left;
 
     public ControllerInterface(int port1, int port2) {
         left = new Joystick(port1);
         right = new Joystick(port2);
-        k = 1;
+        velocityConstant = 1;
     }
 
+    public void setSpeed(double a) {
+        velocityConstant = a;
+    }
 
     public double leftX() {
         return left.getX();
@@ -34,40 +37,35 @@ public class ControllerInterface {
 
     public double rightX() {
         return right.getX();
-
-    }
-
-    /*
-    This might be changed later depending on what we want speed to be
-    */
-    public double speed() {
-        return leftY() * k;
-    }
-
-    /*
-    This might be changed later depending on what we want the angle of the turn to be
-    */
-    public double getAngleOfTurn() {
-        return angleRight();
     }
 
     public double rightY() {
         return right.getY();
     }
 
-    public void setSpeed(int a) {
-        k = a;
+    public double angleLeft() {
+        return left.getDirectionDegrees();
     }
-
 
     public double angleRight() {
         return right.getDirectionDegrees();
     }
 
-    public double angleLeft() {
-        return left.getDirectionDegrees();
+    /*
+    This might be changed later depending on what we want speed to be
+    */
+
+    public double speed() {
+        return leftY() * velocityConstant;
     }
 
+    /*
+    This might be changed later depending on what we want the angle of the turn to be
+    */
+
+    public double getAngleOfTurn() {
+        return angleRight();
+    }
 
     public boolean startLift() {
         return left.getRawButton(1);
@@ -89,37 +87,9 @@ public class ControllerInterface {
         return right.getRawButton(2);
     }
 
-    public boolean sensitivity(){
+    public boolean sensitivity() {
         return right.getRawButton(3);
     }
 
-    public boolean startLiftStatus(){
-        return startLift.falling();
-    }
-
-    public boolean endLiftStatus(){
-        return endLift.falling();
-    }
-
-    public boolean intakeStatus(){
-        return intake.falling();
-    }
-
-    public boolean startClimbStatus(){
-        return startClimb.falling();
-    }
-
-    public boolean endClimbStatus(){
-        return endClimb.falling();
-    }
-
-    public boolean sensitivtySetting(){
-        return sensitivty.falling();
-    }
 }
-
-
-
-
-
 
