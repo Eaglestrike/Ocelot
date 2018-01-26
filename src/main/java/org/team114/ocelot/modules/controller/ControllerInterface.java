@@ -1,13 +1,21 @@
 package org.team114.ocelot.modules.controller;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.lib.geometry.Point;
+import org.team114.lib.util.EdgeDetector;
 
 public class ControllerInterface {
 
+    private final EdgeDetector startLift = new EdgeDetector(this::startLift);
+    private final EdgeDetector endLift = new EdgeDetector(this::endLift);
+    private final EdgeDetector intake = new EdgeDetector(this::intake);
+    private final EdgeDetector startClimb = new EdgeDetector(this::startClimb);
+    private final EdgeDetector endClimb = new EdgeDetector(this::endClimb);
+    private final EdgeDetector sensitivty = new EdgeDetector(this::sensitivity);
 
-    private Joystick left;
-    private Joystick right;
     private double k;
+    private Joystick right;
+    private Joystick left;
 
     public ControllerInterface(int port1, int port2) {
         left = new Joystick(port1);
@@ -26,14 +34,19 @@ public class ControllerInterface {
 
     public double rightX() {
         return right.getX();
+
     }
 
-    //This might be changed later depending on what we want speed to be
+    /*
+    This might be changed later depending on what we want speed to be
+    */
     public double speed() {
         return leftY() * k;
     }
 
-    //This might be changed later depending on what we want the angle of the turn to be
+    /*
+    This might be changed later depending on what we want the angle of the turn to be
+    */
     public double getAngleOfTurn() {
         return angleRight();
     }
@@ -55,28 +68,29 @@ public class ControllerInterface {
         return left.getDirectionDegrees();
     }
 
-    public boolean liftStatus() {
-        return left.getRawButtonPressed(1);
+
+    public boolean startLift() {
+        return left.getRawButton(1);
     }
 
-    public boolean intakeStatus() {
-        return left.getRawButtonPressed(2);
+    public boolean endLift() {
+        return left.getRawButton(2);
     }
 
-    public boolean climbStatus() {
-        return right.getRawButtonPressed(1);
+    public boolean intake() {
+        return left.getRawButton(3);
     }
 
-    public boolean checkLiftChange() {
-        return left.getRawButtonPressed(1);
+    public boolean startClimb() {
+        return right.getRawButton(1);
     }
 
-    public boolean checkIntakeChange() {
-        return left.getRawButtonPressed(2);
+    public boolean endClimb() {
+        return right.getRawButton(2);
     }
 
-    public boolean checkClimbChange() {
-        return right.getRawButtonPressed(3);
+    public boolean sensitivity(){
+        return right.getRawButton(3);
     }
 
 }
