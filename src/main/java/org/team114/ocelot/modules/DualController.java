@@ -1,10 +1,9 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
-import org.team114.lib.geometry.Point;
 import org.team114.lib.util.EdgeDetector;
 
-public class Controller {
+public class DualController implements Controller {
 
     private final EdgeDetector startLift = new EdgeDetector(this::startLift);
     private final EdgeDetector endLift = new EdgeDetector(this::endLift);
@@ -17,7 +16,7 @@ public class Controller {
     private Joystick left;
     private Joystick right;
 
-    public Controller(Joystick left, Joystick right) {
+    public DualController(Joystick left, Joystick right) {
         this.left = left;
         this.right = right;
     }
