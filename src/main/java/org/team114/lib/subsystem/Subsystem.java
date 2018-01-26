@@ -6,6 +6,14 @@ package org.team114.lib.subsystem;
  */
 public interface Subsystem {
     /**
+     * Checked at the end of every tick. If the subsystem is finished working, it should return true and will
+     * no longer be tracked by its manager.
+     */
+    default boolean finished() {
+        return false;
+    }
+
+    /**
      * Runs on subsystem startup. This method should be used for setup that needs to be run immediately
      * before the step begins. Other setup should go in the constructor.
      * @param timestamp the current uptime
