@@ -93,6 +93,29 @@ public class ControllerInterface {
         return right.getRawButton(3);
     }
 
+    public boolean startLiftStatus(){
+        return startLift.falling();
+    }
+
+    public boolean endLiftStatus(){
+        return endLift.falling();
+    }
+
+    public boolean intakeStatus(){
+        return intake.falling();
+    }
+
+    public boolean startClimbStatus(){
+        return startClimb.falling();
+    }
+
+    public boolean endClimbStatus(){
+        return endClimb.falling();
+    }
+
+    public boolean sensitivtySetting(){
+        return sensitivty.falling();
+    }
 }
 
 
