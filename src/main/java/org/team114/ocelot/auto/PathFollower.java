@@ -4,9 +4,7 @@ import org.team114.lib.geometry.Point;
 import org.team114.lib.pathgenerator.Path;
 import org.team114.lib.pathgenerator.Polynomial;
 import org.team114.lib.util.Epsilon;
-import org.team114.ocelot.event.PubSub;
 import org.team114.ocelot.settings.RobotSettings;
-import org.team114.ocelot.subsystems.RobotState;
 import org.team114.ocelot.util.Pose;
 
 public class PathFollower {
@@ -18,12 +16,10 @@ public class PathFollower {
     private double velocity = 0; //assume initial velocity is 0 for tests
 
     private Path path;
-    private Pose latestPose;
 
     public PathFollower(Path path, double timeStamp) {
         this.path = path;
         lastCall = timeStamp;
-        PubSub.shared.subscribe(RobotState.PoseEvent.class, event -> this.latestPose = event.getPose());
     }
 
     public void setCorrectionConstant(double k) {

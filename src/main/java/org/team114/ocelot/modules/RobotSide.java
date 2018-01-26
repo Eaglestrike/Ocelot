@@ -3,6 +3,7 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
@@ -14,25 +15,25 @@ import java.util.List;
  * Coupled with {@link Side}
  */
 public class RobotSide {
-    private final TalonSRX masterTalonSRX;
-    private final TalonSRX slaveTalonSRX;
+    private final TalonSRX masterTalon;
+    private final TalonSRX slaveTalon;
     private ControlMode controlMode;
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public RobotSide(TalonSRX masterTalonSRX, TalonSRX slaveTalonSRX) {
-        this.masterTalonSRX = masterTalonSRX;
-        this.slaveTalonSRX = slaveTalonSRX;
-        slaveTalonSRX.set(ControlMode.Follower, masterTalonSRX.getDeviceID());
+    public RobotSide(TalonSRX masterTalon, TalonSRX slaveTalon) {
+        this.masterTalon = masterTalon;
+        this.slaveTalon = slaveTalon;
+        slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 
     public void refresh() {
-        this.masterTalonSRX.set(this.getControlMode(), this.getLastSpeedSet());
+        this.masterTalon.set(this.getControlMode(), this.getLastSpeedSet());
     }
 
     public void setNeutralMode(NeutralMode neutralMode) {
         this.neutralMode = neutralMode;
-        this.masterTalonSRX.setNeutralMode(this.neutralMode);
+        this.masterTalon.setNeutralMode(this.neutralMode);
     }
 
     public NeutralMode getNeutralMode() {
@@ -57,15 +58,28 @@ public class RobotSide {
         refresh();
     }
 
-    public TalonSRX getMasterTalonSRX() {
-        return masterTalonSRX;
+    public int getEncoderTicks() {
+        return masterTalon.getSelectedSensorPosition(0);
     }
 
-    public TalonSRX getSlaveTalonSRX() {
-        return slaveTalonSRX;
+    public double getEncoderDistance() {
+        double ticks = (double) getEncoderTicks();
+        double cirumference = Math.PI * RobotSettings.WHEEL_DIAMETER;
+        double ticksPerRotation = 4096;
+        double gearRatio = 2;
+
+        return (ticks * cirumference) / ticksPerRotation / gearRatio;
     }
 
-    public List<? extends TalonSRX> getTalonSRXs() {
-        return Arrays.asList(this.masterTalonSRX, this.slaveTalonSRX);
+    public TalonSRX getMasterTalon() {
+        return masterTalon;
+    }
+
+    public TalonSRX getSlaveTalon() {
+        return slaveTalon;
+    }
+
+    public List<? extends TalonSRX> getTalons() {
+        return Arrays.asList(this.masterTalon, this.slaveTalon);
     }
 }

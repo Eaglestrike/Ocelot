@@ -4,7 +4,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.subsystem.Subsystem;
+import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
 
 import java.util.EnumMap;
@@ -13,15 +15,22 @@ import java.util.Map;
 public class Drive implements AbstractDrive, Subsystem {
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
+    private Gyro gyro;
+    private Pose latestState = new Pose(0, 0, 0);
+    private double lastTimeStamp;
 
-    public Drive(RobotSide leftSide, RobotSide rightSide) {
-        robotSideMap.put(Side.LEFT, leftSide);
-        robotSideMap.put(Side.RIGHT, rightSide);
+    public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro) {
+        this.robotSideMap.put(Side.LEFT, leftSide);
+        this.robotSideMap.put(Side.RIGHT, rightSide);
+        this.gyro = gyro;
     }
 
     @Override
     public synchronized void onStart(double timestamp) {
+        gyro.waitUntilCalibrated();
+        gyro.zeroYaw();
         reset();
+        lastTimeStamp = timestamp;
     }
 
     @Override
@@ -31,11 +40,33 @@ public class Drive implements AbstractDrive, Subsystem {
 
     @Override
     public synchronized void onStep(double timestamp) {
+        double delta = timestamp - lastTimeStamp;
+        lastTimeStamp = timestamp;
+
+        double newHeading = gyro.getYaw();
+
+        double leftDistance = robotSideMap.get(Side.LEFT).getEncoderDistance();
+        double rightDistance = robotSideMap.get(Side.RIGHT).getEncoderDistance();
+
+        double angle = (newHeading + latestState.getHeading()) / 2;
+        double distance = (leftDistance + rightDistance) / 2;
+
+        latestState = new Pose(
+            latestState.getX() + (distance * Math.cos(angle)),
+            latestState.getY() + (distance * Math.sin(angle)),
+            newHeading
+        );
     }
 
     private synchronized void reset() {
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.BOTH, 0);
+        latestState = new Pose(0, 0, latestState.getHeading());
+    }
+
+    @Override
+    public synchronized Pose getLatestState() {
+        return latestState;
     }
 
     @Override
@@ -68,8 +99,8 @@ public class Drive implements AbstractDrive, Subsystem {
     @Override
     public synchronized void selfTest() {
         for (RobotSide robotSide : robotSideMap.values()) {
-            // TODO: Publish an error event instead
-            for (TalonSRX talon : robotSide.getTalonSRXs()) {
+            // TODO: Throw an exception instead
+            for (TalonSRX talon : robotSide.getTalons()) {
                 int id = talon.getDeviceID();
                 if (id == 0) {
                     System.out.println("Talon " + id + " has not been configured.");

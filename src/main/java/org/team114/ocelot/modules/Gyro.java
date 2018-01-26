@@ -17,17 +17,14 @@ public class Gyro {
         isCalibrating = true;
     }
 
-    public double getYaw() throws InterruptedIOException {
-        if (isCalibrating()) {
-            throw new InterruptedIOException("The NavX is still calibrating, wait a bit!");
-        }
-        return navx.getYaw();
+    /**
+     * @return the heading of the navx chip, in radians.
+     */
+    public double getYaw() {
+        return Math.toRadians(navx.getYaw());
     }
 
-    public void zeroYaw() throws InterruptedIOException {
-        if (isCalibrating()) {
-            throw new InterruptedIOException("The NavX is still calibrating, wait a bit!");
-        }
+    public void zeroYaw() {
         navx.zeroYaw();
     }
 
