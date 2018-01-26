@@ -52,8 +52,8 @@ public class RobotSide {
         return lastSpeedSet;
     }
 
-    public void setLastSpeedSet(double lastSpeedSet) {
-        this.lastSpeedSet = lastSpeedSet;
+    public void setSpeed(double speed) {
+        this.lastSpeedSet = speed;
         refresh();
     }
 
