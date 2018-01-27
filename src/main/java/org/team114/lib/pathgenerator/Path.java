@@ -1,9 +1,9 @@
 package org.team114.lib.pathgenerator;
 
+import org.team114.lib.geometry.Point;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.team114.lib.geometry.Point;
 
 /**
  * An abstract piecewise path section.

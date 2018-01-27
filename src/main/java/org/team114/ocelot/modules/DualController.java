@@ -1,7 +1,6 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
-import org.team114.lib.util.EdgeDetector;
 
 public class DualController implements Controller {
 

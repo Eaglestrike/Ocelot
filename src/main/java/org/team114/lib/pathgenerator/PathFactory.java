@@ -1,13 +1,13 @@
 package org.team114.lib.pathgenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.factory.LinearSolverFactory_DDRM;
 import org.ejml.interfaces.linsol.LinearSolverDense;
 import org.team114.lib.geometry.Point;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class for creating smooth curves in 2D space, called Paths, and natural splines.

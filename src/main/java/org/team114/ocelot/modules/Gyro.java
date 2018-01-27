@@ -3,8 +3,6 @@ package org.team114.ocelot.modules;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
-import java.io.InterruptedIOException;
-
 public class Gyro {
     public static Gyro shared = new Gyro();
 

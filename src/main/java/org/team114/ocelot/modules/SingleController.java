@@ -1,9 +1,6 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
-import org.team114.lib.util.EdgeDetector;
-
-import javax.naming.ldap.Control;
 
 public class SingleController implements Controller {
 

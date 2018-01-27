@@ -1,9 +1,9 @@
 package org.team114.lib.pathgenerator;
 
 
-import org.junit.*;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 // NOTE: this test depends on EpsilonTest!
 public class PolynomialTest {

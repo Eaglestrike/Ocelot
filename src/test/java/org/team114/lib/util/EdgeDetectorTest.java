@@ -1,6 +1,6 @@
 package org.team114.lib.util;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
