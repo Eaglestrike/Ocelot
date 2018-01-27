@@ -9,7 +9,7 @@ public class MotionProfile {
     // Variables that are calculated based on arguments that are to be used by methods to calculate velocity,
     // position, and acceleration for a given time
     private double distancePerfect, middleDistance, T0, T1, T2, P1, P2;
-    private boolean isTriangular;
+    private boolean triangular, completed;
     private double timePeriodOne, timePeriodTwo, timePeriodThree;
 
     public MotionProfile(double time, double initialPosition, double finalPosition,
@@ -24,7 +24,7 @@ public class MotionProfile {
         T0 = (RobotSettings.MAX_VELOCITY - initialVelocity) / RobotSettings.MAX_ACCELERATION;
 
         if (finalPosition - initialPosition <= distancePerfect) {
-            isTriangular = true;
+            triangular = true;
 
             T1 = (-initialVelocity + Math.sqrt(initialVelocity * initialVelocity +
                     RobotSettings.MAX_ACCELERATION * (finalPosition - initialPosition))) /
@@ -33,7 +33,7 @@ public class MotionProfile {
             timePeriodOne = T1;
             timePeriodTwo = 2 * T1;
         } else {
-            isTriangular = false;
+            triangular = false;
 
             T2 = (RobotSettings.MAX_VELOCITY - finalVelocity) / RobotSettings.MAX_ACCELERATION;
             P1 = initialPosition + (initialVelocity * T0) + ((RobotSettings.MAX_ACCELERATION *
@@ -53,12 +53,15 @@ public class MotionProfile {
             throw new IllegalArgumentException("Negative time");
         }
 
-        if ((isTriangular && time > timePeriodTwo) || (!isTriangular && time > timePeriodThree)) {
-            throw new IllegalArgumentException("Already completed");
-        }
+        completed = (triangular && time > timePeriodTwo) || (!triangular && time > timePeriodThree);
     }
+    
+    public boolean isCompleted() {
+        return completed;
+    }
+
     public double getVelocity() {
-        if (isTriangular) {
+        if (triangular) {
             if (time >= 0 && time < timePeriodOne) {
                 return initialVelocity + RobotSettings.MAX_ACCELERATION * time;
             } else if (time >= timePeriodOne && time < timePeriodTwo) {
@@ -74,7 +77,9 @@ public class MotionProfile {
                 return RobotSettings.MAX_VELOCITY - (RobotSettings.MAX_ACCELERATION * (time - T1));
             }
         }
-
+        if (completed) {
+            return 0;
+        }
         throw new AssertionError("End of method should be unreachable");
     }
 
@@ -85,8 +90,9 @@ public class MotionProfile {
             return 0;
         } else if (time >= timePeriodTwo && time <= timePeriodThree) {
             return -RobotSettings.MAX_ACCELERATION;
+        } else if (completed) {
+            return 0;
         }
-
         throw new AssertionError("End of method should be unreachable");
     }
 
@@ -99,6 +105,8 @@ public class MotionProfile {
         } else if (time >= timePeriodTwo && time <= timePeriodThree) {
             return (finalPosition - P2) + (RobotSettings.MAX_VELOCITY * (time - T1)) -
                     ((RobotSettings.MAX_ACCELERATION * Math.pow(time - T1, 2)) / 2);
+        } else if (completed) {
+            return finalPosition;
         }
 
         throw new AssertionError("End of method should be unreachable");
