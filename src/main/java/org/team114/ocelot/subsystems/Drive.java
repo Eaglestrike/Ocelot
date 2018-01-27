@@ -3,9 +3,12 @@ package org.team114.ocelot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
 
@@ -14,63 +17,90 @@ import java.util.Map;
 
 public class Drive implements AbstractDrive {
 
+    private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
+    private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
+    private static DashboardHandle headingDB = new DashboardHandle("Pose hdg");
+
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
     private Gyro gyro;
-    private Pose latestState = new Pose(0, 0, 0);
-    private double lastTimeStamp;
+    private RobotState robotState;
 
-    public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro) {
+    // TODO change from practice base
+    Encoder leftEncoder;
+    Encoder rightEncoder;
+
+    public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro, RobotState robotState) {
         this.robotSideMap.put(Side.LEFT, leftSide);
         this.robotSideMap.put(Side.RIGHT, rightSide);
         this.gyro = gyro;
+        this.robotState = robotState;
+
+        // TODO practice base
+        leftEncoder = new Encoder(5,6, true);
+        rightEncoder = new Encoder(7,8, false);
+        leftEncoder.setDistancePerPulse(0.043946541); //ft
+        rightEncoder.setDistancePerPulse(0.043946541);
+    }
+
+
+    // TODO for the practice base, these must be changed later
+    private double getLeftEncoder() {
+        return leftEncoder.getDistance();
+    }
+
+    private double getRightEncoder() {
+        return rightEncoder.getDistance();
+    }
+
+    private double leftAccum = 0;
+    private double rightAccum = 0;
+
+    private Pose addPoseObservation() {
+        Pose latestState = robotState.getLatestPose();
+
+        double newHeading = gyro.getYaw();
+        double angle = (newHeading + latestState.getHeading()) / 2;
+
+        double L = getLeftEncoder();
+        double R = getRightEncoder();
+
+        double distance = (L + R - leftAccum - rightAccum)/2;
+        leftAccum = L;
+        rightAccum = R;
+
+        robotState.addObservation(new Pose(
+            latestState.getX() + (distance * Math.cos(angle)),
+            latestState.getY() + (distance * Math.sin(angle)),
+            newHeading,
+            (leftEncoder.getRate() + rightEncoder.getRate())/2
+        ));
+
+        return robotState.getLatestPose();
     }
 
     @Override
     public synchronized void onStart(double timestamp) {
         gyro.waitUntilCalibrated();
         gyro.zeroYaw();
-        reset();
-        lastTimeStamp = timestamp;
+        setControlMode(Side.BOTH, ControlMode.PercentOutput);
+        setSideSpeed(Side.BOTH, 0);
+        robotState.addObservation(new Pose(0, 0,
+                gyro.getYaw(),
+                (leftEncoder.getRate() + rightEncoder.getRate())/2)
+        );
     }
 
     @Override
     public synchronized void onStop(double timestamp) {
-        reset();
     }
 
     @Override
     public synchronized void onStep(double timestamp) {
-        double delta = timestamp - lastTimeStamp;
-        lastTimeStamp = timestamp;
+        Pose latestPose = this.addPoseObservation();
 
-        double newHeading = gyro.getYaw();
-
-        double leftDistance = robotSideMap.get(Side.LEFT).getEncoderDistance();
-        double rightDistance = robotSideMap.get(Side.RIGHT).getEncoderDistance();
-
-        double angle = (newHeading + latestState.getHeading()) / 2;
-        double distance = (leftDistance + rightDistance) / 2;
-
-        latestState = new Pose(
-            latestState.getX() + (distance * Math.cos(angle)),
-            latestState.getY() + (distance * Math.sin(angle)),
-            newHeading
-        );
-
-        SmartDashboard.putNumber("x", latestState.getX());
-        SmartDashboard.putNumber("y", latestState.getY());
-        SmartDashboard.putNumber("heading", latestState.getHeading());
-    }
-
-    private synchronized void reset() {
-        setControlMode(Side.BOTH, ControlMode.PercentOutput);
-        setSideSpeed(Side.BOTH, 0);
-        latestState = new Pose(0, 0, latestState.getHeading());
-    }
-
-    @Override
-    public synchronized Pose getLatestState() {
-        return latestState;
+        xPositionDB.put(latestPose.getX());
+        yPositionDB.put(latestPose.getY());
+        headingDB.put(latestPose.getHeading());
     }
 
     @Override

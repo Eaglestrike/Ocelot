@@ -5,16 +5,17 @@ import org.team114.lib.geometry.Point;
 public class Pose {
     private double x;
     private double y;
+    private double vel;
     /**
      * The direction it is facing, in radians.
-     * When heading is zero, it means the robot is facing directly forwards.
      */
     private double heading;
 
-    public Pose(double x, double y, double heading) {
+    public Pose(double x, double y, double heading, double vel) {
         this.x = x;
         this.y = y;
         this.heading = heading;
+        this.vel = vel;
     }
 
     public Point getPoint() {
@@ -32,4 +33,6 @@ public class Pose {
     public double getY() {
         return this.y;
     }
+
+    public double getVel() {return vel;}
 }

@@ -23,6 +23,7 @@ public class Robot extends IterativeRobot {
     DualController controller;
     CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
     Gyro gyro = Gyro.shared;
+    RobotState robotState = RobotState.shared;
 
     @Override
     public void robotInit() {
@@ -36,7 +37,7 @@ public class Robot extends IterativeRobot {
         );
 
         controller = new DualController(new Joystick(0), new Joystick(1));
-        drive = new Drive(leftSide, rightSide, gyro);
+        drive = new Drive(leftSide, rightSide, gyro, robotState);
 
         subsystemManager = new SubsystemManager(drive);
         subsystemManager.start();
