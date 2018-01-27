@@ -33,7 +33,8 @@ dependencies {
     compile wpilib()
     compile navx()
     compile ctre()
-    
+    compile openrio.powerup.matchData()
+
     compile group: 'org.ejml', name: 'ejml-all', version: '0.32'
 
     compile 'com.google.code.gson:gson:2.8.2'
