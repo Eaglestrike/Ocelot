@@ -78,7 +78,7 @@ public class MotionProfile {
             }
         }
         if (completed) {
-            return 0;
+            return finalVelocity;
         }
         throw new AssertionError("End of method should be unreachable");
     }
