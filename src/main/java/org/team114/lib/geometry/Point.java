@@ -69,5 +69,25 @@ public class Point {
     public String toString() {
         return "Point (" + x + ", " + y + ")";
     }
-    
+
+    @Override
+    public int hashCode() {
+        // standard procedure to make a hash code
+        return Double.hashCode(x) * 31 + Double.hashCode(y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Point)) {
+            return false;
+        }
+
+        Point p = (Point) o;
+        return this.x == p.x && this.y == p.y;
+    }
+
 }
