@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.subsystem.SubsystemManager;
+import org.team114.ocelot.auto.AutoModeExecuter;
+import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.DualController;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
@@ -20,10 +22,13 @@ public class Robot extends IterativeRobot {
 
     SubsystemManager subsystemManager;
     AbstractDrive drive;
+
     DualController controller;
     CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
     Gyro gyro = Gyro.shared;
     RobotState robotState = RobotState.shared;
+
+    AutoModeExecuter autoModeExecuter;
 
     @Override
     public void robotInit() {
@@ -40,15 +45,23 @@ public class Robot extends IterativeRobot {
         drive = new Drive(leftSide, rightSide, gyro, robotState);
 
         subsystemManager = new SubsystemManager(drive);
+        SubsystemSingletons.drive = drive;
         subsystemManager.start();
     }
 
     @Override
     public void disabledInit() {
+        if (autoModeExecuter != null) {
+            autoModeExecuter.stop();
+        }
+        autoModeExecuter = null;
     }
 
     @Override
     public void autonomousInit() {
+        autoModeExecuter = new AutoModeExecuter();
+        autoModeExecuter.setAutoMode(new TestMode());
+        autoModeExecuter.start();
     }
 
     @Override

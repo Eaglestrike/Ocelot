@@ -8,6 +8,7 @@ import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.util.DashboardHandle;
+import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
 
@@ -43,17 +44,17 @@ public class Drive implements AbstractDrive {
 
 
     // TODO for the practice base, these must be changed later
+
     private double getLeftEncoder() {
         return leftEncoder.getDistance();
     }
-
     private double getRightEncoder() {
         return rightEncoder.getDistance();
     }
 
     private double leftAccum = 0;
-    private double rightAccum = 0;
 
+    private double rightAccum = 0;
     private Pose addPoseObservation() {
         Pose latestState = robotState.getLatestPose();
 
@@ -127,6 +128,13 @@ public class Drive implements AbstractDrive {
             RobotSide robotSide = robotSideMap.get(side);
             robotSide.setNeutralMode(neutralMode);
         }
+    }
+
+    @Override
+    public void setDriveSignal(DriveSignal signal) {
+        setControlMode(Side.BOTH, ControlMode.PercentOutput);
+        setSideSpeed(Side.LEFT, signal.getLeft());
+        setSideSpeed(Side.RIGHT, -signal.getRight());
     }
 
     @Override

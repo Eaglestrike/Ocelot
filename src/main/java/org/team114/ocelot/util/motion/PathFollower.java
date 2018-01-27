@@ -1,4 +1,4 @@
-package org.team114.ocelot.auto;
+package org.team114.ocelot.util.motion;
 
 import org.team114.lib.geometry.Point;
 import org.team114.lib.pathgenerator.Path;
