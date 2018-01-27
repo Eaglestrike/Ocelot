@@ -43,6 +43,7 @@ public class EdgeDetector {
         try {
             lastValue = lambda.call();
         } catch (Exception e) {
+            e.printStackTrace();
             lastValue = false;
         }
         return lastValue;
@@ -57,6 +58,7 @@ public class EdgeDetector {
         try {
             newValue = lambda.call();
         } catch (Exception e) {
+            e.printStackTrace();
             newValue = false;
         }
 
