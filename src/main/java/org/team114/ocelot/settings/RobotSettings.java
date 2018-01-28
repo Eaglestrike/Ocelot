@@ -5,8 +5,8 @@ public final class RobotSettings {
         throw new AssertionError();
     }
 
-    public static final double WHEELBASE_WIDTH = 0.55245;
-    public static final double WHEEL_DIAMETER = 0.1016;
+    public static final double WHEELBASE_WIDTH_FT = 1.9;
+    public static final double WHEEL_DIAMETER_FT = 2.0/3.0;
 
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 2;

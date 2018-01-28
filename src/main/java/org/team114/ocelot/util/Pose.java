@@ -35,4 +35,9 @@ public class Pose {
     }
 
     public double getVel() {return vel;}
+
+    @Override
+    public String toString() {
+        return "Pose(X: " + getX() + ", Y: " + getY() + ", H: " + getHeading() + ", V: " + getVel() + ")";
+    }
 }

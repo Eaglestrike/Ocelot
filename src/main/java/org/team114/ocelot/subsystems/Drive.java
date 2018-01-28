@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.Encoder;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
+import org.team114.ocelot.util.motion.PurePursuitController;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -20,6 +22,7 @@ public class Drive implements AbstractDrive {
     private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
     private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
     private static DashboardHandle headingDB = new DashboardHandle("Pose hdg");
+    private static DashboardHandle velocityDB = new DashboardHandle("Pose vel");
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
     private Gyro gyro;
@@ -101,6 +104,7 @@ public class Drive implements AbstractDrive {
         xPositionDB.put(latestPose.getX());
         yPositionDB.put(latestPose.getY());
         headingDB.put(latestPose.getHeading());
+        velocityDB.put(latestPose.getVel());
     }
 
     @Override
@@ -135,6 +139,15 @@ public class Drive implements AbstractDrive {
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.LEFT, signal.getLeft());
         setSideSpeed(Side.RIGHT, -signal.getRight());
+    }
+
+    @Override
+    public void setDriveArcCommand(PurePursuitController.DriveArcCommand a) {
+        double Kv = 1/10;
+        double L = Kv * (5 * a.curvature) * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
+        double R = Kv * (5 * a.curvature) * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
+        setSideSpeed(Side.LEFT, L);
+        setSideSpeed(Side.RIGHT, -R);
     }
 
     @Override

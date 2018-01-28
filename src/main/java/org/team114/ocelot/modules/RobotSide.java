@@ -65,7 +65,7 @@ public class RobotSide {
     //TODO add actual encoders
     public double getEncoderDistance() {
         double ticks = (double) getEncoderTicks();
-        double cirumference = Math.PI * RobotSettings.WHEEL_DIAMETER;
+        double cirumference = Math.PI * RobotSettings.WHEEL_DIAMETER_FT;
         double ticksPerRotation = 4096;
         double gearRatio = 2;
 
