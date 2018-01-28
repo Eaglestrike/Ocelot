@@ -1,6 +1,6 @@
 package org.team114.ocelot.auto;
 
-public class AutoModeExecuter {
+public class AutoModeExecutor {
     private AutoModeBase m_auto_mode;
     private Thread m_thread = null;
 
