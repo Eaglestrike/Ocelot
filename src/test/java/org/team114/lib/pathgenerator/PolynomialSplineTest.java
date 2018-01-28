@@ -22,25 +22,25 @@ public class PolynomialSplineTest {
         try {
             p.at(-0.1);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.at(1.1);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.at(5);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.at(-5);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         //for derivatives
@@ -55,25 +55,25 @@ public class PolynomialSplineTest {
         try {
             p.dfdt(-0.1);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.dfdt(1.1);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.dfdt(5);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             p.dfdt(-5);
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

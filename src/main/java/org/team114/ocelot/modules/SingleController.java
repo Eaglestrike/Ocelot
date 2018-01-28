@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class SingleController implements Controller {
 
     private double velocityConstant = 1;
-    private Joystick stick;
+    private final Joystick stick;
 
 
     public SingleController(Joystick s) {

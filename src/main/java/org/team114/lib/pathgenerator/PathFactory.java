@@ -6,7 +6,7 @@ import org.ejml.interfaces.linsol.LinearSolverDense;
 import org.team114.lib.geometry.Point;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public class PathFactory {
      * valid for t = [0, 1].
      */
     public static ArrayList<PolynomialSpline> CubicC2Spline(List<Double> points, double ddxStart, double ddxEnd) {
-        return SmoothSpline(points, Arrays.asList(ddxStart), Arrays.asList(ddxEnd));
+        return SmoothSpline(points, Collections.singletonList(ddxStart), Collections.singletonList(ddxEnd));
     }
 
     /**

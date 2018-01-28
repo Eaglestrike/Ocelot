@@ -17,17 +17,17 @@ import java.util.Map;
 
 public class Drive implements AbstractDrive {
 
-    private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
-    private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
-    private static DashboardHandle headingDB = new DashboardHandle("Pose hdg");
+    private static final DashboardHandle xPositionDB = new DashboardHandle("Pose X");
+    private static final DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
+    private static final DashboardHandle headingDB = new DashboardHandle("Pose hdg");
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
-    private Gyro gyro;
-    private RobotState robotState;
+    private final Gyro gyro;
+    private final RobotState robotState;
 
     // TODO change from practice base
-    Encoder leftEncoder;
-    Encoder rightEncoder;
+    private final Encoder leftEncoder;
+    private final Encoder rightEncoder;
 
     public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro, RobotState robotState) {
         this.robotSideMap.put(Side.LEFT, leftSide);

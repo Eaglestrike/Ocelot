@@ -4,9 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public class Gyro {
-    public static Gyro shared = new Gyro();
+    public static final Gyro shared = new Gyro();
 
-    private AHRS navx;
+    private final AHRS navx;
     private boolean isCalibrating;
 
     private Gyro() {
@@ -26,8 +26,10 @@ public class Gyro {
         navx.zeroYaw();
     }
 
+    // empty while block is deliberate, used for waiting
+    @SuppressWarnings("StatementWithEmptyBody")
     public void waitUntilCalibrated() {
-        while (isCalibrating());
+        while (isCalibrating()) {}
     }
 
     public boolean isCalibrating() {

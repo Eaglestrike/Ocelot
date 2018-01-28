@@ -8,7 +8,7 @@ public class Point {
     /**
      * X position of this point.
      */
-    private double x;
+    private final double x;
 
     /**
      * Gets the x position of the point.
@@ -20,7 +20,7 @@ public class Point {
     /**
      * Y position of this point.
      */
-    private double y;
+    private final double y;
 
     /**
      * Gets the Y position of the point.

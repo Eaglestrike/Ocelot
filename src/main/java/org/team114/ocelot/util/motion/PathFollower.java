@@ -9,13 +9,13 @@ import org.team114.ocelot.util.Pose;
 
 public class PathFollower {
     //Easy way to change accuracy/speed of gradient descent
-    private static double speed = 20;
+    private static final double speed = 20;
 
     private double lastCall = -1;
     private double k = 0.15 * Math.sqrt(RobotSettings.WHEELBASE_WIDTH);
     private double velocity = 0; //assume initial velocity is 0 for tests
 
-    private Path path;
+    private final Path path;
 
     public PathFollower(Path path, double timeStamp) {
         this.path = path;
@@ -28,8 +28,8 @@ public class PathFollower {
 
     /**
      * Returns an array of two elements representing the speed of each track on the robot.
-     * @param timeStamp
-     * @param pose
+     * @param timeStamp the time at which the method is called
+     * @param pose the current pose of the robot
      * @return {left tread velocity, right tread velocity}
      */
     public double[] tick(double timeStamp, Pose pose) {

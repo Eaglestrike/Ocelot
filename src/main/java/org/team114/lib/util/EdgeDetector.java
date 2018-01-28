@@ -24,7 +24,7 @@ public class EdgeDetector {
         FLAT
     }
 
-    private Callable<Boolean> lambda;
+    private final Callable<Boolean> lambda;
     private boolean lastValue = false;
 
     /**

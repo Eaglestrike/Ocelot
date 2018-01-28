@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class EdgeDetectorTest  {
 
     private boolean value;
-    private EdgeDetector edgeDetector = new EdgeDetector(this::getValue);
+    private final EdgeDetector edgeDetector = new EdgeDetector(this::getValue);
     private boolean getValue() {
         return value;
     }

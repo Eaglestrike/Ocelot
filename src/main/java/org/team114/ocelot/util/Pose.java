@@ -3,13 +3,13 @@ package org.team114.ocelot.util;
 import org.team114.lib.geometry.Point;
 
 public class Pose {
-    private double x;
-    private double y;
-    private double vel;
+    private final double x;
+    private final double y;
+    private final double vel;
     /**
      * The direction it is facing, in radians.
      */
-    private double heading;
+    private final double heading;
 
     public Pose(double x, double y, double heading, double vel) {
         this.x = x;

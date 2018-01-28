@@ -13,11 +13,11 @@ public class Polynomial {
      * The degree of the polynomial. For instance, if the largest term is 5x^8, this will be
      * 8.
      */
-    protected int degree;
+    protected final int degree;
     /**
      * The coefficients of the polynomial expression.
      */
-    protected double[] coefficients;
+    protected final double[] coefficients;
 
 
     /**

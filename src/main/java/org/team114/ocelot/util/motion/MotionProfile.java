@@ -4,12 +4,12 @@ import org.team114.ocelot.settings.RobotSettings;
 
 public class MotionProfile {
 
-    private double time, initialPosition, finalPosition, initialVelocity, finalVelocity;
+    private final double time, initialPosition, finalPosition, initialVelocity, finalVelocity;
 
     // Variables that are calculated based on arguments that are to be used by methods to calculate velocity,
     // position, and acceleration for a given time
     private double distancePerfect, middleDistance, T0, T1, T2, P1, P2;
-    private boolean triangular, completed;
+    private final boolean triangular, completed;
     private double timePeriodOne, timePeriodTwo, timePeriodThree;
 
     public MotionProfile(double time, double initialPosition, double finalPosition,
