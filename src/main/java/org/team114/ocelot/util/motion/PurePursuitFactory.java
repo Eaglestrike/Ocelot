@@ -1,6 +1,5 @@
 package org.team114.ocelot.util.motion;
 
-import edu.wpi.first.wpilibj.Timer;
 import org.team114.ocelot.util.Pose;
 
 import java.io.BufferedReader;
@@ -35,7 +34,7 @@ public abstract class PurePursuitFactory {
         if (path == null || path.pathComponentList.size() < 1)
             throw new FileNotFoundException("PathComponents file was either empty or null");
 
-        PurePursuitController controller = new PurePursuitController(1, path, finalVelocity, 0.25, Timer.getFPGATimestamp());
+        PurePursuitController controller = new PurePursuitController(1, path, 0.5);
         return controller;
     }
 }

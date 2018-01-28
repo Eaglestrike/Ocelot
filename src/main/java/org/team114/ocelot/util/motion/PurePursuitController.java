@@ -1,14 +1,13 @@
 package org.team114.ocelot.util.motion;
 
 import org.team114.lib.geometry.Point;
-import org.team114.ocelot.RobotState;
 import org.team114.ocelot.util.Pose;
 
 public class PurePursuitController {
 
 
     public static class DriveArcCommand {
-        //negative is right, positive is left
+        // negative curvature is left, positive is right in accordance with coordinate standards for the x-axis
         public final double curvature;
         public final double vel;
 
@@ -18,28 +17,31 @@ public class PurePursuitController {
         }
     }
     private final PathPointList path;
-    private final double pathLength;
 
     private final double lookAheadDistance;
-    private final double finalVelocity;
 
     private boolean isFinished = false;
     private int lastLookAheadPoint;
-    private Pose lastKnownPose;
-    private double lastTimeStamp;
     private double finishMargin;
 
-    public PurePursuitController(double lookAheadDistance, PathPointList path, double finalVelocity, double finishMargin, double timestamp) {
+    // not currently used, may be needed for a motion profile
+    double finalVelocity;
+    double pathLength;
+
+    public PurePursuitController(double lookAheadDistance, PathPointList path, double finishMargin) {
         this.lookAheadDistance = lookAheadDistance;
         this.path = path;
-        this.finalVelocity = finalVelocity;
+        this.finishMargin = finishMargin;
+
         this.lastLookAheadPoint = 0;
-        lastKnownPose = RobotState.shared.getLatestPose(); //TODO implement
-        lastTimeStamp = timestamp;
-        if (this.path.pathComponentList.size() > 0) {
-            pathLength = this.path.get(this.path.pathComponentList.size()-1).getDistance();
-        } else {
-            pathLength = 0;
+
+        if (false) { // will be used if a motion profile is implemented
+            this.finalVelocity = finalVelocity;
+            if (this.path.pathComponentList.size() > 0) {
+                pathLength = this.path.get(this.path.pathComponentList.size()-1).getDistance();
+            } else {
+                pathLength = 0;
+            }
         }
     }
 
@@ -51,30 +53,6 @@ public class PurePursuitController {
         }
         return path.get(search);
     }
-
-    private Point getPivot(Point objective){
-        //account for NaN
-        if(objective.x() == lastKnownPose.getX() && objective.y() == lastKnownPose.getY())
-            return lastKnownPose.getPoint();
-
-        double m = -1 / Math.tan(lastKnownPose.getHeading());
-        double b = m * -lastKnownPose.getX() + lastKnownPose.getY();
-
-        double m2 = (lastKnownPose.getX() - objective.x()) / (objective.y() - lastKnownPose.getY());
-        double b2 = (-m2 * (lastKnownPose.getX() + objective.x()) + lastKnownPose.getY() + objective.y()) / 2;
-
-        double pivotX = (b - b2) / (m2 - m);
-        return new Point(pivotX, m * pivotX + b);
-    }
-
-    private double threePointAngle(Point robot, Point target, double radius) {
-        double hyp = target.hyp2(robot);
-        double temp = -2 * radius * radius;
-
-        return Math.acos( (hyp+temp)/temp );
-    }
-
-
 
     public DriveArcCommand getCommand(Pose pose, double timestamp) {
         PathComponent targetComponent = getLookAheadPoint(pose);
@@ -91,26 +69,16 @@ public class PurePursuitController {
             isFinished = true;
             return new DriveArcCommand(0,0);
         }
+
         Point targetPoint = targetComponent.getLocation();
-        Point arcCenter = getPivot(targetPoint);
-        double arcRadius = arcCenter.dist(pose.getPoint());
+        Point robotCentricTarget = pose.asRobotCoordinates(targetPoint);
+        double signedCurvature = (2 * robotCentricTarget.x()) / robotCentricTarget.hyp2(new Point(0,0));
 
-        double angleToObjective = Math.atan2(targetPoint.y() - arcCenter.y(), targetPoint.x() - arcCenter.x());
+        //TODO: replace with a motion profile?
+        //TODO: update constant with something in robot settings
+        double targetVelocity = Math.min(5.0, 1.5 * targetPoint.dist(pose.getPoint()));
 
-        double arcLength = threePointAngle(lastKnownPose.getPoint(), targetPoint, arcRadius) * arcRadius;
-
-        //MUST FIX
-        double targetVelocity = 0;
-        //double targetVelocity = MotionProfile.getVelocity(timestamp-lastTimeStamp, 0, arcLength + pathLength
-        //        - targetComponent.getDistance(), lastKnownPose.getVel(), finalVelocity);
-
-
-        double signOfCurvature = Math.signum(Math.atan2(targetPoint.y() - pose.getPoint().y(), targetPoint.x() - pose.getPoint().x()) - pose.getHeading());
-
-        lastKnownPose = pose;
-        lastTimeStamp = timestamp;
-
-        return new DriveArcCommand(signOfCurvature/arcRadius, targetVelocity);
+        return new DriveArcCommand(signedCurvature, targetVelocity);
     }
 
     public boolean isFinished() {

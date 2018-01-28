@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
+import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
@@ -143,9 +144,15 @@ public class Drive implements AbstractDrive {
 
     @Override
     public void setDriveArcCommand(PurePursuitController.DriveArcCommand a) {
-        double Kv = 1/10;
-        double L = Kv * (5 * a.curvature) * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
-        double R = Kv * (5 * a.curvature) * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
+        double Kv = 1/9.5; //TODO replace primitive speed controller with talon velocity control on main robot
+        double L, R;
+        if (Epsilon.epsilonEquals(a.curvature, 0)) {
+            L = Kv * a.vel * a.curvature * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
+            R = Kv * a.vel * a.curvature * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
+        } else {
+            L = Kv * a.vel;
+            R = L;
+        }
         setSideSpeed(Side.LEFT, L);
         setSideSpeed(Side.RIGHT, -R);
     }

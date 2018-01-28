@@ -9,7 +9,6 @@ import org.team114.ocelot.util.motion.PathComponent;
 import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitController;
 import org.team114.ocelot.SubsystemSingletons;
-import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 import java.util.Arrays;
 
@@ -25,7 +24,7 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void start() {
-        controller = new PurePursuitController(20, path, 0, 1, Timer.getFPGATimestamp());
+        controller = new PurePursuitController(20, path, 1);
     }
 
     @Override
