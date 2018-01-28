@@ -1,29 +1,29 @@
 package org.team114.ocelot.auto;
 
 public class AutoModeExecutor {
-    private AutoModeBase m_auto_mode;
-    private Thread m_thread = null;
+    private AutoModeBase autoMode;
+    private Thread thread = null;
 
-    public void setAutoMode(AutoModeBase new_auto_mode) {
-        m_auto_mode = new_auto_mode;
+    public void setAutoMode(AutoModeBase autoMode) {
+        this.autoMode = autoMode;
     }
 
     public void start() {
-        if (m_thread == null) {
-            m_thread = new Thread(() -> {
-                if (m_auto_mode != null) {
-                    m_auto_mode.run();
+        if (thread == null) {
+            thread = new Thread(() -> {
+                if (autoMode != null) {
+                    autoMode.run();
                 }
             });
-            m_thread.start();
+            thread.start();
         }
 
     }
 
     public void stop() {
-        if (m_auto_mode != null) {
-            m_auto_mode.stop();
+        if (autoMode != null) {
+            autoMode.stop();
         }
-        m_thread = null;
+        thread = null;
     }
 }
