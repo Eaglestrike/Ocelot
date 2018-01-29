@@ -2,6 +2,7 @@ package org.team114.ocelot.auto.modes;
 
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.DriveCommandAction;
+import org.team114.ocelot.auto.actions.FollowPathTestAction;
 import org.team114.ocelot.util.DriveSignal;
 import openrio.powerup.MatchData;
 
@@ -15,7 +16,7 @@ public class TestMode extends AutoModeBase {
         } else if (side == MatchData.OwnedSide.RIGHT) {
             runAction(new DriveCommandAction(new DriveSignal(-0.5, -0.5)));
         } else {
-            runAction(new DriveCommandAction(new DriveSignal(-0.5, 0.5)));
+            runAction(new FollowPathTestAction());
         }
     }
 }

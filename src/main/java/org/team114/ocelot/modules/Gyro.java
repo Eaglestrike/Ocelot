@@ -11,15 +11,24 @@ public class Gyro {
 
     private Gyro() {
         navx = new AHRS(Port.kMXP);
+        navx.setAngleAdjustment(-90.0);
         navx.zeroYaw();
         isCalibrating = true;
     }
 
+    private double boundDegrees(double angle) {
+        return ((angle + 180) % 360 + 360) % 360 - 180;
+    }
+
     /**
-     * @return the heading of the navx chip, in radians.
+     * @return the heading of the navx chip modified to co-oridnate system conventions, in radians.
      */
     public double getYaw() {
-        return Math.toRadians(navx.getYaw());
+        return Math.toRadians(getYawDegrees());
+    }
+
+    public double getYawDegrees() {
+        return boundDegrees(-navx.getAngle());
     }
 
     public void zeroYaw() {

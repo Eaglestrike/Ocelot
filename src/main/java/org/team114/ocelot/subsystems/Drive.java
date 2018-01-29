@@ -4,22 +4,26 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
+import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
+import org.team114.ocelot.util.motion.PurePursuitController;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 public class Drive implements AbstractDrive {
 
-    private static final DashboardHandle xPositionDB = new DashboardHandle("Pose X");
-    private static final DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
-    private static final DashboardHandle headingDB = new DashboardHandle("Pose hdg");
+    private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
+    private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
+    private static DashboardHandle headingDB = new DashboardHandle("Pose hdg");
+    private static DashboardHandle velocityDB = new DashboardHandle("Pose vel");
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
     private final Gyro gyro;
@@ -101,6 +105,7 @@ public class Drive implements AbstractDrive {
         xPositionDB.put(latestPose.getX());
         yPositionDB.put(latestPose.getY());
         headingDB.put(latestPose.getHeading());
+        velocityDB.put(latestPose.getVel());
     }
 
     @Override
@@ -135,6 +140,21 @@ public class Drive implements AbstractDrive {
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.LEFT, signal.getLeft());
         setSideSpeed(Side.RIGHT, -signal.getRight());
+    }
+
+    @Override
+    public void setDriveArcCommand(PurePursuitController.DriveArcCommand a) {
+        double Kv = 1/9.5; //TODO replace primitive speed controller with talon velocity control on main robot
+        double L, R;
+        if (Epsilon.epsilonEquals(a.curvature, 0)) {
+            L = Kv * a.vel;
+            R = L;
+        } else {
+            L = Kv * a.vel * a.curvature * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
+            R = Kv * a.vel * a.curvature * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
+        }
+        setSideSpeed(Side.LEFT, L);
+        setSideSpeed(Side.RIGHT, -R);
     }
 
     @Override
