@@ -36,10 +36,10 @@ public class PathPointList {
 
         while (tIndex < p.length()) {
             Point dydx = p.dydx(tIndex);
-            if (dydx.x() == 0.0 || dydx.y() == 0.0) {
+            if (dydx.x() == 0.0 && dydx.y() == 0.0) {
                 tIndex += Epsilon.EPSILON;
             } else {
-                double speed = dydx.y() / dydx.x();
+                double speed = Math.sqrt(Math.pow(dydx.y(), 2) +  Math.pow(dydx.x(), 2));
                 tIndex += segmentDistance / speed;
             }
             Point newPoint = p.getPointAtT(tIndex);
