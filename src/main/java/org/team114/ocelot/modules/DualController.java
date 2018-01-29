@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class DualController implements Controller {
 
-    private double velocityConstant = 1;
     private final Joystick left;
     private final Joystick right;
 
