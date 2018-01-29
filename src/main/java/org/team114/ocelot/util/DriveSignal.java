@@ -7,9 +7,9 @@ public class DriveSignal {
     public static final DriveSignal COAST = new DriveSignal(0, 0);
     public static final DriveSignal BRAKE = new DriveSignal(0, 0, true);
 
-    private double leftMotor;
-    private double rightMotor;
-    private boolean brakeMode;
+    private final double leftMotor;
+    private final double rightMotor;
+    private final boolean brakeMode;
 
     public DriveSignal(double left, double right) {
         this(left, right, false);

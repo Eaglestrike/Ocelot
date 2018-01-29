@@ -3,13 +3,13 @@ package org.team114.ocelot.auto;
 import org.team114.lib.auto.actions.Action;
 
 public abstract class AutoModeBase {
-    protected double m_update_rate = 1.0 / 50.0;
-    protected boolean m_active = false;
+    protected double updateRate = 1.0 / 50.0;
+    protected boolean active = false;
 
     protected abstract void routine();
 
     public void run() {
-        m_active = true;
+        active = true;
         routine();
 
         done();
@@ -20,11 +20,11 @@ public abstract class AutoModeBase {
     }
 
     public void stop() {
-        m_active = false;
+        active = false;
     }
 
     public boolean isActive() {
-        return m_active;
+        return active;
     }
 
     public void runAction(Action action) {
@@ -32,7 +32,7 @@ public abstract class AutoModeBase {
 
         while (isActive() && !action.finished()) {
             action.step();
-            long waitTime = (long) (m_update_rate * 1000.0);
+            long waitTime = (long) (updateRate * 1000.0);
 
             try {
                 Thread.sleep(waitTime);

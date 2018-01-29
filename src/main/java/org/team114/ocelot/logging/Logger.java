@@ -8,7 +8,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class Logger<T extends Loggable> {
-    private ArrayList<T> list = new ArrayList<>();
+    private final ArrayList<T> list = new ArrayList<>();
 
     public void log(T item) {
         list.add(item);
@@ -20,7 +20,7 @@ public class Logger<T extends Loggable> {
 
     public List<JsonObject> dumpLogsToJson() {
         return list.stream()
-                .map(p -> p.toJson())
+                .map(T::toJson)
                 .collect(toList());
     }
 }

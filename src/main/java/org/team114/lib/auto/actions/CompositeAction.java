@@ -16,7 +16,7 @@ public abstract class CompositeAction implements Action {
      * A list of actions input when the class is constructed. The use of this list is defined
      * by the subclass, but some or all of the actions will ordinarily be executed.
      */
-    protected List<Action> actions;
+    protected final List<Action> actions;
 
     /**
      * Create a new instance of this class from a list of actions.

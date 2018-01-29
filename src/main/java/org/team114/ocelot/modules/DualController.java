@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.Joystick;
 public class DualController implements Controller {
 
     private double velocityConstant = 1;
-    private Joystick left;
-    private Joystick right;
+    private final Joystick left;
+    private final Joystick right;
 
     public DualController(Joystick left, Joystick right) {
         this.left = left;

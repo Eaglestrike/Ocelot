@@ -26,12 +26,12 @@ public class Drive implements AbstractDrive {
     private static DashboardHandle velocityDB = new DashboardHandle("Pose vel");
 
     private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
-    private Gyro gyro;
-    private RobotState robotState;
+    private final Gyro gyro;
+    private final RobotState robotState;
 
     // TODO change from practice base
-    Encoder leftEncoder;
-    Encoder rightEncoder;
+    private final Encoder leftEncoder;
+    private final Encoder rightEncoder;
 
     public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro, RobotState robotState) {
         this.robotSideMap.put(Side.LEFT, leftSide);

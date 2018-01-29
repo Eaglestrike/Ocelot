@@ -19,13 +19,13 @@ public class CubicHermiteSplineTest {
         try {
             new CubicHermiteSpline(new double[]{7, 3, 5});
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         try {
             new CubicHermiteSpline(new double[]{7, 3, 5, 19, 21});
             fail();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

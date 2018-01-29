@@ -5,7 +5,7 @@ import org.team114.ocelot.SubsystemSingletons;
 import org.team114.ocelot.util.DriveSignal;
 
 public class DriveCommandAction implements Action {
-    DriveSignal signal;
+    private final DriveSignal signal;
 
     public DriveCommandAction(DriveSignal d) {
         this.signal = d;
