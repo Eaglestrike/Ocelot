@@ -49,7 +49,7 @@ public class Pose {
         double y = p.y() - getY();
 
         //rotate by robot-radians
-        double rad = -getHeading();
+        double rad = -getHeading() + (Math.PI/2); // the delta for the x-axis
         return new Point(x * Math.cos(rad) - y * Math.sin(rad),
                 x * Math.sin(rad) + y * Math.cos(rad));
 

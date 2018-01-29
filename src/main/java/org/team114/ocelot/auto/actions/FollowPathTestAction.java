@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class FollowPathTestAction implements Action {
     PurePursuitController controller;
-    PathPointList path = new PathPointList(Arrays.asList(new PathComponent(new Point(5, 0), 0)));
+    PathPointList path = new PathPointList(Arrays.asList(new PathComponent(new Point(5, 5), 0)));
 
 
     @Override

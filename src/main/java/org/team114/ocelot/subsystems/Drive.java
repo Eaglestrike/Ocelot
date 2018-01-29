@@ -147,11 +147,11 @@ public class Drive implements AbstractDrive {
         double Kv = 1/9.5; //TODO replace primitive speed controller with talon velocity control on main robot
         double L, R;
         if (Epsilon.epsilonEquals(a.curvature, 0)) {
-            L = Kv * a.vel * a.curvature * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
-            R = Kv * a.vel * a.curvature * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
-        } else {
             L = Kv * a.vel;
             R = L;
+        } else {
+            L = Kv * a.vel * a.curvature * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
+            R = Kv * a.vel * a.curvature * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
         }
         setSideSpeed(Side.LEFT, L);
         setSideSpeed(Side.RIGHT, -R);
