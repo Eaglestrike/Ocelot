@@ -8,14 +8,18 @@ import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PathComponent;
 import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitController;
-import org.team114.ocelot.SubsystemSingletons;
+import org.team114.ocelot.Subsystems;
 
 import java.util.Arrays;
 
 public class FollowPathTestAction implements Action {
-    PurePursuitController controller;
-    PathPointList path = new PathPointList(Arrays.asList(new PathComponent(new Point(5, 5), 0)));
+    private Subsystems subsystems;
+    private PurePursuitController controller;
 
+    public FollowPathTestAction(Subsystems subsystems, PathPointList path, double lookAheadDistance, double finishMargin) {
+        this.subsystems = subsystems;
+        this.controller = new PurePursuitController(lookAheadDistance, path, finishMargin);
+    }
 
     @Override
     public boolean finished() {
@@ -24,18 +28,16 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void start() {
-        controller = new PurePursuitController(20, path, 1);
     }
 
     @Override
     public void stop() {
-        SubsystemSingletons.drive.setDriveSignal(new DriveSignal(0,0));
-
+        subsystems.getDrive().setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
     public void step() {
         PurePursuitController.DriveArcCommand command = controller.getCommand(RobotState.shared.getLatestPose(), Timer.getFPGATimestamp());
-        SubsystemSingletons.drive.setDriveArcCommand(command);
+        subsystems.getDrive().setDriveArcCommand(command);
     }
 }

@@ -20,6 +20,8 @@ import org.team114.ocelot.util.Side;
  */
 public class Robot extends IterativeRobot {
 
+    Subsystems subsystems = new Subsystems();
+
     SubsystemManager subsystemManager;
     AbstractDrive drive;
 
@@ -44,8 +46,10 @@ public class Robot extends IterativeRobot {
         controller = new DualController(new Joystick(0), new Joystick(1));
         drive = new Drive(leftSide, rightSide, gyro, robotState);
 
+        subsystems.setDrive(drive);
+        subsystems.setState(robotState);
+
         subsystemManager = new SubsystemManager(drive);
-        SubsystemSingletons.drive = drive;
         subsystemManager.start();
     }
 
@@ -60,7 +64,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         autoModeExecutor = new AutoModeExecutor();
-        autoModeExecutor.setAutoMode(new TestMode());
+        autoModeExecutor.setAutoMode(new TestMode(subsystems));
         autoModeExecutor.start();
     }
 
