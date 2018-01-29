@@ -14,7 +14,7 @@ public class DualController implements Controller {
     }
 
     public double throttle() {
-        return left.getY();
+        return Math.pow(left.getY(),3);
     }
 
     public double wheel() {

@@ -1,6 +1,6 @@
 package org.team114.ocelot.modules;
 
-interface Controller {
+public interface Controller {
 
     double throttle();
 
