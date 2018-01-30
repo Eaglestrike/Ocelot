@@ -24,7 +24,7 @@ public class SubsystemManager {
      * Creates a new manager from a list of subsystems.
      * @param subsystems a {@code List} of all subsystems
      */
-    public SubsystemManager(List<? extends Subsystem> subsystems) {
+    public SubsystemManager(List<Subsystem> subsystems) {
         this.subsystems = new ArrayList<>(subsystems);
     }
     /**
