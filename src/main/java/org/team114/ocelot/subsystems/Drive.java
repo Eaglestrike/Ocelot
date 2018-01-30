@@ -6,6 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
+import org.team114.ocelot.dagger.Left;
+import org.team114.ocelot.dagger.Right;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.settings.RobotSettings;
@@ -15,9 +17,12 @@ import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.EnumMap;
 import java.util.Map;
 
+@Singleton
 public class Drive implements AbstractDrive {
 
     private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
@@ -33,7 +38,8 @@ public class Drive implements AbstractDrive {
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
 
-    public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro, RobotState robotState) {
+    @Inject
+    public Drive(@Left RobotSide leftSide, @Right RobotSide rightSide, Gyro gyro, RobotState robotState) {
         this.robotSideMap.put(Side.LEFT, leftSide);
         this.robotSideMap.put(Side.RIGHT, rightSide);
         this.gyro = gyro;

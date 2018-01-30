@@ -1,13 +1,20 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.dagger.Left;
+import org.team114.ocelot.dagger.Right;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class DualController implements Controller {
 
     private final Joystick left;
     private final Joystick right;
 
-    public DualController(Joystick left, Joystick right) {
+    @Inject
+    public DualController(@Left Joystick left, @Right Joystick right) {
         this.left = left;
         this.right = right;
     }

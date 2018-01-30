@@ -1,13 +1,18 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.dagger.Primary;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class SingleController implements Controller {
 
     private final Joystick stick;
 
-
-    public SingleController(Joystick s) {
+    @Inject
+    public SingleController(@Primary Joystick s) {
         stick = s;
     }
 

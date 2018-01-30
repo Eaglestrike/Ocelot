@@ -3,13 +3,17 @@ package org.team114.ocelot.modules;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class Gyro {
-    public static final Gyro shared = new Gyro();
 
     private final AHRS navx;
     private boolean isCalibrating;
 
-    private Gyro() {
+    @Inject
+    public Gyro() {
         navx = new AHRS(Port.kMXP);
         navx.setAngleAdjustment(-90.0);
         navx.zeroYaw();

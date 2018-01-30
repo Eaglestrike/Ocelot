@@ -1,16 +1,13 @@
 package org.team114.ocelot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.modules.DualController;
-import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.dagger.DaggerRobotComponent;
+import org.team114.ocelot.dagger.RobotComponent;
+import org.team114.ocelot.modules.Controller;
 import org.team114.ocelot.subsystems.AbstractDrive;
-import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Side;
@@ -22,33 +19,19 @@ public class Robot extends IterativeRobot {
 
     Subsystems subsystems = new Subsystems();
 
-    SubsystemManager subsystemManager;
-    AbstractDrive drive;
+    RobotComponent component = DaggerRobotComponent.create();
 
-    DualController controller;
+    SubsystemManager subsystemManager;
+    AbstractDrive drive = component.drive();
+
+    Controller controller = component.controller();
     CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper();
-    Gyro gyro = Gyro.shared;
-    RobotState robotState = RobotState.shared;
+    RobotState robotState = component.robotState();
 
     AutoModeExecutor autoModeExecutor;
 
     @Override
     public void robotInit() {
-        RobotSide leftSide = new RobotSide(
-            new TalonSRX(1),
-            new TalonSRX(2)
-        );
-        RobotSide rightSide = new RobotSide(
-            new TalonSRX(3),
-            new TalonSRX(4)
-        );
-
-        controller = new DualController(new Joystick(0), new Joystick(1));
-        drive = new Drive(leftSide, rightSide, gyro, robotState);
-
-        subsystems.setDrive(drive);
-        subsystems.setState(robotState);
-
         subsystemManager = new SubsystemManager(drive);
         subsystemManager.start();
     }
