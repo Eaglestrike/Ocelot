@@ -30,6 +30,8 @@ public class Robot extends IterativeRobot {
     public static final String DB_yPositionDB = "Pose Y";
     public static final String DB_headingDB = "Pose hdg";
     public static final String DB_velocityDB = "Pose vel";
+    Subsystems subsystems = new Subsystems();
+
     SubsystemManager subsystemManager;
     AbstractDrive drive;
 
@@ -66,8 +68,10 @@ public class Robot extends IterativeRobot {
         drive = new Drive(robotRegistry.getRobotRegistry("Drive"));
         robotRegistry.put(drive);
 
+        subsystems.setDrive(drive);
+        subsystems.setState(robotState);
+
         subsystemManager = new SubsystemManager(drive);
-        SubsystemSingletons.drive = drive;
         subsystemManager.start();
     }
 
@@ -82,7 +86,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         autoModeExecutor = new AutoModeExecutor();
-        autoModeExecutor.setAutoMode(new TestMode());
+        autoModeExecutor.setAutoMode(new TestMode(subsystems));
         autoModeExecutor.start();
     }
 

@@ -1,14 +1,17 @@
 package org.team114.ocelot.auto.actions;
 
 import org.team114.lib.auto.actions.Action;
-import org.team114.ocelot.SubsystemSingletons;
+import org.team114.lib.subsystem.Subsystem;
+import org.team114.ocelot.Subsystems;
 import org.team114.ocelot.util.DriveSignal;
 
 public class DriveCommandAction implements Action {
+    private Subsystems subsystems;
     private final DriveSignal signal;
 
-    public DriveCommandAction(DriveSignal d) {
-        this.signal = d;
+    public DriveCommandAction(Subsystems subsystems, DriveSignal signal) {
+        this.subsystems = subsystems;
+        this.signal = signal;
     }
 
     @Override
@@ -18,16 +21,16 @@ public class DriveCommandAction implements Action {
 
     @Override
     public void start() {
-        SubsystemSingletons.drive.setDriveSignal(signal);
+        subsystems.getDrive().setDriveSignal(signal);
     }
 
     @Override
     public void stop() {
-        SubsystemSingletons.drive.setDriveSignal(new DriveSignal(0,0));
+        subsystems.getDrive().setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
     public void step() {
-        SubsystemSingletons.drive.setDriveSignal(signal);
+        subsystems.getDrive().setDriveSignal(signal);
     }
 }
