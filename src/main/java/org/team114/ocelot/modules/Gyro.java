@@ -10,6 +10,7 @@ public class Gyro {
 
     public Gyro(RobotRegistry robotRegistry) {
         navx = new AHRS(Port.kMXP);
+        // we want the angle to read 90 after a zero yaw, but our reading is negated below, so the offset is -90.
         navx.setAngleAdjustment(-90.0);
         navx.zeroYaw();
         isCalibrating = true;
@@ -27,6 +28,7 @@ public class Gyro {
     }
 
     public double getYawDegrees() {
+        // negated because the navx counts angles CW, we want CCW angles;
         return boundDegrees(-navx.getAngle());
     }
 
