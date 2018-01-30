@@ -1,4 +1,4 @@
-package org.team114.ocelot.subsystems;
+package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -8,8 +8,6 @@ import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.dagger.Left;
 import org.team114.ocelot.dagger.Right;
-import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
@@ -23,7 +21,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @Singleton
-public class Drive implements AbstractDrive {
+class Drive implements AbstractDrive {
 
     private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
     private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");

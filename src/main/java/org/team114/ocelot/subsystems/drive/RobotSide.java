@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -14,7 +14,7 @@ import java.util.List;
  * This class is responsible for ensuring that the master and slave talons are linked.
  * Coupled with {@link Side}
  */
-public class RobotSide {
+class RobotSide {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
     private ControlMode controlMode;

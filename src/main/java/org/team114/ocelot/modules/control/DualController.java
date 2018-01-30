@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.modules.control;
 
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.ocelot.dagger.Left;

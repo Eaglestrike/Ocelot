@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.modules.control;
 
 public interface Controller {
 

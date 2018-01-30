@@ -3,6 +3,7 @@ plugins {
     id "eclipse"
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.01.11"
+    id "net.ltgt.apt" version "0.10"
 }
 
 repositories {
@@ -44,6 +45,9 @@ dependencies {
         ['com.google.code.findbugs:jsr305:2.0.1'],
         ['com.google.code.findbugs:annotations:2.0.1']
     )
+
+    compile 'com.google.dagger:dagger:2.14.+'
+    apt 'com.google.dagger:dagger-compiler:2.14.+'
 
     // testing and mocking
     testCompile 'junit:junit:4.12'

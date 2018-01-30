@@ -1,4 +1,4 @@
-package org.team114.ocelot.subsystems;
+package org.team114.ocelot.subsystems.drive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
