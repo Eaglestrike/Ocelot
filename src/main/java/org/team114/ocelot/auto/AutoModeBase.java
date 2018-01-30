@@ -2,7 +2,6 @@ package org.team114.ocelot.auto;
 
 import org.team114.lib.auto.actions.Action;
 import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.Subsystems;
 
 public abstract class AutoModeBase {
     protected final RobotRegistry robotRegistry;

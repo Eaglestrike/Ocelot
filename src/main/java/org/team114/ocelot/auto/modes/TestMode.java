@@ -2,7 +2,6 @@ package org.team114.ocelot.auto.modes;
 
 import org.team114.lib.geometry.Point;
 import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.Subsystems;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.DriveCommandAction;
 import org.team114.ocelot.auto.actions.FollowPathTestAction;
@@ -32,7 +31,7 @@ public class TestMode extends AutoModeBase {
             ));
 
             runAction(new FollowPathTestAction(
-                subsystems, path,
+                robotRegistry, path,
                 20, // lookahead distance
                 1 // finish margin
             ));

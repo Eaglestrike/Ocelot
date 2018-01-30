@@ -26,6 +26,7 @@ class RobotRegistryImpl implements RobotRegistry {
     }
 
     RobotRegistry getRobotRegistry(final String prefix) {
+        @SuppressWarnings("unchecked")
         RobotRegistry robotRegistry = new RobotRegistry() {
             private RobotSettings.Configuration configuration = RobotRegistryImpl.this.getConfiguration(prefix);
             @Override
@@ -75,6 +76,7 @@ class RobotRegistryImpl implements RobotRegistry {
 
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(Class clazz) {
         return (T) this.singletonMap.get(clazz);
     }

@@ -1,9 +1,7 @@
 package org.team114.ocelot.auto.actions;
 
 import org.team114.lib.auto.actions.Action;
-import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.Subsystems;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.DriveSignal;
 
