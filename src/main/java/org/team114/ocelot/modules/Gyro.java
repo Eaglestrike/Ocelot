@@ -6,9 +6,11 @@ import org.team114.ocelot.RobotRegistry;
 
 public class Gyro {
     private final AHRS navx;
+    private final RobotRegistry robotRegistry;
     private boolean isCalibrating;
 
     public Gyro(RobotRegistry robotRegistry) {
+        this.robotRegistry = robotRegistry;
         navx = new AHRS(Port.kMXP);
         // we want the angle to read 90 after a zero yaw, but our reading is negated below, so the offset is -90.
         navx.setAngleAdjustment(-90.0);

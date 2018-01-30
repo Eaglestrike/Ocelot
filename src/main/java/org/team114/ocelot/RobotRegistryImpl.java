@@ -2,8 +2,10 @@ package org.team114.ocelot;
 
 import org.team114.ocelot.settings.RobotSettings;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * In more advance systems, we would use something like Guice or Springframework to do
@@ -62,6 +64,13 @@ class RobotRegistryImpl implements RobotRegistry {
 
     <T> void put(Class<? extends T> clazz, T object) {
         singletonMap.put(clazz, object);
+    }
+
+    public <T> List<T> getAsList(final Class clazz) {
+        return (List<T>) this.singletonMap.values().stream()
+        .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
+                .collect(Collectors.toList());
+
     }
 
     public <T> T get(Class clazz) {

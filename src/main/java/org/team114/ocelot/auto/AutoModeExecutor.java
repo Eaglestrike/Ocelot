@@ -2,7 +2,7 @@ package org.team114.ocelot.auto;
 
 public class AutoModeExecutor {
     private AutoModeBase autoMode;
-    private Thread thread = null;
+    private Thread thread;
 
     public void setAutoMode(AutoModeBase autoMode) {
         this.autoMode = autoMode;
