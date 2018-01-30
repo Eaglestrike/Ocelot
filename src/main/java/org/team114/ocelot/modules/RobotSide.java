@@ -3,6 +3,7 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.Side;
 
@@ -17,13 +18,15 @@ import java.util.List;
 public class RobotSide {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
+    private final RobotRegistry robotRegistry;
     private ControlMode controlMode;
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public RobotSide(TalonSRX masterTalon, TalonSRX slaveTalon) {
-        this.masterTalon = masterTalon;
-        this.slaveTalon = slaveTalon;
+    public RobotSide(RobotRegistry robotRegistry) {
+        this.robotRegistry = robotRegistry;
+        this.masterTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("master"));
+        this.slaveTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("slave"));
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 

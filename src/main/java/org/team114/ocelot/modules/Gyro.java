@@ -2,14 +2,13 @@ package org.team114.ocelot.modules;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
+import org.team114.ocelot.RobotRegistry;
 
 public class Gyro {
-    public static final Gyro shared = new Gyro();
-
     private final AHRS navx;
     private boolean isCalibrating;
 
-    private Gyro() {
+    public Gyro(RobotRegistry robotRegistry) {
         navx = new AHRS(Port.kMXP);
         navx.setAngleAdjustment(-90.0);
         navx.zeroYaw();

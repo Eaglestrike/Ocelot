@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Encoder;
 import org.team114.lib.util.Epsilon;
+import org.team114.ocelot.Robot;
+import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
@@ -17,33 +19,38 @@ import org.team114.ocelot.util.motion.PurePursuitController;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class Drive implements AbstractDrive {
 
-    private static DashboardHandle xPositionDB = new DashboardHandle("Pose X");
-    private static DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
-    private static DashboardHandle headingDB = new DashboardHandle("Pose hdg");
-    private static DashboardHandle velocityDB = new DashboardHandle("Pose vel");
-
-    private final Map<Side, RobotSide> robotSideMap = new EnumMap<>(Side.class);
-    private final Gyro gyro;
-    private final RobotState robotState;
+    private final Map<Side, Supplier<RobotSide>> robotSideMap = new EnumMap<>(Side.class);
+    private final RobotRegistry robotRegistry;
 
     // TODO change from practice base
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
+    private final RobotState robotState = RobotState.shared;
+    private final double halfOfWheelbase;
 
-    public Drive(RobotSide leftSide, RobotSide rightSide, Gyro gyro, RobotState robotState) {
-        this.robotSideMap.put(Side.LEFT, leftSide);
-        this.robotSideMap.put(Side.RIGHT, rightSide);
-        this.gyro = gyro;
-        this.robotState = robotState;
+
+    public Drive(RobotRegistry robotRegistry) {
+        this.robotRegistry = robotRegistry;
+        this.robotSideMap.put(Side.LEFT, () -> robotRegistry.get(Robot.ROBOT_SIDE_LEFT));
+        this.robotSideMap.put(Side.RIGHT, () -> robotRegistry.get(Robot.ROBOT_SIDE_RIGHT));
+        this.halfOfWheelbase = robotRegistry.getConfiguration().getDouble("wheelbase_width_ft") / 2.0;
 
         // TODO practice base
-        leftEncoder = new Encoder(5,6, true);
-        rightEncoder = new Encoder(7,8, false);
-        leftEncoder.setDistancePerPulse(0.043946541); //ft
-        rightEncoder.setDistancePerPulse(0.043946541);
+        RobotSettings.Configuration configuration = this.robotRegistry.getConfiguration();
+        leftEncoder = new Encoder(
+                configuration.getInt("left.channelA"),
+                configuration.getInt("left.channelB"),
+                configuration.getBoolean("left.reversedDirection"));
+        leftEncoder.setDistancePerPulse(configuration.getDouble("left.distancePerPulseInFeet")); //ft
+        rightEncoder = new Encoder(
+                configuration.getInt("right.channelA"),
+                configuration.getInt("right.channelB"),
+                configuration.getBoolean("right.reversedDirection"));
+        rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
     }
 
 
@@ -60,9 +67,9 @@ public class Drive implements AbstractDrive {
 
     private double rightAccum = 0;
     private Pose addPoseObservation() {
-        Pose latestState = robotState.getLatestPose();
+        Pose latestState = getRobotState().getLatestPose();
 
-        double newHeading = gyro.getYaw();
+        double newHeading = getGyro().getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
 
         double L = getLeftEncoder();
@@ -72,24 +79,24 @@ public class Drive implements AbstractDrive {
         leftAccum = L;
         rightAccum = R;
 
-        robotState.addObservation(new Pose(
+        getRobotState().addObservation(new Pose(
             latestState.getX() + (distance * Math.cos(angle)),
             latestState.getY() + (distance * Math.sin(angle)),
             newHeading,
             (leftEncoder.getRate() + rightEncoder.getRate())/2
         ));
 
-        return robotState.getLatestPose();
+        return getRobotState().getLatestPose();
     }
 
     @Override
     public synchronized void onStart(double timestamp) {
-        gyro.waitUntilCalibrated();
-        gyro.zeroYaw();
+        getGyro().waitUntilCalibrated();
+        getGyro().zeroYaw();
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.BOTH, 0);
-        robotState.addObservation(new Pose(0, 0,
-                gyro.getYaw(),
+        getRobotState().addObservation(new Pose(0, 0,
+                getGyro().getYaw(),
                 (leftEncoder.getRate() + rightEncoder.getRate())/2)
         );
     }
@@ -102,17 +109,17 @@ public class Drive implements AbstractDrive {
     public synchronized void onStep(double timestamp) {
         Pose latestPose = this.addPoseObservation();
 
-        xPositionDB.put(latestPose.getX());
-        yPositionDB.put(latestPose.getY());
-        headingDB.put(latestPose.getHeading());
-        velocityDB.put(latestPose.getVel());
+        getVelocityDB().put(latestPose.getVel());
+        getxPositionDB().put(latestPose.getX());
+        getyPositionDB().put(latestPose.getY());
+        getHeadingDB().put(latestPose.getHeading());
     }
 
     @Override
     public synchronized void setSideSpeed(Side sides, double speed) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = robotSideMap.get(side);
+            RobotSide robotSide = getRobotSide(side);
             robotSide.setSpeed(speed);
         }
     }
@@ -121,7 +128,7 @@ public class Drive implements AbstractDrive {
     public synchronized void setControlMode(Side sides, ControlMode controlMode) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = robotSideMap.get(side);
+            RobotSide robotSide = getRobotSide(side);
             robotSide.setControlMode(controlMode);
         }
     }
@@ -130,7 +137,7 @@ public class Drive implements AbstractDrive {
     public synchronized void setNeutralMode(Side sides, NeutralMode neutralMode) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = robotSideMap.get(side);
+            RobotSide robotSide = getRobotSide(side);
             robotSide.setNeutralMode(neutralMode);
         }
     }
@@ -150,8 +157,8 @@ public class Drive implements AbstractDrive {
             L = Kv * a.vel;
             R = L;
         } else {
-            L = Kv * a.vel * a.curvature * (1/a.curvature + RobotSettings.WHEELBASE_WIDTH_FT/2);
-            R = Kv * a.vel * a.curvature * (1/a.curvature - RobotSettings.WHEELBASE_WIDTH_FT/2);
+            L = Kv * a.vel * a.curvature * (1/a.curvature + halfOfWheelbase);
+            R = Kv * a.vel * a.curvature * (1/a.curvature - halfOfWheelbase);
         }
         setSideSpeed(Side.LEFT, L);
         setSideSpeed(Side.RIGHT, -R);
@@ -159,7 +166,8 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void selfTest() {
-        for (RobotSide robotSide : robotSideMap.values()) {
+        for (Supplier<RobotSide> robotSideSupplier : robotSideMap.values()) {
+            RobotSide robotSide = robotSideSupplier.get();
             // TODO: Throw an exception instead
             for (TalonSRX talon : robotSide.getTalons()) {
                 int id = talon.getDeviceID();
@@ -170,5 +178,33 @@ public class Drive implements AbstractDrive {
                 }
             }
         }
+    }
+
+    private Gyro getGyro() {
+        return this.robotRegistry.get(Gyro.class);
+    }
+
+    private DashboardHandle getxPositionDB() {
+        return this.robotRegistry.get(Robot.DB_xPositionDB);
+    }
+
+    private DashboardHandle getyPositionDB() {
+        return this.robotRegistry.get(Robot.DB_yPositionDB);
+    }
+
+    private DashboardHandle getHeadingDB() {
+        return this.robotRegistry.get(Robot.DB_headingDB);
+    }
+
+    private DashboardHandle getVelocityDB() {
+        return this.robotRegistry.get(Robot.DB_velocityDB);
+    }
+
+    private RobotSide getRobotSide(Side side) {
+        return this.robotSideMap.get(side).get();
+    }
+
+    private RobotState getRobotState() {
+        return this.robotRegistry.get(RobotState.class);
     }
 }
