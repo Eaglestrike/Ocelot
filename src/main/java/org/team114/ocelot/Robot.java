@@ -18,6 +18,7 @@ import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Side;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -67,7 +68,8 @@ public class Robot extends IterativeRobot {
         drive = new Drive(robotRegistry.getRobotRegistry("Drive"));
         robotRegistry.put(drive);
 
-        subsystemManager = new SubsystemManager(drive);
+        subsystemManager = new SubsystemManager(robotRegistry.getRobotRegistry("SubsystemManager"),
+                Arrays.asList(drive));
         subsystemManager.start();
     }
 

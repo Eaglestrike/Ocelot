@@ -54,6 +54,7 @@ class RobotRegistryImpl implements RobotRegistry {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T get(String key) {
         return (T) registryMap.get(key);
     }
@@ -66,6 +67,7 @@ class RobotRegistryImpl implements RobotRegistry {
         singletonMap.put(clazz, object);
     }
 
+    @SuppressWarnings("unchecked")
     public <T> List<T> getAsList(final Class clazz) {
         return (List<T>) this.singletonMap.values().stream()
         .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
