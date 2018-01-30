@@ -34,12 +34,14 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void stop() {
-        ((Drive)robotRegistry.get(Drive.class)).setDriveSignal(new DriveSignal(0,0));
+        robotRegistry.get(Drive.class).setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
     public void step() {
-        PurePursuitController.DriveArcCommand command = controller.getCommand(RobotState.shared.getLatestPose(), Timer.getFPGATimestamp());
-        ((Drive)robotRegistry.get(Drive.class)).setDriveArcCommand(command);
+        PurePursuitController.DriveArcCommand command = controller.getCommand(
+                this.robotRegistry.get(RobotState.class).getLatestPose(),
+                Timer.getFPGATimestamp());
+        robotRegistry.get(Drive.class).setDriveArcCommand(command);
     }
 }

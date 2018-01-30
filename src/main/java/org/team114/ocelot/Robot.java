@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
             e.printStackTrace();
         }
         this.robotRegistry = new RobotRegistryImpl(robotSettings, null);
-
+        this.robotRegistry.put(new RobotState(this.robotRegistry));
         RobotSide leftSide = new RobotSide(robotRegistry.getRobotRegistry("RobotSide.left"));
         robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
         RobotSide rightSide = new RobotSide(robotRegistry.getRobotRegistry("RobotSide.right"));

@@ -29,7 +29,6 @@ public class Drive implements AbstractDrive {
     // TODO change from practice base
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
-    private final RobotState robotState = RobotState.shared;
     private final double halfOfWheelbase;
 
 

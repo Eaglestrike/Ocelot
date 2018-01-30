@@ -35,7 +35,7 @@ class RobotRegistryImpl implements RobotRegistry {
             }
 
             @Override
-            public <T> T get(Class clazz) {
+            public <T> T get(Class<? extends T> clazz) {
                 return RobotRegistryImpl.this.get(clazz);
             }
 
@@ -77,7 +77,7 @@ class RobotRegistryImpl implements RobotRegistry {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get(Class clazz) {
+    public <T> T get(Class<? extends T> clazz) {
         return (T) this.singletonMap.get(clazz);
     }
 
