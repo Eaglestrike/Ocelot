@@ -3,8 +3,6 @@ package org.team114.ocelot.util;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Class providing access to SmartDashboard, and abstracting away string keys keys.

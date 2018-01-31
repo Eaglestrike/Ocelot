@@ -2,16 +2,12 @@ package org.team114.ocelot.auto.actions;
 
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.auto.actions.Action;
-import org.team114.lib.geometry.Point;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.util.DriveSignal;
-import org.team114.ocelot.util.motion.PathComponent;
 import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitController;
-
-import java.util.Arrays;
 
 public class FollowPathTestAction implements Action {
     private RobotRegistry robotRegistry;
