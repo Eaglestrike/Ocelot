@@ -4,6 +4,7 @@ import org.team114.ocelot.settings.RobotSettings;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,7 @@ class RobotRegistryImpl implements RobotRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
-        return (T) registryMap.get(key);
+        return Optional.of((T) registryMap.get(key)).get();
     }
 
     void put(Object object) {
@@ -65,20 +66,23 @@ class RobotRegistryImpl implements RobotRegistry {
     }
 
     <T> void put(Class<? extends T> clazz, T object) {
-        singletonMap.put(clazz, object);
+        singletonMap.put(clazz,
+                Optional.of(object)
+                .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
+                        .get());
     }
 
     @SuppressWarnings("unchecked")
     public <T> List<T> getAsList(final Class clazz) {
         return (List<T>) this.singletonMap.values().stream()
-        .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
+            .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
                 .collect(Collectors.toList());
 
     }
 
     @SuppressWarnings("unchecked")
     public <T> T get(Class<? extends T> clazz) {
-        return (T) this.singletonMap.get(clazz);
+        return Optional.of((T) this.singletonMap.get(clazz)).get();
     }
 
     private RobotSettings.Configuration getConfiguration(String prefix) {
