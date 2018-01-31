@@ -3,6 +3,7 @@ package org.team114.lib.subsystem;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.ocelot.RobotRegistry;
+import org.team114.ocelot.util.DashboardHandle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,9 @@ public class SubsystemManager {
     private final List<Subsystem> subsystems;
     private final Notifier notifier = new Notifier(this::step);
     private final RobotRegistry robotRegistry;
+    private final DashboardHandle hertzDB = new DashboardHandle("Subsystem Hz");
+
+    private double lastTimeStamp;
 
     /**
      * Creates a new manager from a list of subsystems.
@@ -35,6 +39,9 @@ public class SubsystemManager {
 
     private void step() {
         subsystems.forEach(system -> system.onStep(timestamp()));
+        double current = Timer.getFPGATimestamp();
+        hertzDB.put(1/(current - lastTimeStamp));
+        lastTimeStamp = current;
     }
 
     /**
@@ -49,6 +56,7 @@ public class SubsystemManager {
     public void start() {
         subsystems.forEach(subsystem -> subsystem.onStart(timestamp()));
         notifier.startPeriodic(this.robotRegistry.getConfiguration().getDouble("stepPeriod"));
+        lastTimeStamp = Timer.getFPGATimestamp();
     }
 
     /**
