@@ -36,8 +36,8 @@ class RobotRegistryImpl implements RobotRegistry {
             }
 
             @Override
-            public <T> T get(Class<? extends T> clazz) {
-                return RobotRegistryImpl.this.get(clazz);
+            public <T> T get(Class<? extends T> interfaceClazz) {
+                return RobotRegistryImpl.this.get(interfaceClazz);
             }
 
             public RobotSettings.Configuration getConfiguration() {
@@ -65,24 +65,30 @@ class RobotRegistryImpl implements RobotRegistry {
         singletonMap.put(object.getClass(), object);
     }
 
-    <T> void put(Class<? extends T> clazz, T object) {
-        singletonMap.put(clazz,
+    /**
+     * Puts the object into the singletonMap. The object is retrieved via {@link #get(Class)}
+     * @param interfaceClazz interface implemented by object
+     * @param object must be nonnull and implement interfaceClazz
+     * @param <T>
+     */
+    <T> void put(Class<? extends T> interfaceClazz, T object) {
+        singletonMap.put(interfaceClazz,
                 Optional.of(object)
-                .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
+                .filter(obj -> interfaceClazz.isAssignableFrom(obj.getClass()))
                         .get());
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> getAsList(final Class clazz) {
+    public <T> List<T> getAsList(final Class interfaceClazz) {
         return (List<T>) this.singletonMap.values().stream()
-            .filter(obj -> clazz.isAssignableFrom(obj.getClass()))
+            .filter(obj -> interfaceClazz.isAssignableFrom(obj.getClass()))
                 .collect(Collectors.toList());
 
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get(Class<? extends T> clazz) {
-        return Optional.of((T) this.singletonMap.get(clazz)).get();
+    public <T> T get(Class<? extends T> interfaceClazz) {
+        return Optional.of((T) this.singletonMap.get(interfaceClazz)).get();
     }
 
     private RobotSettings.Configuration getConfiguration(String prefix) {
