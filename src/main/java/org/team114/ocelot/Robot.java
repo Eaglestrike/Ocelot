@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
         Controller controller = new DualController(new Joystick(0), new Joystick(1));
         robotRegistry.put(Controller.class, controller);
         drive = new Drive(robotRegistry.getRobotRegistry("Drive"));
-        robotRegistry.put(drive);
+        robotRegistry.put(AbstractDrive.class, drive);
 
         subsystemManager = new SubsystemManager(robotRegistry.getRobotRegistry("SubsystemManager"),
                 Arrays.asList(drive));

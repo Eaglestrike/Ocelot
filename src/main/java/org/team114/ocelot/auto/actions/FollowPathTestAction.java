@@ -6,7 +6,6 @@ import org.team114.lib.geometry.Point;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.subsystems.AbstractDrive;
-import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PathComponent;
 import org.team114.ocelot.util.motion.PathPointList;
@@ -34,7 +33,7 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void stop() {
-        robotRegistry.get(Drive.class).setDriveSignal(new DriveSignal(0,0));
+        robotRegistry.get(AbstractDrive.class).setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
@@ -42,6 +41,6 @@ public class FollowPathTestAction implements Action {
         PurePursuitController.DriveArcCommand command = controller.getCommand(
                 this.robotRegistry.get(RobotState.class).getLatestPose(),
                 Timer.getFPGATimestamp());
-        robotRegistry.get(Drive.class).setDriveArcCommand(command);
+        robotRegistry.get(AbstractDrive.class).setDriveArcCommand(command);
     }
 }
