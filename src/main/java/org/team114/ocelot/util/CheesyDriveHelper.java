@@ -6,11 +6,11 @@ import org.team114.ocelot.settings.RobotSettings;
 public class CheesyDriveHelper {
     private final RobotRegistry robotRegistry;
 
-    public static double limit(double v, double limit) {
+    private static double limit(double v, double limit) {
         return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
     }
 
-    double quickStopAccumulator;
+    private double quickStopAccumulator;
     private final double throttleDeadband;
     private final double wheelDeadband;
     private final double turnSensitivity;
@@ -23,6 +23,7 @@ public class CheesyDriveHelper {
         this.wheelDeadband = configuration.getDouble("wheelDeadband");
         this.turnSensitivity = configuration.getDouble("turnSensitivity");
     }
+
     public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
 
         wheel = handleDeadband(wheel, wheelDeadband);

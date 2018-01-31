@@ -32,10 +32,10 @@ public class Robot extends IterativeRobot {
     public static final String DB_headingDB = "Pose hdg";
     public static final String DB_velocityDB = "Pose vel";
 
-    SubsystemManager subsystemManager;
-    AbstractDrive drive;
+    private SubsystemManager subsystemManager;
+    private AbstractDrive drive;
 
-    AutoModeExecutor autoModeExecutor;
+    private AutoModeExecutor autoModeExecutor;
 
     private RobotRegistryImpl robotRegistry;
 
