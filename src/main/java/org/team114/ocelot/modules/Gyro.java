@@ -14,7 +14,7 @@ public class Gyro {
         navx = new AHRS(Port.kMXP);
         // we want the angle to read 90 after a zero yaw, but our reading is negated below, so the offset is -90.
         navx.setAngleAdjustment(-90.0);
-        navx.zeroYaw();
+        zeroYaw();
         isCalibrating = true;
     }
 
@@ -34,20 +34,24 @@ public class Gyro {
         return boundDegrees(-navx.getAngle());
     }
 
-    public void zeroYaw() {
+    public void init() {
+        waitUntilCalibrated();
+        zeroYaw();
+    }
+    private void zeroYaw() {
         navx.zeroYaw();
     }
 
-    // empty while block is deliberate, used for waiting
-    @SuppressWarnings("StatementWithEmptyBody")
-    public void waitUntilCalibrated() {
-        while (isCalibrating()) {}
-    }
-
-    public boolean isCalibrating() {
-        if (isCalibrating) {
+    private void waitUntilCalibrated() {
+        while (isCalibrating) {
             isCalibrating = navx.isCalibrating();
+            if (isCalibrating) {
+                try {
+                    Thread.sleep(10L);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
         }
-        return isCalibrating;
     }
 }

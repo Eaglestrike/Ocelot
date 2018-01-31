@@ -90,8 +90,7 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void onStart(double timestamp) {
-        getGyro().waitUntilCalibrated();
-        getGyro().zeroYaw();
+        getGyro().init();
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.BOTH, 0);
         getRobotState().addObservation(new Pose(0, 0,
