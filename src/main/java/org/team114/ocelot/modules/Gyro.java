@@ -2,15 +2,14 @@ package org.team114.ocelot.modules;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
-import org.team114.ocelot.RobotRegistry;
 
 public class Gyro {
+    public static final Gyro shared = new Gyro();
+
     private final AHRS navx;
-    private final RobotRegistry robotRegistry;
     private boolean isCalibrating;
 
-    public Gyro(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
+    private Gyro() {
         navx = new AHRS(Port.kMXP);
         // we want the angle to read 90 after a zero yaw, but our reading is negated below, so the offset is -90.
         navx.setAngleAdjustment(-90.0);

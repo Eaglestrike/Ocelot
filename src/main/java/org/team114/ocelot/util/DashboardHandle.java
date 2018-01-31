@@ -14,17 +14,21 @@ import java.util.Set;
  *  }</pre>
  */
 public class DashboardHandle  {
+    private final static Set<String> keys = new HashSet<>();
 
     /**
      * The string used to access SmartDashboard.
      */
-    private final String key;
+    private String key;
 
     /**
      * Create a dashboard handle that wraps around the given key.
      * @param key string to be used as key
+     * @throws IllegalArgumentException if the key has already been used
      */
     public DashboardHandle(String key) {
+        if (!keys.add(key))
+            throw new IllegalArgumentException("Handle to key already exists: " + key);
         this.key = key;
     }
 

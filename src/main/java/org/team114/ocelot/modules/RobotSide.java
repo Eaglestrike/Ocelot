@@ -3,7 +3,6 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.Side;
 
@@ -18,15 +17,13 @@ import java.util.List;
 public class RobotSide {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
-    private final RobotRegistry robotRegistry;
     private ControlMode controlMode;
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public RobotSide(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
-        this.masterTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("master"));
-        this.slaveTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("slave"));
+    public RobotSide(TalonSRX masterTalon, TalonSRX slaveTalon) {
+        this.masterTalon = masterTalon;
+        this.slaveTalon = slaveTalon;
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 
@@ -63,6 +60,16 @@ public class RobotSide {
 
     public int getEncoderTicks() {
         return masterTalon.getSelectedSensorPosition(0);
+    }
+
+    //TODO add actual encoders
+    public double getEncoderDistance() {
+        double ticks = (double) getEncoderTicks();
+        double cirumference = Math.PI * RobotSettings.WHEEL_DIAMETER_FT;
+        double ticksPerRotation = 4096;
+        double gearRatio = 2;
+
+        return (ticks * cirumference) / ticksPerRotation / gearRatio;
     }
 
     public TalonSRX getMasterTalon() {

@@ -1,15 +1,15 @@
 package org.team114.ocelot.auto;
 
 import org.team114.lib.auto.actions.Action;
-import org.team114.ocelot.RobotRegistry;
+import org.team114.ocelot.Subsystems;
 
 public abstract class AutoModeBase {
-    protected final RobotRegistry robotRegistry;
+    protected final Subsystems subsystems;
     protected double updateRate = 1.0 / 50.0;
-    protected boolean active;
+    protected boolean active = false;
 
-    public AutoModeBase(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
+    public AutoModeBase(Subsystems subsystems) {
+        this.subsystems = subsystems;
     }
 
     protected abstract void routine();
