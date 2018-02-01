@@ -1,40 +1,36 @@
 package org.team114.ocelot.util.motion;
 
-import org.team114.ocelot.util.Pose;
+import org.team114.lib.geometry.Point;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import com.google.gson.*;
+import java.util.ArrayList;
 
 public abstract class PurePursuitFactory {
 
-    public static PurePursuitController startPurePursuit(String pointFileLocation, Pose initial) throws FileNotFoundException {
-        return startPurePursuitVf(pointFileLocation, 0);
+    public static PurePursuitController startPurePursuit(String pointFileLocation, double lookAheadDistance, double finishMargin) throws FileNotFoundException {
+        return startPurePursuitVf(pointFileLocation, lookAheadDistance, finishMargin, 0);
     }
 
-    public static PurePursuitController startPurePursuitVf(String pointFileLocation, double finalVelocity) throws FileNotFoundException {
-        PathPointList path;
+    public static PurePursuitController startPurePursuitVf(String pointFileLocation, double lookAheadDistance, double finishMargin, double finalVelocity) throws FileNotFoundException {
+        PathPointList path = new PathPointList(new ArrayList<PathComponent>());
         try {
             String line = null;
             BufferedReader in = new BufferedReader(new FileReader(pointFileLocation));
-            StringBuilder s = new StringBuilder();
-            while ((line = in.readLine()) != null)
-                s.append(line);
-            Gson gson = new Gson();
-            path = gson.fromJson(s.toString(), PathPointList.class);
+            while ((line = in.readLine()) != null) {
+                String[] section = line.split(",");
+                if (section.length != 3) continue;
+                path.pathComponentList.add(new PathComponent(new Point(Double.parseDouble(section[0]),
+                        Double.parseDouble(section[1])), Double.parseDouble(section[2])));
+            }
             in.close();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
 
-        if (path == null || path.pathComponentList.size() < 1)
-            throw new FileNotFoundException("PathComponents file was either empty or null");
-
-        PurePursuitController controller = new PurePursuitController(1, path, 0.5);
-        return controller;
+        return new PurePursuitController(lookAheadDistance, path, finishMargin);
     }
 }
