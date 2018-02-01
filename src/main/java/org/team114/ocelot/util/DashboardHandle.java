@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
  *      new DashboardHandle(<KEY>).put(<VALUE>);
  *  }</pre>
  */
-public class DashboardHandle  {
+public class DashboardHandle implements AutoCloseable {
 
     /**
      * The string used to access SmartDashboard.
@@ -88,5 +88,10 @@ public class DashboardHandle  {
     @Nullable
     public boolean[] getBooleans() {
         return SmartDashboard.getBooleanArray(key, (boolean[])null);
+    }
+
+    @Override
+    public void close() {
+        SmartDashboard.delete(key);
     }
 }
