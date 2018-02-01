@@ -68,4 +68,5 @@ public final class RobotSettings {
 
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 2;
+    public static final double climbingTime = 10;
 }

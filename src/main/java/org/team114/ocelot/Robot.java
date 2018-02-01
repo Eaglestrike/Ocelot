@@ -16,6 +16,7 @@ import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Side;
+import edu.wpi.first.wpilibj.Timer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class Robot extends IterativeRobot {
     public static final String DB_yPositionDB = "Pose Y";
     public static final String DB_headingDB = "Pose hdg";
     public static final String DB_velocityDB = "Pose vel";
+    public static final double climbingTime = 10.0;
 
     private SubsystemManager subsystemManager;
     private AbstractDrive drive;
@@ -41,6 +43,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
+        Timer timer = new Timer();
+        DashboardHandle climbingCountdown = new DashboardHandle("Climbing Countdown");
+        climbingCountdown.put(climbingTime);
+        double timeLeft = Math.round(3 * 60 - timer.getMatchTime() - climbingTime);
+        climbingCountdown.put(timeLeft);
+
+
+
+
         RobotSettings robotSettings = new RobotSettings();
         try {
             robotSettings.load();
