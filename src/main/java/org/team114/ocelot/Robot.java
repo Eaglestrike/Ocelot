@@ -32,7 +32,8 @@ public class Robot extends IterativeRobot {
     public static final String DB_yPositionDB = "Pose Y";
     public static final String DB_headingDB = "Pose hdg";
     public static final String DB_velocityDB = "Pose vel";
-    public static final double climbingTime = 10.0;
+
+    DashboardHandle climbingCountdown = new DashboardHandle("Climbing Countdown");
 
     private SubsystemManager subsystemManager;
     private AbstractDrive drive;
@@ -43,15 +44,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
-        Timer timer = new Timer();
-        DashboardHandle climbingCountdown = new DashboardHandle("Climbing Countdown");
-        climbingCountdown.put(climbingTime);
-        double timeLeft = Math.round(3 * 60 - timer.getMatchTime() - climbingTime);
-        climbingCountdown.put(timeLeft);
-
-
-
-
         RobotSettings robotSettings = new RobotSettings();
         try {
             robotSettings.load();
@@ -82,6 +74,8 @@ public class Robot extends IterativeRobot {
         subsystemManager = new SubsystemManager(robotRegistry.getRobotRegistry("SubsystemManager"),
                 Arrays.asList(drive));
         subsystemManager.start();
+
+        climbingCountdown.put(RobotSettings.CLIMBING_TIME);
     }
 
     @Override
@@ -109,6 +103,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
+        double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
+        climbingCountdown.put(timeLeft);
     }
 
     @Override
