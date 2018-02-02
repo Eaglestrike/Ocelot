@@ -1,29 +1,44 @@
 package org.team114.ocelot.modules;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
 
 public class Carriage {
     Solenoid left;
     Solenoid right;
-    Solenoid lift1;
-    Solenoid lift2;
-    Solenoid lift3;
-    Solenoid lift4;
-    Ultrasonic ultrasonic;
+    Solenoid rightLift1;
+    Solenoid rightLift2;
+    Solenoid leftLift1;
+    Solenoid leftLift2;
+    Ultrasonic distanceSensorLeft;
+    Ultrasonic distanceSensorRight;
+    TalonSRX leftTalon;
+    TalonSRX rightTalon;
 
 
-    public Carriage(int leftMechId, int rightMechId, int lift1Id, int lift2Id, int lift3Id, int lift4Id, int digitalInput, int digitalOutput) {
+    public Carriage(int leftMechId, int rightMechId, int rightLift1Id, int rightLift2Id, int leftLift1Id,
+                    int leftLift2Id, int digitalInputLeft, int digitalOutputLeft, int digitalInputRight, int digitalOutputRight, int leftTalonId, int rightTalonId) {
         left = new Solenoid(leftMechId);
         right = new Solenoid(rightMechId);
-        lift1 = new Solenoid(lift1Id);
-        lift2 = new Solenoid(lift2Id);
-        lift3 = new Solenoid(lift3Id);
-        lift4 = new Solenoid(lift4Id);
-        ultrasonic = new Ultrasonic(digitalOutput, digitalInput);
+        rightLift1 = new Solenoid(rightLift1Id);
+        rightLift2 = new Solenoid(rightLift2Id);
+        leftLift1 = new Solenoid(leftLift1Id);
+        leftLift2 = new Solenoid(leftLift2Id);
+        distanceSensorLeft = new Ultrasonic(digitalOutputLeft, digitalInputLeft);
+        distanceSensorRight = new Ultrasonic(digitalOutputRight, digitalInputRight);
+        leftTalon = new TalonSRX(leftTalonId);
+        rightTalon = new TalonSRX(rightTalonId);
+
     }
 
-    public double getDistance(){
-        double range = ultrasonic.getRangeInches();
+    public double getLeftDistanceInFeet() {
+        double range = 12 * distanceSensorLeft.getRangeInches();
+        return range;
+    }
+
+    public double getRightDistanceInFeet() {
+        double range = 12 * distanceSensorRight.getRangeInches();
         return range;
     }
 
@@ -33,13 +48,29 @@ public class Carriage {
     }
 
     public void actuateFirstLift(boolean actuate) {
-        lift1.set(actuate);
-        lift2.set(actuate);
+        rightLift1.set(actuate);
+        rightLift2.set(actuate);
     }
 
     public void actuateSecondLift(boolean actuate) {
-        lift3.set(actuate);
-        lift4.set(actuate);
+        leftLift1.set(actuate);
+        leftLift2.set(actuate);
+    }
+
+    public void rotateLeft() {
+        leftTalon.set(ControlMode.Velocity, -1);
+    }
+
+    public void rotateRight() {
+        rightTalon.set(ControlMode.Velocity, 1);
+    }
+
+    public void stopLeft() {
+        leftTalon.set(ControlMode.Velocity, 0);
+    }
+
+    public void stopRight() {
+        rightTalon.set(ControlMode.Velocity, 0);
     }
 
 }
