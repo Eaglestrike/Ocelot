@@ -45,6 +45,9 @@ public class PurePursuitController {
         }
     }
 
+    /**
+     * Returns the closest point on the path to the pose
+     */
     private PathComponent getLookAheadPoint(Pose pose) {
         int search = lastLookAheadPoint;
         while (path.get(search).getLocation().dist(pose.getPoint()) < lookAheadDistance &&
@@ -55,17 +58,12 @@ public class PurePursuitController {
     }
 
     public DriveArcCommand getCommand(Pose pose, double timestamp) {
+        // closest point to pose along path
         PathComponent targetComponent = getLookAheadPoint(pose);
-        if (isFinished) {
-            return new DriveArcCommand(0,0);
-        }
-        else if (path.pathComponentList.size() > 0) {
-            if (path.pathComponentList.get(path.pathComponentList.size()-1).getLocation().dist(pose.getPoint()) < finishMargin) {
-                isFinished = true;
-                return new DriveArcCommand(0,0);
-            }
 
-        } else {
+        if (isFinished ||
+            path.pathComponentList.isEmpty() ||
+            path.pathComponentList.get(path.pathComponentList.size() - 1).getLocation().dist(pose.getPoint()) < finishMargin) {
             isFinished = true;
             return new DriveArcCommand(0,0);
         }
