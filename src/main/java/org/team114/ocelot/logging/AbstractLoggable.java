@@ -4,8 +4,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 public abstract class AbstractLoggable implements Loggable {
-    public UUID id = UUID.randomUUID();
-    public Instant timestamp = Instant.now();
+    private final UUID id = UUID.randomUUID();
+    private final Instant timestamp = Instant.now();
 
     @Override
     public UUID getId() {

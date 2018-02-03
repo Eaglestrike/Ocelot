@@ -24,6 +24,7 @@ public class Errors {
             System.out.print("ERROR: ");
             System.out.println(message);
             log(message);
+            throw new IllegalStateException(message);
         }
     }
 }
