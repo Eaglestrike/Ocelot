@@ -28,7 +28,7 @@ public class PurePursuitController {
     double finalVelocity;
     double pathLength;
 
-    public PurePursuitController(double lookAheadDistance, PathPointList path, double finishMargin) {
+    public PurePursuitController(PathPointList path, double lookAheadDistance, double finishMargin, double finalVelocity) {
         this.lookAheadDistance = lookAheadDistance;
         this.path = path;
         this.finishMargin = finishMargin;

@@ -2,35 +2,38 @@ package org.team114.ocelot.util.motion;
 
 import org.team114.lib.geometry.Point;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class PurePursuitFactory {
 
-    public static PurePursuitController startPurePursuit(String pointFileLocation, double lookAheadDistance, double finishMargin) throws FileNotFoundException {
-        return startPurePursuitVf(pointFileLocation, lookAheadDistance, finishMargin, 0);
+    public static PathPointList loadPath(String pathName) {
+        String resourceBasePath = "/org/team114/ocelot/paths/";
+        InputStream inputStream = PurePursuitFactory.class.getResourceAsStream(resourceBasePath + pathName + ".csv");
+        InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        BufferedReader reader = new BufferedReader(streamReader);
+
+        List<PathComponent> components = reader.lines()
+            .skip(1) // skip the header line
+            .map(line -> line.split(","))
+            .map(line -> new PathComponent(
+                new Point(
+                    Double.parseDouble(line[0]), // x
+                    Double.parseDouble(line[1]) // y
+                ), Double.parseDouble(line[2]) // distance
+            ))
+            .collect(Collectors.toList());
+
+        return new PathPointList(components);
     }
 
-    public static PurePursuitController startPurePursuitVf(String pointFileLocation, double lookAheadDistance, double finishMargin, double finalVelocity) throws FileNotFoundException {
-        PathPointList path = new PathPointList(new ArrayList<PathComponent>());
-        try {
-            String line = null;
-            BufferedReader in = new BufferedReader(new FileReader(pointFileLocation));
-            while ((line = in.readLine()) != null) {
-                String[] section = line.split(",");
-                if (section.length != 3) continue;
-                path.pathComponentList.add(new PathComponent(new Point(Double.parseDouble(section[0]),
-                        Double.parseDouble(section[1])), Double.parseDouble(section[2])));
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static PurePursuitController startPurePursuit(PathPointList path, double lookAheadDistance, double finishMargin) {
+        return startPurePursuit(path, lookAheadDistance, finishMargin, 0);
+    }
 
-        return new PurePursuitController(lookAheadDistance, path, finishMargin);
+    public static PurePursuitController startPurePursuit(PathPointList path, double lookAheadDistance, double finishMargin, double finalVelocity) {
+        return new PurePursuitController(path, lookAheadDistance, finishMargin, finalVelocity);
     }
 }
