@@ -5,46 +5,46 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
 
 public class Carriage {
-    Solenoid left;
-    Solenoid right;
-    Solenoid rightLift1;
-    Solenoid rightLift2;
-    Solenoid leftLift1;
-    Solenoid leftLift2;
-    Ultrasonic distanceSensorLeft;
-    Ultrasonic distanceSensorRight;
-    TalonSRX leftTalon;
-    TalonSRX rightTalon;
+    private final Solenoid leftIntake;
+    private final Solenoid rightIntake;
+    private final Solenoid rightLift1;
+    private final Solenoid rightLift2;
+    private final Solenoid leftLift1;
+    private final Solenoid leftLift2;
+    private final Ultrasonic leftDistanceSensor;
+    private final Ultrasonic rightDistanceSensor;
+    private final TalonSRX leftTalon;
+    private final TalonSRX rightTalon;
 
 
-    public Carriage(int leftMechId, int rightMechId, int rightLift1Id, int rightLift2Id, int leftLift1Id,
-                    int leftLift2Id, int digitalInputLeft, int digitalOutputLeft, int digitalInputRight, int digitalOutputRight, int leftTalonId, int rightTalonId) {
-        left = new Solenoid(leftMechId);
-        right = new Solenoid(rightMechId);
-        rightLift1 = new Solenoid(rightLift1Id);
-        rightLift2 = new Solenoid(rightLift2Id);
-        leftLift1 = new Solenoid(leftLift1Id);
-        leftLift2 = new Solenoid(leftLift2Id);
-        distanceSensorLeft = new Ultrasonic(digitalOutputLeft, digitalInputLeft);
-        distanceSensorRight = new Ultrasonic(digitalOutputRight, digitalInputRight);
-        leftTalon = new TalonSRX(leftTalonId);
-        rightTalon = new TalonSRX(rightTalonId);
+    public Carriage(Solenoid leftMech, Solenoid rightMech, Solenoid _rightLift1, Solenoid _rightLift2, Solenoid _leftLift1,
+                    Solenoid _leftLift2, Ultrasonic _leftDistanceSensor, Ultrasonic _rightDistanceSensor, TalonSRX left, TalonSRX right) {
+        leftIntake = leftMech;
+        rightIntake = rightMech;
+        rightLift1 = _rightLift1;
+        rightLift2 = _rightLift2;
+        leftLift1 = _leftLift1;
+        leftLift2 = _leftLift2;
+        leftDistanceSensor = _leftDistanceSensor;
+        rightDistanceSensor = _rightDistanceSensor;
+        leftTalon = left;
+        rightTalon = right;
 
     }
 
     public double getLeftDistanceInFeet() {
-        double range = 12 * distanceSensorLeft.getRangeInches();
+        double range = 12 * leftDistanceSensor.getRangeInches();
         return range;
     }
 
     public double getRightDistanceInFeet() {
-        double range = 12 * distanceSensorRight.getRangeInches();
+        double range = 12 * rightDistanceSensor.getRangeInches();
         return range;
     }
 
     public void actuateIntake(boolean actuate) {
-        left.set(actuate);
-        right.set(actuate);
+        leftIntake.set(actuate);
+        rightIntake.set(actuate);
     }
 
     public void actuateFirstLift(boolean actuate) {
