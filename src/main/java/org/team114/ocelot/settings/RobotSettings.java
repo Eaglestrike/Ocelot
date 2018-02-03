@@ -2,6 +2,8 @@ package org.team114.ocelot.settings;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Properties;
 
 public final class RobotSettings {
@@ -29,8 +31,15 @@ public final class RobotSettings {
             this.prefix = prefix == null ? "" : prefix + ".";
         }
 
+        /**
+         * Throws NoSuchElementException if the property value is missing
+         * @param key throws NullPointerException if key is null
+         * @return
+         */
         public String getProperty(String key) {
-            return RobotSettings.this.properties.getProperty(prefix+key);
+            return Optional.of(key)
+                .map(nonnullKey -> RobotSettings.this.properties.getProperty(prefix+nonnullKey))
+                    .orElseThrow(() -> new NoSuchElementException(prefix+key));
         }
 
         public double getDouble(String key) {
