@@ -4,6 +4,7 @@ import org.team114.ocelot.settings.RobotSettings;
 
 public interface RobotRegistry {
 
+    RobotRegistry getRobotRegistry(String prefix);
     /**
      *
      * @param key

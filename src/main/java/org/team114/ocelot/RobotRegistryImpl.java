@@ -21,30 +21,36 @@ class RobotRegistryImpl implements RobotRegistry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();
     private final Map<Class, Object> singletonMap = new ConcurrentHashMap<>();
     private final RobotSettings robotSettings;
+    private class SubRobotRegistry implements RobotRegistry {
+        private final RobotSettings.Configuration configuration;
+        SubRobotRegistry(String prefix) {
+            this.configuration = RobotRegistryImpl.this.getConfiguration(prefix);
+        }
+        @Override
+        public <T> T get(String key) {
+            return RobotRegistryImpl.this.get(key);
+        }
 
-    RobotRegistryImpl(RobotSettings robotSettings, String prefix) {
+        @Override
+        public <T> T get(Class<? extends T> interfaceClazz) {
+            return RobotRegistryImpl.this.get(interfaceClazz);
+        }
+
+        public RobotSettings.Configuration getConfiguration() {
+            return this.configuration;
+        }
+
+        public RobotRegistry getRobotRegistry(String prefix) {
+            return new SubRobotRegistry(configuration.getPrefix()+prefix);
+        }
+    };
+
+    RobotRegistryImpl(RobotSettings robotSettings) {
         this.robotSettings = robotSettings;
     }
 
-    RobotRegistry getRobotRegistry(final String prefix) {
-        @SuppressWarnings("unchecked")
-        RobotRegistry robotRegistry = new RobotRegistry() {
-            private RobotSettings.Configuration configuration = RobotRegistryImpl.this.getConfiguration(prefix);
-            @Override
-            public <T> T get(String key) {
-                return RobotRegistryImpl.this.get(key);
-            }
-
-            @Override
-            public <T> T get(Class<? extends T> interfaceClazz) {
-                return RobotRegistryImpl.this.get(interfaceClazz);
-            }
-
-            public RobotSettings.Configuration getConfiguration() {
-                return this.configuration;
-            }
-        };
-        return robotRegistry;
+    public RobotRegistry getRobotRegistry(final String prefix) {
+        return new SubRobotRegistry(prefix);
     }
 
     void put(String key, Object object) {
