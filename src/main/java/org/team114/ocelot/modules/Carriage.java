@@ -2,7 +2,8 @@ package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Carriage {
     private final Solenoid leftIntake;
@@ -16,20 +17,26 @@ public class Carriage {
     private final TalonSRX leftTalon;
     private final TalonSRX rightTalon;
 
-
-    public Carriage(Solenoid leftMech, Solenoid rightMech, Solenoid _rightLift1, Solenoid _rightLift2, Solenoid _leftLift1,
-                    Solenoid _leftLift2, Ultrasonic _leftDistanceSensor, Ultrasonic _rightDistanceSensor, TalonSRX left, TalonSRX right) {
-        leftIntake = leftMech;
-        rightIntake = rightMech;
-        rightLift1 = _rightLift1;
-        rightLift2 = _rightLift2;
-        leftLift1 = _leftLift1;
-        leftLift2 = _leftLift2;
-        leftDistanceSensor = _leftDistanceSensor;
-        rightDistanceSensor = _rightDistanceSensor;
-        leftTalon = left;
-        rightTalon = right;
-
+    public Carriage(Solenoid leftIntake,
+                    Solenoid rightIntake,
+                    Solenoid rightLift1,
+                    Solenoid rightLift2,
+                    Solenoid leftLift1,
+                    Solenoid leftLift2,
+                    Ultrasonic leftDistanceSensor,
+                    Ultrasonic rightDistanceSensor,
+                    TalonSRX leftTalon,
+                    TalonSRX rightTalon) {
+        this.leftIntake = leftIntake;
+        this.rightIntake = rightIntake;
+        this.rightLift1 = rightLift1;
+        this.rightLift2 = rightLift2;
+        this.leftLift1 = leftLift1;
+        this.leftLift2 = leftLift2;
+        this.leftDistanceSensor = leftDistanceSensor;
+        this.rightDistanceSensor = rightDistanceSensor;
+        this.leftTalon = leftTalon;
+        this.rightTalon = rightTalon;
     }
 
     public double getLeftDistanceInFeet() {
@@ -72,5 +79,4 @@ public class Carriage {
     public void stopRight() {
         rightTalon.set(ControlMode.Velocity, 0);
     }
-
 }
