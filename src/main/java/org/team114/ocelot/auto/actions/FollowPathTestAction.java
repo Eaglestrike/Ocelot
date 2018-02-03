@@ -8,6 +8,7 @@ import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitController;
+import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 public class FollowPathTestAction implements Action {
     private RobotRegistry robotRegistry;
@@ -15,7 +16,7 @@ public class FollowPathTestAction implements Action {
 
     public FollowPathTestAction(RobotRegistry robotRegistry, PathPointList path, double lookAheadDistance, double finishMargin) {
         this.robotRegistry = robotRegistry;
-        this.controller = new PurePursuitController(lookAheadDistance, path, finishMargin);
+        this.controller = PurePursuitFactory.startPurePursuit(path, lookAheadDistance, finishMargin);
     }
 
     @Override

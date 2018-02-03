@@ -51,7 +51,4 @@ public class PathPointList {
 
         return new PathPointList(pointList);
     }
-
-    //Because gson
-    private PathPointList(){}
 }
