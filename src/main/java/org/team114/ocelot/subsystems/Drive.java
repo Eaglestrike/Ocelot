@@ -31,6 +31,9 @@ public class Drive implements AbstractDrive {
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
     private final double halfOfWheelbase;
+    private double leftAccum;
+
+    private double rightAccum;
 
     public Drive(RobotRegistry robotRegistry) {
         this.robotRegistry = robotRegistry;
@@ -62,9 +65,6 @@ public class Drive implements AbstractDrive {
         return rightEncoder.getDistance();
     }
 
-    private double leftAccum = 0;
-
-    private double rightAccum = 0;
     private Pose addPoseObservation() {
         Pose latestState = getRobotState().getLatestPose();
 
