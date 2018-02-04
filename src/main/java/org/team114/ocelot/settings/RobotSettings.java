@@ -32,12 +32,15 @@ public final class RobotSettings {
         try (InputStream io =
                      this.getClass().getResourceAsStream(filename)) {
             if (io == null) {
-                throw new IOException("Could not load settings from "+ filename);
+                throw new IOException("Could not load settings from " + filename);
             } else {
-                this.properties = new Properties();
-                this.properties.load(io);
+                return this.load(io);
             }
         }
+    }
+    public RobotSettings load(InputStream io) throws IOException {
+        this.properties = new Properties();
+        this.properties.load(io);
         return this;
     }
 
@@ -94,7 +97,7 @@ public final class RobotSettings {
             channelRegistry.putIfAbsent(channel, nonnullKey);
             String registeredKey = channelRegistry.get(channel);
             Errors.assertThat(registeredKey.equals(nonnullKey),
-                        () -> "Duplicate access to channel "+ channel+ "by key " + registeredKey + " and " +nonnullKey);
+                        () -> "Duplicate access to channel "+ channel+ " by key " + registeredKey + " and " +nonnullKey);
             return channel;
         }
 
