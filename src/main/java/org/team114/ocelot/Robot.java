@@ -54,16 +54,16 @@ public class Robot extends IterativeRobot {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.robotRegistry = new RobotRegistryImpl(robotSettings, null);
+        this.robotRegistry = new RobotRegistryImpl(robotSettings);
         this.robotRegistry.put(new RobotState(this.robotRegistry));
-        RobotSide leftSide = new RobotSide(robotRegistry.getRobotRegistry("RobotSide.left"));
+        RobotSide leftSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.left"));
         robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
-        RobotSide rightSide = new RobotSide(robotRegistry.getRobotRegistry("RobotSide.right"));
+        RobotSide rightSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.right"));
         robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
 
-        robotRegistry.put(new CheesyDriveHelper(robotRegistry.getRobotRegistry("CheesyDriveHelper")));
+        robotRegistry.put(new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper")));
 
-        robotRegistry.put(new Gyro(robotRegistry.getRobotRegistry("Gyro")));
+        robotRegistry.put(new Gyro(robotRegistry.getSubRobotRegistry("Gyro")));
 
         robotRegistry.put(Robot.DB_xPositionDB, new DashboardHandle("Pose X"));
         robotRegistry.put(Robot.DB_yPositionDB, new DashboardHandle("Pose Y"));
@@ -72,10 +72,10 @@ public class Robot extends IterativeRobot {
 
         Controller controller = new DualController(new Joystick(0), new Joystick(1));
         robotRegistry.put(Controller.class, controller);
-        drive = new Drive(robotRegistry.getRobotRegistry("Drive"));
+        drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
         robotRegistry.put(AbstractDrive.class, drive);
 
-        subsystemManager = new SubsystemManager(robotRegistry.getRobotRegistry("SubsystemManager"),
+        subsystemManager = new SubsystemManager(robotRegistry.getSubRobotRegistry("SubsystemManager"),
                 Arrays.asList(drive));
         subsystemManager.start();
 
