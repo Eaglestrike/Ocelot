@@ -7,6 +7,7 @@ import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.Controller;
 import org.team114.ocelot.modules.DualController;
+import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.settings.RobotSettings;
@@ -42,6 +43,9 @@ public class Robot extends IterativeRobot {
 
     private RobotRegistryImpl robotRegistry;
 
+
+    private GearShifter gearShifter;
+
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their reprensetations.
      * That means, all talons, solenoids, etc. are created here.
@@ -72,6 +76,8 @@ public class Robot extends IterativeRobot {
 
         Controller controller = new DualController(new Joystick(0), new Joystick(1));
         robotRegistry.put(Controller.class, controller);
+        this.gearShifter = new GearShifter(this.robotRegistry.getSubRobotRegistry("GearShifter"));
+
         drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
         robotRegistry.put(AbstractDrive.class, drive);
 

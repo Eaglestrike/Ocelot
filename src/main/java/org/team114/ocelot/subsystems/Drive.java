@@ -31,8 +31,6 @@ public class Drive implements AbstractDrive {
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
     private final double halfOfWheelbase;
-    private final GearShifter gearShifter;
-
 
     public Drive(RobotRegistry robotRegistry) {
         this.robotRegistry = robotRegistry;
@@ -52,7 +50,6 @@ public class Drive implements AbstractDrive {
                 configuration.getChannelAndRegister("right.channelB"),
                 configuration.getBoolean("right.reversedDirection"));
         rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
-        this.gearShifter = new GearShifter(this.robotRegistry.getSubRobotRegistry("GearShifter"));
     }
 
 
