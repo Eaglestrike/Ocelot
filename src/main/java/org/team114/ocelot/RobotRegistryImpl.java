@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
  */
 class RobotRegistryImpl implements RobotRegistry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();
-    private final Map<Class, Object> singletonMap = new ConcurrentHashMap<>();
+    private final Map<Class, Object> objectsByClassMap = new ConcurrentHashMap<>();
     private final RobotSettings robotSettings;
+
     private class SubRobotRegistry implements RobotRegistry {
         private final RobotSettings.Configuration configuration;
         SubRobotRegistry(String prefix) {
@@ -36,6 +37,11 @@ class RobotRegistryImpl implements RobotRegistry {
         @Override
         public <T> T get(Class<? extends T> interfaceClazz) {
             return RobotRegistryImpl.this.get(interfaceClazz);
+        }
+
+        @Override
+        public <K,V> V getIndex(K key, Class<? extends V> interfaceClazz) {
+            return RobotRegistryImpl.this.getIndex(key, interfaceClazz);
         }
 
         public RobotSettings.Configuration getConfiguration() {
@@ -55,6 +61,17 @@ class RobotRegistryImpl implements RobotRegistry {
         return new SubRobotRegistry(prefix);
     }
 
+    @SuppressWarnings("unchecked")
+    <K, V> void putIndex(K key, V object) {
+        objectsByClassMap.putIfAbsent(object.getClass(), new ConcurrentHashMap<K, V>());
+        ConcurrentHashMap<K, V> subMap = (ConcurrentHashMap<K, V>) objectsByClassMap.get(object.getClass());
+        subMap.put(key, object);
+    }
+
+    public <K,V> V getIndex(K key, Class<? extends V> interfaceClazz) {
+        return ((Map<K,V>)get(interfaceClazz)).get(key);
+    }
+
     void put(String key, Object object) {
         synchronized (registryMap) {
             if (this.registryMap.containsKey(key)) {
@@ -70,17 +87,17 @@ class RobotRegistryImpl implements RobotRegistry {
     }
 
     void put(Object object) {
-        singletonMap.put(object.getClass(), object);
+        objectsByClassMap.put(object.getClass(), object);
     }
 
     /**
-     * Puts the object into the singletonMap. The object is retrieved via {@link #get(Class)}
+     * Puts the object into the objectsByClassMap. The object is retrieved via {@link #get(Class)}
      * @param interfaceClazz interface implemented by object
      * @param object must be nonnull and implement interfaceClazz
      * @param <T>
      */
     <T> void put(Class<? extends T> interfaceClazz, T object) {
-        singletonMap.put(interfaceClazz,
+        objectsByClassMap.put(interfaceClazz,
                 Optional.of(object)
                 .filter(obj -> interfaceClazz.isAssignableFrom(obj.getClass()))
                         .get());
@@ -88,7 +105,7 @@ class RobotRegistryImpl implements RobotRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> getAsList(final Class interfaceClazz) {
-        return (List<T>) this.singletonMap.values().stream()
+        return (List<T>) this.objectsByClassMap.values().stream()
             .filter(obj -> interfaceClazz.isAssignableFrom(obj.getClass()))
                 .collect(Collectors.toList());
 
@@ -96,7 +113,7 @@ class RobotRegistryImpl implements RobotRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> T get(Class<? extends T> interfaceClazz) {
-        return Optional.of((T) this.singletonMap.get(interfaceClazz)).get();
+        return Optional.of((T) this.objectsByClassMap.get(interfaceClazz)).get();
     }
 
     private RobotSettings.Configuration getConfiguration(String prefix) {

@@ -31,9 +31,10 @@ public interface RobotRegistry {
     /**
      *
      * @param interfaceClazz
-     * @param <T>
      * @return guaranteed to be nonnull
      */
     <T> T get(Class<? extends T> interfaceClazz);
+
+    <K,V> V getIndex(K key, Class<? extends V> interfaceClazz);
     RobotSettings.Configuration getConfiguration();
 }

@@ -4,12 +4,16 @@ import org.team114.ocelot.logging.Errors;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public final class RobotSettings {
     public static final int MAX_NUMBER_OF_CHANNELS = 8;
@@ -83,6 +87,15 @@ public final class RobotSettings {
 
         public boolean getBoolean(String key) {
             return Boolean.valueOf(getProperty(key));
+        }
+
+        public List<Integer> getIntList(String key) {
+            return getList(key, Integer::valueOf);
+        }
+
+        public <T> List<T> getList(String key, Function<String, T> transform) {
+            String[] list = getProperty(key).split(",");
+            return Arrays.asList(list).stream().map(transform).collect(Collectors.toList());
         }
 
         /**
