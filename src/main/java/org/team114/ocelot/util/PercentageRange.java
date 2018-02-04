@@ -6,6 +6,7 @@ import org.team114.ocelot.logging.Errors;
  * Represents a (-1.0,1.0) range
  */
 public class PercentageRange {
+    private static final PercentageRange ZERO = new PercentageRange(0.0);
     private final double percentageRange;
 
     public PercentageRange(double percentageRange) {
@@ -22,6 +23,13 @@ public class PercentageRange {
         return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
     }
 
+    public PercentageRange deadband(double deadband) {
+        if (Math.abs(this.percentageRange) <= deadband) {
+            return ZERO;
+        } else {
+            return this;
+        }
+    }
 
     public double scaled(double scalar) {
         return scalar * percentageRange;
