@@ -42,6 +42,10 @@ public class Robot extends IterativeRobot {
 
     private RobotRegistryImpl robotRegistry;
 
+    /**
+     * The main purpose of robot init is to create the mappings between physical objects and their reprensetations.
+     * That means, all talons, solenoids, etc. are created here.
+     */
     @Override
     public void robotInit() {
         RobotSettings robotSettings = new RobotSettings();
