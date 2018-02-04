@@ -40,12 +40,16 @@ public class Carriage {
     }
 
     public double getLeftDistanceInFeet() {
-        double range = 12 * leftDistanceSensor.getRangeInches();
+        double range = toFeet(leftDistanceSensor.getRangeInches());
         return range;
     }
 
+    private double toFeet(double rangeInches) {
+        return 12.0 * rangeInches;
+    }
+
     public double getRightDistanceInFeet() {
-        double range = 12 * rightDistanceSensor.getRangeInches();
+        double range = toFeet(rightDistanceSensor.getRangeInches());
         return range;
     }
 
