@@ -22,7 +22,7 @@ public class GearShifter {
             this.highGearSolenoid.set(true);
         } else {
             this.highGearSolenoid.set(false);
-            this.lowGearSolenoid.set(false);
+            this.lowGearSolenoid.set(true);
         }
     }
 }

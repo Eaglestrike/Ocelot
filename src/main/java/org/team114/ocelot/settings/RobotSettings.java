@@ -18,7 +18,7 @@ public final class RobotSettings {
     public static final double MAX_ACCELERATION = 2;
     public static final double CLIMBING_TIME = 10;
     public static final double GAME_TIME = 180;
-    
+
     private Properties properties;
     /**
      * This registry ensures that channels are only allocated to a single purpose.
