@@ -103,6 +103,6 @@ class RobotRegistryImpl implements RobotRegistry {
         return this.robotSettings.getConfiguration(prefix);
     }
     public RobotSettings.Configuration getConfiguration() {
-        return this.robotSettings.getConfiguration("");
+        return this.robotSettings.getConfiguration(null);
     }
 }
