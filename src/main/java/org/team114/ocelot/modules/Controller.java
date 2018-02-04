@@ -1,10 +1,12 @@
 package org.team114.ocelot.modules;
 
+import org.team114.ocelot.util.PercentageRange;
+
 public interface Controller {
 
-    double throttle();
+    PercentageRange throttle();
 
-    double wheel();
+    PercentageRange wheel();
 
     boolean startLift();
 

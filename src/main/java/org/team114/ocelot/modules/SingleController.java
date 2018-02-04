@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.util.PercentageRange;
 
 public class SingleController implements Controller {
 
@@ -11,12 +12,12 @@ public class SingleController implements Controller {
         stick = s;
     }
 
-    public double throttle() {
-        return stick.getRawAxis(1);
+    public PercentageRange throttle() {
+        return new PercentageRange(stick.getRawAxis(1));
     }
 
-    public double wheel() {
-        return stick.getRawAxis(4);
+    public PercentageRange wheel() {
+        return new PercentageRange(stick.getRawAxis(4));
     }
 
     public boolean startLift() {

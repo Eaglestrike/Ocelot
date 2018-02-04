@@ -16,6 +16,7 @@ import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
+import org.team114.ocelot.util.PercentageRange;
 import org.team114.ocelot.util.Side;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -141,10 +142,10 @@ public class Robot extends IterativeRobot {
     }
     private DriveSignal getDriveSignal() {
         Controller controller = getController();
-        double throttle = controller.throttle();
-        double wheel = controller.wheel();
+        PercentageRange throttle = controller.throttle();
+        PercentageRange wheel = controller.wheel();
         CheesyDriveHelper cheesyDriveHelper = robotRegistry.get(CheesyDriveHelper.class);
-        DriveSignal signal = cheesyDriveHelper.cheesyDrive(throttle, -wheel, controller.quickTurn());
+        DriveSignal signal = cheesyDriveHelper.cheesyDrive(throttle, wheel, controller.quickTurn());
         return signal;
     }
 }

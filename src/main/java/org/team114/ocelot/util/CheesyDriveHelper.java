@@ -4,11 +4,8 @@ import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.settings.RobotSettings;
 
 public class CheesyDriveHelper {
+    public static final double WHEEL_CONTROLLER_REVERSED = -1.0;
     private final RobotRegistry robotRegistry;
-
-    private static double limit(double v, double limit) {
-        return (Math.abs(v) < limit) ? v : limit * (v < 0 ? -1 : 1);
-    }
 
     private double quickStopAccumulator;
     private final double throttleDeadband;
@@ -24,17 +21,17 @@ public class CheesyDriveHelper {
         this.turnSensitivity = configuration.getDouble("turnSensitivity");
     }
 
-    public DriveSignal cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
+    public DriveSignal cheesyDrive(PercentageRange throttlePercentage, PercentageRange wheelPercentage, boolean isQuickTurn) {
 
-        wheel = handleDeadband(wheel, wheelDeadband);
-        throttle = handleDeadband(throttle, throttleDeadband);
+        double wheel = handleDeadband(wheelPercentage.scaled(WHEEL_CONTROLLER_REVERSED), wheelDeadband);
+        double throttle = handleDeadband(throttlePercentage.unscaled(), throttleDeadband);
 
         double overPower, angularPower;
 
         if (isQuickTurn) {
             if (Math.abs(throttle) < 0.2) {
                 double alpha = 0.1;
-                quickStopAccumulator = (1 - alpha) * quickStopAccumulator + alpha * limit(wheel, 1.0) * 2;
+                quickStopAccumulator = (1 - alpha) * quickStopAccumulator + alpha * wheel * 2;
             }
             overPower = 1.0;
             angularPower = wheel;

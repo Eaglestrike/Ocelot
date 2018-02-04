@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.util.PercentageRange;
 
 public class DualController implements Controller {
 
@@ -12,12 +13,12 @@ public class DualController implements Controller {
         this.right = right;
     }
 
-    public double throttle() {
-        return left.getY();
+    public PercentageRange throttle() {
+        return new PercentageRange(left.getY());
     }
 
-    public double wheel() {
-        return right.getX();
+    public PercentageRange wheel() {
+        return new PercentageRange(right.getX());
     }
 
     public boolean startLift() {
