@@ -7,8 +7,8 @@ import java.io.IOException;
 public class TestRobotRegistry {
     public static void main(String[] argv) throws IOException {
         RobotRegistryImpl robotRegistry = new RobotRegistryImpl(new RobotSettings().load());
-        int channelA = robotRegistry.getRobotRegistry("Drive")
-                .getRobotRegistry("left")
+        int channelA = robotRegistry.getSubRobotRegistry("Drive")
+                .getSubRobotRegistry("left")
                 .getConfiguration().getInt("channelA");
         System.out.println(channelA);
 

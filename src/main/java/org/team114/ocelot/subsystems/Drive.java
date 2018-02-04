@@ -52,7 +52,7 @@ public class Drive implements AbstractDrive {
                 configuration.getChannelAndRegister("right.channelB"),
                 configuration.getBoolean("right.reversedDirection"));
         rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
-        this.gearShifter = new GearShifter(this.robotRegistry.getRobotRegistry("GearShifter"));
+        this.gearShifter = new GearShifter(this.robotRegistry.getSubRobotRegistry("GearShifter"));
     }
 
 

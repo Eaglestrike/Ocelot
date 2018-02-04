@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
  *
  * No other object should hold a direct reference to another object held in the RobotRegistryImpl
  * Lookups are fast enough.
+ *
+ *
  */
 class RobotRegistryImpl implements RobotRegistry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();
@@ -40,7 +42,7 @@ class RobotRegistryImpl implements RobotRegistry {
             return this.configuration;
         }
 
-        public RobotRegistry getRobotRegistry(String prefix) {
+        public RobotRegistry getSubRobotRegistry(String prefix) {
             return new SubRobotRegistry(configuration.getPrefix()+prefix);
         }
     };
@@ -49,7 +51,7 @@ class RobotRegistryImpl implements RobotRegistry {
         this.robotSettings = robotSettings;
     }
 
-    public RobotRegistry getRobotRegistry(final String prefix) {
+    public RobotRegistry getSubRobotRegistry(final String prefix) {
         return new SubRobotRegistry(prefix);
     }
 
