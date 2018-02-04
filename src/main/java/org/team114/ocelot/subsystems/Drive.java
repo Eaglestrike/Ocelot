@@ -8,6 +8,7 @@ import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
+import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.settings.RobotSettings;
@@ -30,6 +31,7 @@ public class Drive implements AbstractDrive {
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
     private final double halfOfWheelbase;
+    private final GearShifter gearShifter;
 
 
     public Drive(RobotRegistry robotRegistry) {
@@ -41,15 +43,16 @@ public class Drive implements AbstractDrive {
         // TODO practice base
         RobotSettings.Configuration configuration = this.robotRegistry.getConfiguration();
         leftEncoder = new Encoder(
-                configuration.getInt("left.channelA"),
-                configuration.getInt("left.channelB"),
+                configuration.getChannelAndRegister("left.channelA"),
+                configuration.getChannelAndRegister("left.channelB"),
                 configuration.getBoolean("left.reversedDirection"));
         leftEncoder.setDistancePerPulse(configuration.getDouble("left.distancePerPulseInFeet")); //ft
         rightEncoder = new Encoder(
-                configuration.getInt("right.channelA"),
-                configuration.getInt("right.channelB"),
+                configuration.getChannelAndRegister("right.channelA"),
+                configuration.getChannelAndRegister("right.channelB"),
                 configuration.getBoolean("right.reversedDirection"));
         rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
+        this.gearShifter = new GearShifter(this.robotRegistry.getRobotRegistry("GearShifter"));
     }
 
 
