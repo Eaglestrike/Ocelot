@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
     private AutoModeExecutor autoModeExecutor;
 
     /**
-     * The main purpose of robot init is to create the mappings between physical objects and their reprensetations.
+     * The main purpose of robot init is to create the mappings between physical objects and their representations.
      * That means, all talons, solenoids, etc. are created here.
      */
     @Override
