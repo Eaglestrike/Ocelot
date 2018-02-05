@@ -8,7 +8,6 @@ import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
-import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
 import org.team114.ocelot.settings.RobotSettings;
@@ -182,19 +181,19 @@ public class Drive implements AbstractDrive {
     }
 
     private DashboardHandle getxPositionDB() {
-        return this.robotRegistry.get(Robot.DB_xPositionDB);
+        return this.robotRegistry.get(Robot.xPositionDB);
     }
 
     private DashboardHandle getyPositionDB() {
-        return this.robotRegistry.get(Robot.DB_yPositionDB);
+        return this.robotRegistry.get(Robot.yPositionDB);
     }
 
     private DashboardHandle getHeadingDB() {
-        return this.robotRegistry.get(Robot.DB_headingDB);
+        return this.robotRegistry.get(Robot.headingDB);
     }
 
     private DashboardHandle getVelocityDB() {
-        return this.robotRegistry.get(Robot.DB_velocityDB);
+        return this.robotRegistry.get(Robot.velocityDB);
     }
 
     private RobotSide getRobotSide(Side side) {
