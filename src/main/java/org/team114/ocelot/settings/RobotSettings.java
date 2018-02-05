@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class RobotSettings {
-    public static final int MAX_NUMBER_OF_CHANNELS = 8;
+    public static final int MAX_NUMBER_OF_CHANNELS = 16;
 
     public static final double MAX_VELOCITY = 1;
     public static final double MAX_ACCELERATION = 2;
@@ -106,7 +106,7 @@ public final class RobotSettings {
         public int getChannelAndRegister(String key) {
             String nonnullKey = getKey(key);
             int channel = getInt(key);
-//            Errors.assertThat(channel > -1 && channel < MAX_NUMBER_OF_CHANNELS, () ->  nonnullKey + ": Channel must be between 0 and 7");
+            Errors.assertThat(channel > -1 && channel < MAX_NUMBER_OF_CHANNELS, () ->  nonnullKey + ": Channel must be between 0 and 7");
             channelRegistry.putIfAbsent(channel, nonnullKey);
             String registeredKey = channelRegistry.get(channel);
             Errors.assertThat(registeredKey.equals(nonnullKey),
