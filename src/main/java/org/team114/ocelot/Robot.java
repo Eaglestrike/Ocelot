@@ -1,15 +1,12 @@
 package org.team114.ocelot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.modules.Controller;
-import org.team114.ocelot.modules.DualController;
-import org.team114.ocelot.modules.GearShifter;
-import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
@@ -36,6 +33,7 @@ public class Robot extends IterativeRobot {
     public static final String DB_velocityDB = "Pose vel";
 
     DashboardHandle climbingCountdown = new DashboardHandle("Climbing Countdown");
+    DashboardHandle pneumaticPressure = new DashboardHandle("Pneumatic Pressure");
 
     private SubsystemManager subsystemManager;
     private AbstractDrive drive;
@@ -46,6 +44,7 @@ public class Robot extends IterativeRobot {
 
 
     private GearShifter gearShifter;
+    private PneumaticPressureSensor pressureSensor;
 
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their reprensetations.
@@ -87,6 +86,7 @@ public class Robot extends IterativeRobot {
         subsystemManager.start();
 
         climbingCountdown.put(RobotSettings.CLIMBING_TIME);
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
     }
 
     @Override
@@ -116,6 +116,7 @@ public class Robot extends IterativeRobot {
     public void robotPeriodic() {
         double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
         climbingCountdown.put(timeLeft);
+        pneumaticPressure.put(pressureSensor.getPressure());
     }
 
     @Override
