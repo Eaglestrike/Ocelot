@@ -31,6 +31,14 @@ public class SubsystemManager {
     }
 
     /**
+     * Creates a new manager with subsystems, using a variadic constructor
+     * @param subsystems all the subsystems
+     */
+    public SubsystemManager(RobotRegistry robotRegistry, Subsystem... subsystems) {
+        this(robotRegistry, Arrays.asList(subsystems));
+    }
+
+    /**
      * Returns uptime in seconds.
      */
     private double timestamp() {
