@@ -9,6 +9,7 @@ import org.team114.ocelot.util.DriveSignal;
 import openrio.powerup.MatchData;
 import org.team114.ocelot.util.motion.PathComponent;
 import org.team114.ocelot.util.motion.PathPointList;
+import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 import java.util.Arrays;
 
@@ -26,9 +27,7 @@ public class TestMode extends AutoModeBase {
         } else if (side == MatchData.OwnedSide.RIGHT) {
             runAction(new DriveCommandAction(robotRegistry, new DriveSignal(-0.5, -0.5)));
         } else {
-            PathPointList path = new PathPointList(Arrays.asList(
-                new PathComponent(new Point(5, 5), 0)
-            ));
+            PathPointList path = PurePursuitFactory.loadPath("circle");
 
             runAction(new FollowPathTestAction(
                 robotRegistry, path,
