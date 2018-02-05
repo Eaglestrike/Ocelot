@@ -55,7 +55,6 @@ public class Drive implements AbstractDrive {
         rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
     }
 
-
     // TODO for the practice base, these must be changed later
 
     private double getLeftEncoder() {

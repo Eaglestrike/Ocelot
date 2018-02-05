@@ -17,7 +17,6 @@ public class AutoModeExecutor {
             });
             thread.start();
         }
-
     }
 
     public void stop() {
