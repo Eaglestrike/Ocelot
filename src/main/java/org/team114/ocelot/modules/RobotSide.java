@@ -27,6 +27,7 @@ public class RobotSide {
         this.masterTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("master"));
         this.slaveTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("slave"));
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
+        masterTalon.setSelectedSensorPosition(0, 0, 0);
     }
 
     public void refresh() {
