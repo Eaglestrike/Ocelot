@@ -16,6 +16,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class RobotSettings {
+    // ratio of height/encoder turns
+    public static final double HEIGHT_TO_ENCODER_TICKS_RATIO = 1;
+    //TODO: find out the real ratio
+
     public static final int MAX_NUMBER_OF_CHANNELS = 16;
 
     public static final double MAX_VELOCITY = 1;
