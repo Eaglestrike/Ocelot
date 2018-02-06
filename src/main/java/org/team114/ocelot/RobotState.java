@@ -6,11 +6,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class RobotState {
 
-    private final RobotRegistry robotRegistry;
     private final AtomicReference<Pose> latest = new AtomicReference<>();
 
-    public RobotState(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
+    public RobotState() {
     }
 
     public void addObservation(Pose pose) {

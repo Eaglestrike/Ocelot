@@ -31,6 +31,14 @@ public class SubsystemManager {
     }
 
     /**
+     * Creates a new manager with subsystems, using a variadic constructor
+     * @param subsystems all the subsystems
+     */
+    public SubsystemManager(RobotRegistry robotRegistry, Subsystem... subsystems) {
+        this(robotRegistry, Arrays.asList(subsystems));
+    }
+
+    /**
      * Returns uptime in seconds.
      */
     private double timestamp() {
@@ -51,11 +59,10 @@ public class SubsystemManager {
      * <p>This function tells a notifier to trigger every
      * "stepPeriod" (config file) seconds, calling the step method of each
      * subsystem.</p>
-
      */
     public void start() {
         subsystems.forEach(subsystem -> subsystem.onStart(timestamp()));
-        notifier.startPeriodic(this.robotRegistry.getConfiguration().getDouble("stepPeriod"));
+        notifier.startPeriodic(robotRegistry.getConfiguration().getDouble("stepPeriod"));
         lastTimeStamp = Timer.getFPGATimestamp();
     }
 

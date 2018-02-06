@@ -37,8 +37,7 @@ public final class RobotSettings {
     public RobotSettings load() throws IOException {
         String filename = "/"+this.getClass().getCanonicalName().replaceAll("\\.", "/") + ".properties";
         System.out.println("Loading " + filename);
-        try (InputStream io =
-                     this.getClass().getResourceAsStream(filename)) {
+        try (InputStream io = this.getClass().getResourceAsStream(filename)) {
             if (io == null) {
                 throw new IOException("Could not load settings from " + filename);
             } else {

@@ -3,15 +3,9 @@ package org.team114.ocelot.logging;
 import java.util.function.Supplier;
 
 public class Errors {
-    private static final Errors ourInstance = new Errors();
     public static final Logger<ErrorItem> logger = new Logger<>();
 
-    public static Errors getInstance() {
-        return ourInstance;
-    }
-
     private Errors() {
-
     }
 
     public static void log(String message) {
@@ -19,12 +13,14 @@ public class Errors {
     }
 
     public static void assertThat(boolean assertion, Supplier<String> messageSource) {
-        if (!assertion) {
-            String message = messageSource.get();
-            System.out.print("ERROR: ");
-            System.out.println(message);
-            log(message);
-            throw new IllegalStateException(message);
+        if (assertion) {
+            return;
         }
+
+        String message = messageSource.get();
+        //TODO: log should print to console, too
+        System.out.println("ERROR: " + message);
+        log(message);
+        throw new IllegalStateException(message);
     }
 }

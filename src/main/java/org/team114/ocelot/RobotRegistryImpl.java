@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
  *
  * No other object should hold a direct reference to another object held in the RobotRegistryImpl
  * Lookups are fast enough.
- *
- *
  */
 class RobotRegistryImpl implements RobotRegistry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();

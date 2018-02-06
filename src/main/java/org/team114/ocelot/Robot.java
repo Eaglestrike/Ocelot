@@ -3,6 +3,7 @@ package org.team114.ocelot;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
@@ -14,11 +15,8 @@ import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.PercentageRange;
-import org.team114.ocelot.util.Side;
-import edu.wpi.first.wpilibj.Timer;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -27,27 +25,21 @@ public class Robot extends IterativeRobot {
 
     public static final String ROBOT_SIDE_LEFT = "robotSide.left";
     public static final String ROBOT_SIDE_RIGHT = "robotSide.right";
-    public static final String DB_xPositionDB = "Pose X";
-    public static final String DB_yPositionDB = "Pose Y";
-    public static final String DB_headingDB = "Pose hdg";
-    public static final String DB_velocityDB = "Pose vel";
-
-    DashboardHandle climbingCountdown = new DashboardHandle("Climbing Countdown");
+    public static final String xPositionDB = "Pose X";
+    public static final String yPositionDB = "Pose Y";
+    public static final String headingDB = "Pose hdg";
+    public static final String velocityDB = "Pose vel";
+    public static final String countdownDB = "Climbing Countdown";
     DashboardHandle pneumaticPressure = new DashboardHandle("Pneumatic Pressure");
 
+    private RobotRegistryImpl robotRegistry;
     private SubsystemManager subsystemManager;
-    private AbstractDrive drive;
-
     private AutoModeExecutor autoModeExecutor;
 
-    private RobotRegistryImpl robotRegistry;
-
-
-    private GearShifter gearShifter;
     private PneumaticPressureSensor pressureSensor;
 
     /**
-     * The main purpose of robot init is to create the mappings between physical objects and their reprensetations.
+     * The main purpose of robot init is to create the mappings between physical objects and their representations.
      * That means, all talons, solenoids, etc. are created here.
      */
     @Override
@@ -57,50 +49,64 @@ public class Robot extends IterativeRobot {
             robotSettings.load();
         } catch (IOException e) {
             e.printStackTrace();
+            // if we can't load settings, we want to crash the robot
+            throw new IllegalStateException();
         }
-        this.robotRegistry = new RobotRegistryImpl(robotSettings);
-        this.robotRegistry.put(new RobotState(this.robotRegistry));
+
+        robotRegistry = new RobotRegistryImpl(robotSettings);
+        autoModeExecutor = new AutoModeExecutor();
+        CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper"));
+        RobotState robotState = new RobotState();
+
+        // create modules
+        Gyro gyro = Gyro.shared;
+        Controller controller = new DualController(new Joystick(0), new Joystick(1));
+        GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
         RobotSide leftSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.left"));
-        robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
         RobotSide rightSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.right"));
+
+        // create subsystems
+        AbstractDrive drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
+
+        // register general stuff
+        robotRegistry.put(cheesyDriveHelper);
+        robotRegistry.put(robotState);
+
+        // register handles
+        robotRegistry.put(Robot.xPositionDB, new DashboardHandle(Robot.xPositionDB));
+        robotRegistry.put(Robot.yPositionDB, new DashboardHandle(Robot.yPositionDB));
+        robotRegistry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
+        robotRegistry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
+        robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
+
+        // register modules
+        robotRegistry.put(gyro);
+        robotRegistry.put(controller);
+        robotRegistry.put(gearShifter);
+        robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
         robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
 
-        robotRegistry.put(new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper")));
+        // register subsystems
+        robotRegistry.put(drive);
 
-        robotRegistry.put(new Gyro(robotRegistry.getSubRobotRegistry("Gyro")));
-
-        robotRegistry.put(Robot.DB_xPositionDB, new DashboardHandle("Pose X"));
-        robotRegistry.put(Robot.DB_yPositionDB, new DashboardHandle("Pose Y"));
-        robotRegistry.put(Robot.DB_headingDB, new DashboardHandle("Pose hdg"));
-        robotRegistry.put(Robot.DB_velocityDB, new DashboardHandle("Pose vel"));
-
-        Controller controller = new DualController(new Joystick(0), new Joystick(1));
-        robotRegistry.put(Controller.class, controller);
-        this.gearShifter = new GearShifter(this.robotRegistry.getSubRobotRegistry("GearShifter"));
-
-        drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
-        robotRegistry.put(AbstractDrive.class, drive);
-
-        subsystemManager = new SubsystemManager(robotRegistry.getSubRobotRegistry("SubsystemManager"),
-                Arrays.asList(drive));
+        // create & kick off subsystem manager
+        subsystemManager = new SubsystemManager(
+            robotRegistry.getSubRobotRegistry("SubsystemManager"),
+            drive
+        );
         subsystemManager.start();
 
-        climbingCountdown.put(RobotSettings.CLIMBING_TIME);
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
     }
 
     @Override
     public void disabledInit() {
-        if (autoModeExecutor != null) {
-            autoModeExecutor.stop();
-        }
-        autoModeExecutor = null;
+        autoModeExecutor.stop();
     }
 
     @Override
     public void autonomousInit() {
-        autoModeExecutor = new AutoModeExecutor();
-        autoModeExecutor.setAutoMode(new TestMode(this.robotRegistry));
+        autoModeExecutor.setAutoMode(new TestMode(robotRegistry));
         autoModeExecutor.start();
     }
 
@@ -114,8 +120,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
+        // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
-        climbingCountdown.put(timeLeft);
+        DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
+        countdownHandle.put(timeLeft);
+
         pneumaticPressure.put(pressureSensor.getPressure());
     }
 
@@ -129,24 +138,21 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        DriveSignal signal = getDriveSignal();
-        drive.setSideSpeed(Side.LEFT, -signal.getLeft());
-        drive.setSideSpeed(Side.RIGHT, signal.getRight());
+        AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
+        drive.setDriveSignal(getDriveSignal());
     }
 
     @Override
     public void testPeriodic() {
     }
 
-    private Controller getController() {
-        return this.robotRegistry.get(Controller.class);
-    }
     private DriveSignal getDriveSignal() {
-        Controller controller = getController();
+        Controller controller = robotRegistry.get(Controller.class);
+        CheesyDriveHelper cheesyDriveHelper = robotRegistry.get(CheesyDriveHelper.class);
+
         PercentageRange throttle = controller.throttle();
         PercentageRange wheel = controller.wheel();
-        CheesyDriveHelper cheesyDriveHelper = robotRegistry.get(CheesyDriveHelper.class);
-        DriveSignal signal = cheesyDriveHelper.cheesyDrive(throttle, wheel, controller.quickTurn());
-        return signal;
+
+        return cheesyDriveHelper.cheesyDrive(throttle, wheel, controller.quickTurn());
     }
 }

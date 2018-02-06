@@ -5,17 +5,17 @@ import org.team114.lib.geometry.Point;
 public class Pose {
     private final double x;
     private final double y;
-    private final double vel;
+    private final double velocity;
     /**
      * The direction it is facing, in radians.
      */
     private final double heading;
 
-    public Pose(double x, double y, double heading, double vel) {
+    public Pose(double x, double y, double heading, double velocity) {
         this.x = x;
         this.y = y;
         this.heading = heading;
-        this.vel = vel;
+        this.velocity = velocity;
     }
 
     public Point getPoint() {
@@ -34,7 +34,7 @@ public class Pose {
         return this.y;
     }
 
-    public double getVel() {return vel;}
+    public double getVelocity() {return velocity;}
 
     /**
      * Transform a point in the same coordinate frame as the Pose is to one in a robot-centric frame.
@@ -57,6 +57,6 @@ public class Pose {
 
     @Override
     public String toString() {
-        return "Pose(X: " + getX() + ", Y: " + getY() + ", H: " + getHeading() + ", V: " + getVel() + ")";
+        return "Pose(X: " + getX() + ", Y: " + getY() + ", H: " + getHeading() + ", V: " + getVelocity() + ")";
     }
 }

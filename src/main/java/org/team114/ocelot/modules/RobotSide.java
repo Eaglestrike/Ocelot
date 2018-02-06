@@ -61,8 +61,12 @@ public class RobotSide {
         refresh();
     }
 
-    public int getEncoderTicks() {
+    public int getPosition() {
         return masterTalon.getSelectedSensorPosition(0);
+    }
+
+    public double getVelocity() {
+        return masterTalon.getSelectedSensorVelocity(0);
     }
 
     public TalonSRX getMasterTalon() {
