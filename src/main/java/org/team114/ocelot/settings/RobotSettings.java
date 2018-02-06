@@ -16,6 +16,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class RobotSettings {
+
+    public static double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
+    public static int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
+
     public static final int MAX_NUMBER_OF_CHANNELS = 16;
 
     public static final double MAX_VELOCITY = 1;

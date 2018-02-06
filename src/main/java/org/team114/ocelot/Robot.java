@@ -1,16 +1,13 @@
 package org.team114.ocelot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.modules.Controller;
-import org.team114.ocelot.modules.DualController;
-import org.team114.ocelot.modules.GearShifter;
-import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
@@ -33,10 +30,13 @@ public class Robot extends IterativeRobot {
     public static final String headingDB = "Pose hdg";
     public static final String velocityDB = "Pose vel";
     public static final String countdownDB = "Climbing Countdown";
+    DashboardHandle pneumaticPressure = new DashboardHandle("Pneumatic Pressure");
 
     private RobotRegistryImpl robotRegistry;
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
+
+    private PneumaticPressureSensor pressureSensor;
 
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
@@ -95,6 +95,8 @@ public class Robot extends IterativeRobot {
             drive
         );
         subsystemManager.start();
+
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
     }
 
     @Override
@@ -122,6 +124,8 @@ public class Robot extends IterativeRobot {
         double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
         DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
         countdownHandle.put(timeLeft);
+
+        pneumaticPressure.put(pressureSensor.getPressure());
     }
 
     @Override
