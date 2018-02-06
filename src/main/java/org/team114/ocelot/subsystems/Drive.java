@@ -3,14 +3,12 @@ package org.team114.ocelot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.Encoder;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.ocelot.modules.RobotSide;
-import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
@@ -23,44 +21,18 @@ import java.util.function.Supplier;
 
 public class Drive implements AbstractDrive {
 
-    private final Map<Side, Supplier<RobotSide>> robotSideMap = new EnumMap<>(Side.class);
+    private final Map<Side, Supplier<RobotSide>> sides = new EnumMap<>(Side.class);
     private final RobotRegistry robotRegistry;
 
-    // TODO change from practice base
-    private final Encoder leftEncoder;
-    private final Encoder rightEncoder;
     private final double halfOfWheelbase;
-    private double leftAccum;
-
-    private double rightAccum;
+    private double lastLeftAccumulated;
+    private double lastRightAccumulated;
 
     public Drive(RobotRegistry robotRegistry) {
         this.robotRegistry = robotRegistry;
-        this.robotSideMap.put(Side.LEFT, () -> robotRegistry.get(Robot.ROBOT_SIDE_LEFT));
-        this.robotSideMap.put(Side.RIGHT, () -> robotRegistry.get(Robot.ROBOT_SIDE_RIGHT));
+        this.sides.put(Side.LEFT, () -> robotRegistry.get(Robot.ROBOT_SIDE_LEFT));
+        this.sides.put(Side.RIGHT, () -> robotRegistry.get(Robot.ROBOT_SIDE_RIGHT));
         this.halfOfWheelbase = robotRegistry.getConfiguration().getDouble("wheelbase_width_ft") / 2.0;
-
-        // TODO practice base
-        RobotSettings.Configuration configuration = this.robotRegistry.getConfiguration();
-        leftEncoder = new Encoder(
-                configuration.getChannelAndRegister("left.channelA"),
-                configuration.getChannelAndRegister("left.channelB"),
-                configuration.getBoolean("left.reversedDirection"));
-        leftEncoder.setDistancePerPulse(configuration.getDouble("left.distancePerPulseInFeet")); //ft
-        rightEncoder = new Encoder(
-                configuration.getChannelAndRegister("right.channelA"),
-                configuration.getChannelAndRegister("right.channelB"),
-                configuration.getBoolean("right.reversedDirection"));
-        rightEncoder.setDistancePerPulse(configuration.getDouble("right.distancePerPulseInFeet")); //ft
-    }
-
-    // TODO for the practice base, these must be changed later
-
-    private double getLeftEncoder() {
-        return leftEncoder.getDistance();
-    }
-    private double getRightEncoder() {
-        return rightEncoder.getDistance();
     }
 
     private Pose addPoseObservation() {
@@ -69,18 +41,21 @@ public class Drive implements AbstractDrive {
         double newHeading = getGyro().getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
 
-        double L = getLeftEncoder();
-        double R = getRightEncoder();
+        double leftDistance = getRobotSide(Side.LEFT).getPosition();
+        double rightDistance = getRobotSide(Side.RIGHT).getPosition();
+        double leftVelocity = getRobotSide(Side.LEFT).getVelocity();
+        double rightVelocity = getRobotSide(Side.RIGHT).getVelocity();
 
-        double distance = (L + R - leftAccum - rightAccum)/2;
-        leftAccum = L;
-        rightAccum = R;
+        double velocity = (leftVelocity + rightVelocity) / 2;
+        double distance = (leftDistance + rightDistance - lastLeftAccumulated - lastRightAccumulated)/2;
+        lastLeftAccumulated = leftDistance;
+        lastRightAccumulated = rightDistance;
 
         getRobotState().addObservation(new Pose(
             latestState.getX() + (distance * Math.cos(angle)),
             latestState.getY() + (distance * Math.sin(angle)),
             newHeading,
-            (leftEncoder.getRate() + rightEncoder.getRate())/2
+            velocity
         ));
 
         return getRobotState().getLatestPose();
@@ -92,9 +67,9 @@ public class Drive implements AbstractDrive {
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.BOTH, 0);
         getRobotState().addObservation(new Pose(0, 0,
-                getGyro().getYaw(),
-                (leftEncoder.getRate() + rightEncoder.getRate())/2)
-        );
+            getGyro().getYaw(),
+            (getRobotSide(Side.LEFT).getVelocity() + getRobotSide(Side.RIGHT).getVelocity())/2
+        ));
     }
 
     @Override
@@ -103,9 +78,9 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void onStep(double timestamp) {
-        Pose latestPose = this.addPoseObservation();
+        Pose latestPose = addPoseObservation();
 
-        getVelocityDB().put(latestPose.getVel());
+        getVelocityDB().put(latestPose.getVelocity());
         getxPositionDB().put(latestPose.getX());
         getyPositionDB().put(latestPose.getY());
         getHeadingDB().put(latestPose.getHeading());
@@ -162,7 +137,7 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void selfTest() {
-        for (Supplier<RobotSide> robotSideSupplier : robotSideMap.values()) {
+        for (Supplier<RobotSide> robotSideSupplier : sides.values()) {
             RobotSide robotSide = robotSideSupplier.get();
             // TODO: Throw an exception instead
             for (TalonSRX talon : robotSide.getTalons()) {
@@ -177,30 +152,30 @@ public class Drive implements AbstractDrive {
     }
 
     private Gyro getGyro() {
-        return this.robotRegistry.get(Gyro.class);
+        return robotRegistry.get(Gyro.class);
     }
 
     private DashboardHandle getxPositionDB() {
-        return this.robotRegistry.get(Robot.xPositionDB);
+        return robotRegistry.get(Robot.xPositionDB);
     }
 
     private DashboardHandle getyPositionDB() {
-        return this.robotRegistry.get(Robot.yPositionDB);
+        return robotRegistry.get(Robot.yPositionDB);
     }
 
     private DashboardHandle getHeadingDB() {
-        return this.robotRegistry.get(Robot.headingDB);
+        return robotRegistry.get(Robot.headingDB);
     }
 
     private DashboardHandle getVelocityDB() {
-        return this.robotRegistry.get(Robot.velocityDB);
+        return robotRegistry.get(Robot.velocityDB);
     }
 
     private RobotSide getRobotSide(Side side) {
-        return this.robotSideMap.get(side).get();
+        return sides.get(side).get();
     }
 
     private RobotState getRobotState() {
-        return this.robotRegistry.get(RobotState.class);
+        return robotRegistry.get(RobotState.class);
     }
 }
