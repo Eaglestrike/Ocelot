@@ -81,13 +81,13 @@ public class Robot extends IterativeRobot {
 
         // register modules
         robotRegistry.put(gyro);
-        robotRegistry.put(controller);
+        robotRegistry.put(Controller.class, controller);
         robotRegistry.put(gearShifter);
         robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
         robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
 
         // register subsystems
-        robotRegistry.put(drive);
+        robotRegistry.put(AbstractDrive.class, drive);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -138,8 +138,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        Controller controller = robotRegistry.get(Controller.class);
         AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
+        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
+
         drive.setDriveSignal(getDriveSignal());
+
+        if (controller.shiftGear().rising()) {
+            gearShifter.shift();
+        }
     }
 
     @Override

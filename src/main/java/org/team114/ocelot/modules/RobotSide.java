@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
