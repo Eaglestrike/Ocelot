@@ -6,6 +6,10 @@ import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.settings.RobotSettings;
 
 public class GearShifter {
+    public enum State {
+        HIGH, LOW, OFF
+    }
+
     private final RobotRegistry robotRegistry;
     private final DoubleSolenoid gearSolenoid;
     public GearShifter(RobotRegistry robotRegistry) {
@@ -15,27 +19,44 @@ public class GearShifter {
             configuration.getChannelAndRegister("highGearChannel"),
             configuration.getChannelAndRegister("lowGearChannel")
         );
-        this.gearSolenoid.set(DoubleSolenoid.Value.kForward);
+        set(State.HIGH);
     }
 
-    public void setHighGear(boolean on) {
-        if (on) {
-            gearSolenoid.set(DoubleSolenoid.Value.kForward);
-        } else {
-            gearSolenoid.set(DoubleSolenoid.Value.kReverse);
+    public void set(State state) {
+        switch (state) {
+            case HIGH:
+                gearSolenoid.set(DoubleSolenoid.Value.kForward);
+                break;
+            case LOW:
+                gearSolenoid.set(DoubleSolenoid.Value.kReverse);
+                break;
+            case OFF:
+                gearSolenoid.set(DoubleSolenoid.Value.kOff);
+                break;
+        }
+    }
+
+    public State get() {
+        switch (gearSolenoid.get()) {
+            case kForward:
+                return State.HIGH;
+            case kReverse:
+                return State.LOW;
+            default: // kOff
+                return State.OFF;
         }
     }
 
     public void shift() {
-        switch (gearSolenoid.get()) {
-            case kForward:
-                gearSolenoid.set(DoubleSolenoid.Value.kReverse);
+        switch (get()) {
+            case LOW:
+                set(State.HIGH);
                 break;
-            case kReverse:
-                gearSolenoid.set(DoubleSolenoid.Value.kForward);
+            case HIGH:
+                set(State.LOW);
                 break;
-            case kOff:
-                gearSolenoid.set(DoubleSolenoid.Value.kForward);
+            case OFF:
+                set(State.HIGH);
                 break;
         }
     }

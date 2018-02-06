@@ -30,7 +30,8 @@ public class Robot extends IterativeRobot {
     public static final String headingDB = "Pose hdg";
     public static final String velocityDB = "Pose vel";
     public static final String countdownDB = "Climbing Countdown";
-    DashboardHandle pneumaticPressure = new DashboardHandle("Pneumatic Pressure");
+    public static final String pneumaticPressureDB = "Pneumatic Pressure";
+    public static final String gearDB = "Gear";
 
     private RobotRegistryImpl robotRegistry;
     private SubsystemManager subsystemManager;
@@ -78,6 +79,8 @@ public class Robot extends IterativeRobot {
         robotRegistry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
         robotRegistry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
         robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
+        robotRegistry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
+        robotRegistry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
 
         // register modules
         robotRegistry.put(gyro);
@@ -120,12 +123,27 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
+        DashboardHandle pneumaticPressureHandle = robotRegistry.get(pneumaticPressureDB);
+        pneumaticPressureHandle.put(pressureSensor.getPressure());
+
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
         DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
         countdownHandle.put(timeLeft);
 
-        pneumaticPressure.put(pressureSensor.getPressure());
+        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
+        DashboardHandle gearHandle = robotRegistry.get(gearDB);
+        switch (gearShifter.get()) {
+            case HIGH:
+                gearHandle.put(1);
+                break;
+            case LOW:
+                gearHandle.put(-1);
+                break;
+            case OFF:
+                gearHandle.put(0);
+                break;
+        }
     }
 
     @Override
