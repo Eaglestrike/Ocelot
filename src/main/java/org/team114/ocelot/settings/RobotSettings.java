@@ -17,6 +17,15 @@ import java.util.stream.Collectors;
 
 public final class RobotSettings {
 
+    //TODO: set this to the real number haha
+    public static final int LIFT_HEIGHT = 1;
+
+    public static final int ENCODER_TICKS = 4096;
+
+    // ratio of height/encoder turns
+    //TODO: find out the real ratio
+    public static final double FEET_TO_ENCODER_TICKS_RATIO = 1;
+
     public static double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
     public static int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
 
