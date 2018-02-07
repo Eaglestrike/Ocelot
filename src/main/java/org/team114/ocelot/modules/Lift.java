@@ -12,13 +12,9 @@ public class Lift {
     private ControlMode controlMode;
     private double goalHeight;
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
-                DigitalInput bottomLimitSwitch) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
-//        masterTalon.configMotionCruiseVelocity();
-//        masterTalon.configMotionAcceleration();
-//        masterTalon.setSelectedSensorPosition(0, );
     }
 
     //go to height (height in feet)
@@ -26,22 +22,21 @@ public class Lift {
     public void goToHeight(double height) {
         //TODO: think about limit switches (digital inputs)
         //TODO: only count a switch pressed if it's pressed for a certain time
-
-        masterTalon.set(ControlMode.MotionMagic, convertFeettoTicks(height));
-        goalHeight = 0;
+        masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
+        goalHeight = height;
     }
 
     //get the height in feet
     public double getHeight() {
-        return convertTickstoFeet(masterTalon.getSelectedSensorPosition(0));
+        return convertTicksToFeet(masterTalon.getSelectedSensorPosition(0));
     }
 
     //increment can be negative, and in that case it would be a decrement
     //increment is measured in feet
     public void incrementHeight(double increment) {
         goalHeight += increment;
-        if (goalHeight > RobotSettings.LIFT_HEIGHT) {
-            goalHeight = RobotSettings.LIFT_HEIGHT;
+        if (goalHeight > RobotSettings.MAX_LIFT_HEIGHT) {
+            goalHeight = RobotSettings.MAX_LIFT_HEIGHT;
         }
         else if (goalHeight < 0) {
             goalHeight = 0;
@@ -49,11 +44,11 @@ public class Lift {
         goToHeight(goalHeight);
     }
 
-    public double convertTickstoFeet(double ticks) {
-        return ticks * RobotSettings.FEET_TO_ENCODER_TICKS_RATIO / RobotSettings.ENCODER_TICKS;
+    public double convertTicksToFeet(double ticks) {
+        return (ticks / RobotSettings.ENCODER_TICKS_PER_REVOLUTION) / RobotSettings.CLIMBER_FEET_PER_REVOLUTION;
     }
 
-    public double convertFeettoTicks(double feet) {
-        return RobotSettings.ENCODER_TICKS * feet / RobotSettings.FEET_TO_ENCODER_TICKS_RATIO;
+    public double convertFeetToTicks(double feet) {
+        return RobotSettings.ENCODER_TICKS_PER_REVOLUTION * (feet / RobotSettings.CLIMBER_FEET_PER_REVOLUTION);
     }
 }
