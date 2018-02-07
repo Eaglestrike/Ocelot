@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.Registry;
+import org.team114.ocelot.settings.Configuration;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
@@ -17,15 +18,13 @@ import java.util.List;
 public class DriveSide {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
-    private final Registry registry;
     private ControlMode controlMode;
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public DriveSide(Registry registry) {
-        this.registry = registry;
-        this.masterTalon = new TalonSRX(registry.getConfiguration().getInt("master"));
-        this.slaveTalon = new TalonSRX(registry.getConfiguration().getInt("slave"));
+    public DriveSide(Configuration configuration) {
+        this.masterTalon = new TalonSRX(configuration.getInt("master"));
+        this.slaveTalon = new TalonSRX(configuration.getInt("slave"));
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
         masterTalon.setSelectedSensorPosition(0, 0, 0);
     }

@@ -1,19 +1,15 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import org.team114.ocelot.Registry;
-import org.team114.ocelot.settings.Settings;
+import org.team114.ocelot.settings.Configuration;
 
 public class GearShifter {
     public enum State {
         HIGH, LOW, OFF
     }
 
-    private final Registry registry;
     private final DoubleSolenoid gearSolenoid;
-    public GearShifter(Registry registry) {
-        this.registry = registry;
-        Settings.Configuration configuration = this.registry.getConfiguration();
+    public GearShifter(Configuration configuration) {
         this.gearSolenoid = new DoubleSolenoid(
             configuration.getChannelAndRegister("highGearChannel"),
             configuration.getChannelAndRegister("lowGearChannel")

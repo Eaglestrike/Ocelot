@@ -1,7 +1,5 @@
 package org.team114.ocelot;
 
-import org.team114.ocelot.settings.Settings;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,43 +18,8 @@ import java.util.stream.Collectors;
 class RegistryImpl implements Registry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();
     private final Map<Class, Object> objectsByClassMap = new ConcurrentHashMap<>();
-    private final Settings settings;
 
-    private class SubRegistry implements Registry {
-        private final Settings.Configuration configuration;
-        SubRegistry(String prefix) {
-            this.configuration = RegistryImpl.this.getConfiguration(prefix);
-        }
-        @Override
-        public <T> T get(String key) {
-            return RegistryImpl.this.get(key);
-        }
-
-        @Override
-        public <T> T get(Class<? extends T> interfaceClazz) {
-            return RegistryImpl.this.get(interfaceClazz);
-        }
-
-        @Override
-        public <K,V> V getIndex(K key, Class<? extends V> interfaceClazz) {
-            return RegistryImpl.this.getIndex(key, interfaceClazz);
-        }
-
-        public Settings.Configuration getConfiguration() {
-            return this.configuration;
-        }
-
-        public Registry getSubRegistry(String prefix) {
-            return new SubRegistry(configuration.getPrefix()+prefix);
-        }
-    };
-
-    RegistryImpl(Settings settings) {
-        this.settings = settings;
-    }
-
-    public Registry getSubRegistry(final String prefix) {
-        return new SubRegistry(prefix);
+    public RegistryImpl() {
     }
 
     @SuppressWarnings("unchecked")
@@ -112,12 +75,5 @@ class RegistryImpl implements Registry {
     @SuppressWarnings("unchecked")
     public <T> T get(Class<? extends T> interfaceClazz) {
         return Optional.of((T) this.objectsByClassMap.get(interfaceClazz)).get();
-    }
-
-    private Settings.Configuration getConfiguration(String prefix) {
-        return this.settings.getConfiguration(prefix);
-    }
-    public Settings.Configuration getConfiguration() {
-        return this.settings.getConfiguration(null);
     }
 }

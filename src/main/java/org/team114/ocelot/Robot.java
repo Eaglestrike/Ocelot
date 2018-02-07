@@ -8,6 +8,7 @@ import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
+import org.team114.ocelot.settings.Configuration;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
@@ -45,29 +46,29 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        Settings settings = new Settings();
+        Configuration configuration;
         try {
-            settings.load();
+            configuration = Configuration.loadFromProperties();
         } catch (IOException e) {
             e.printStackTrace();
             // if we can't load settings, we want to crash the robot
             throw new IllegalStateException();
         }
 
-        registry = new RegistryImpl(settings);
+        registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
-        CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper(registry.getSubRegistry("CheesyDriveHelper"));
+        CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper(configuration.subConfiguration("CheesyDriveHelper"));
         RobotState robotState = new RobotState();
 
         // create modules
         Gyro gyro = Gyro.shared;
         Controller controller = new DualController(new Joystick(0), new Joystick(1));
-        GearShifter gearShifter = new GearShifter(registry.getSubRegistry("GearShifter"));
-        DriveSide leftSide = new DriveSide(registry.getSubRegistry("DriveSide.left"));
-        DriveSide rightSide = new DriveSide(registry.getSubRegistry("DriveSide.right"));
+        GearShifter gearShifter = new GearShifter(configuration.subConfiguration("GearShifter"));
+        DriveSide leftSide = new DriveSide(configuration.subConfiguration("DriveSide.left"));
+        DriveSide rightSide = new DriveSide(configuration.subConfiguration("DriveSide.right"));
 
         // create subsystems
-        AbstractDrive drive = new Drive(registry.getSubRegistry("Drive"));
+        AbstractDrive drive = new Drive(registry, configuration.subConfiguration("Drive"));
 
         // register general stuff
         registry.put(cheesyDriveHelper);

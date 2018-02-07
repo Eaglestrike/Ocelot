@@ -1,21 +1,16 @@
 package org.team114.ocelot.util;
 
-import org.team114.ocelot.Registry;
-import org.team114.ocelot.settings.Settings;
+import org.team114.ocelot.settings.Configuration;
 
 public class CheesyDriveHelper {
     private static final double WHEEL_CONTROLLER_REVERSED = -1.0;
-    private final Registry registry;
 
     private double quickStopAccumulator;
     private final double throttleDeadband;
     private final double wheelDeadband;
     private final double turnSensitivity;
 
-    public CheesyDriveHelper(Registry registry) {
-        this.registry = registry;
-
-        Settings.Configuration configuration = this.registry.getConfiguration();
+    public CheesyDriveHelper(Configuration configuration) {
         this.throttleDeadband = configuration.getDouble("throttleDeadband");
         this.wheelDeadband = configuration.getDouble("wheelDeadband");
         this.turnSensitivity = configuration.getDouble("turnSensitivity");
