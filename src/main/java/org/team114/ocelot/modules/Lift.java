@@ -39,12 +39,14 @@ public class Lift {
     //increment can be negative, and in that case it would be a decrement
     //increment is measured in feet
     public void incrementHeight(double increment) {
-        if (goalHeight - increment > -1 * RobotSettings.LIFT_HEIGHT &&
-                (goalHeight + increment <= RobotSettings.LIFT_HEIGHT)) {
-            goalHeight += increment;
-            goToHeight(goalHeight);
+        goalHeight += increment;
+        if (goalHeight > RobotSettings.LIFT_HEIGHT) {
+            goalHeight = RobotSettings.LIFT_HEIGHT;
         }
-        else throw new RuntimeException("The increment was out of range.");
+        else if (goalHeight < 0) {
+            goalHeight = 0;
+        }
+        goToHeight(goalHeight);
     }
 
     public double convertTickstoFeet(double ticks) {
