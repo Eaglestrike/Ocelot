@@ -16,14 +16,15 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class RobotSettings {
-    public static final int LIFT_HEIGHT = 1;
+
     //TODO: set this to the real number haha
+    public static final int LIFT_HEIGHT = 1;
 
     public static final int ENCODER_TICKS = 4096;
 
     // ratio of height/encoder turns
-    public static final double HEIGHT_TO_ENCODER_TICKS_RATIO = 1;
     //TODO: find out the real ratio
+    public static final double FEET_TO_ENCODER_TICKS_RATIO = 1;
 
     public static final int MAX_NUMBER_OF_CHANNELS = 16;
 
