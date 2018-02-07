@@ -3,7 +3,7 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.ocelot.RobotRegistry;
+import org.team114.ocelot.Registry;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
@@ -14,18 +14,18 @@ import java.util.List;
  * This class is responsible for ensuring that the master and slave talons are linked.
  * Coupled with {@link Side}
  */
-public class RobotSide {
+public class DriveSide {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
-    private final RobotRegistry robotRegistry;
+    private final Registry registry;
     private ControlMode controlMode;
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public RobotSide(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
-        this.masterTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("master"));
-        this.slaveTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("slave"));
+    public DriveSide(Registry registry) {
+        this.registry = registry;
+        this.masterTalon = new TalonSRX(registry.getConfiguration().getInt("master"));
+        this.slaveTalon = new TalonSRX(registry.getConfiguration().getInt("slave"));
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
         masterTalon.setSelectedSensorPosition(0, 0, 0);
     }

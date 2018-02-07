@@ -2,8 +2,7 @@ package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 
 public class Lift {
     private final TalonSRX masterTalon;
@@ -35,8 +34,8 @@ public class Lift {
     //increment is measured in feet
     public void incrementHeight(double increment) {
         goalHeight += increment;
-        if (goalHeight > RobotSettings.MAX_LIFT_HEIGHT) {
-            goalHeight = RobotSettings.MAX_LIFT_HEIGHT;
+        if (goalHeight > Settings.MAX_LIFT_HEIGHT) {
+            goalHeight = Settings.MAX_LIFT_HEIGHT;
         }
         else if (goalHeight < 0) {
             goalHeight = 0;
@@ -45,10 +44,10 @@ public class Lift {
     }
 
     public double convertTicksToFeet(double ticks) {
-        return (ticks / RobotSettings.ENCODER_TICKS_PER_REVOLUTION) / RobotSettings.CLIMBER_FEET_PER_REVOLUTION;
+        return (ticks / Settings.ENCODER_TICKS_PER_REVOLUTION) / Settings.CLIMBER_FEET_PER_REVOLUTION;
     }
 
     public double convertFeetToTicks(double feet) {
-        return RobotSettings.ENCODER_TICKS_PER_REVOLUTION * (feet / RobotSettings.CLIMBER_FEET_PER_REVOLUTION);
+        return Settings.ENCODER_TICKS_PER_REVOLUTION * (feet / Settings.CLIMBER_FEET_PER_REVOLUTION);
     }
 }

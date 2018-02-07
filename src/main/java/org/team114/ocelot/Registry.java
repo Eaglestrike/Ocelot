@@ -1,17 +1,17 @@
 package org.team114.ocelot;
 
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 
-public interface RobotRegistry {
+public interface Registry {
 
     /**
-     * allows RobotRegistry to return narrowed RobotRegistry
-     * For example.
-     * this is the robotregistry passed to drive:
-     *   RobotRegistry.getSubRobotRegistry("Drive")
+     * allows Registry to return narrowed Registry
+     * for example.
+     * this is the registry passed to drive:
+     *   Registry.getSubRegistry("Drive")
      *
      * the Drive code can then pass to gearshifter:
-     *   this.robotRegistry.getSubRobotRegistry("GearShifter")
+     *   this.registry.getSubRegistry("GearShifter")
      *
      * the gearshifter can then ask for "highGearChannel" which really looks at the key:
      *  "Drive.GearShifter.highGearChannel"
@@ -20,7 +20,7 @@ public interface RobotRegistry {
      * @param prefix (added to this' prefix)
      * @return
      */
-    RobotRegistry getSubRobotRegistry(String prefix);
+    Registry getSubRegistry(String prefix);
     /**
      *
      * @param key
@@ -36,5 +36,5 @@ public interface RobotRegistry {
     <T> T get(Class<? extends T> interfaceClazz);
 
     <K,V> V getIndex(K key, Class<? extends V> interfaceClazz);
-    RobotSettings.Configuration getConfiguration();
+    Settings.Configuration getConfiguration();
 }

@@ -1,20 +1,19 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
-import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.Registry;
+import org.team114.ocelot.settings.Settings;
 
 public class GearShifter {
     public enum State {
         HIGH, LOW, OFF
     }
 
-    private final RobotRegistry robotRegistry;
+    private final Registry registry;
     private final DoubleSolenoid gearSolenoid;
-    public GearShifter(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
-        RobotSettings.Configuration configuration = this.robotRegistry.getConfiguration();
+    public GearShifter(Registry registry) {
+        this.registry = registry;
+        Settings.Configuration configuration = this.registry.getConfiguration();
         this.gearSolenoid = new DoubleSolenoid(
             configuration.getChannelAndRegister("highGearChannel"),
             configuration.getChannelAndRegister("lowGearChannel")

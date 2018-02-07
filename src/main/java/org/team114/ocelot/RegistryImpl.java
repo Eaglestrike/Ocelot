@@ -1,6 +1,6 @@
 package org.team114.ocelot;
 
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 
 import java.util.List;
 import java.util.Map;
@@ -12,51 +12,51 @@ import java.util.stream.Collectors;
  * In more advance systems, we would use something like Guice or Springframework to do
  * Dependency injection. In such a system the registry is less visible.
  *
- * RobotRegistryImpl is our poorman dependency injection.
+ * RegistryImpl is our poorman dependency injection.
  *
- * No other object should hold a direct reference to another object held in the RobotRegistryImpl
+ * No other object should hold a direct reference to another object held in the RegistryImpl
  * Lookups are fast enough.
  */
-class RobotRegistryImpl implements RobotRegistry {
+class RegistryImpl implements Registry {
     private final Map<String, Object> registryMap = new ConcurrentHashMap<>();
     private final Map<Class, Object> objectsByClassMap = new ConcurrentHashMap<>();
-    private final RobotSettings robotSettings;
+    private final Settings settings;
 
-    private class SubRobotRegistry implements RobotRegistry {
-        private final RobotSettings.Configuration configuration;
-        SubRobotRegistry(String prefix) {
-            this.configuration = RobotRegistryImpl.this.getConfiguration(prefix);
+    private class SubRegistry implements Registry {
+        private final Settings.Configuration configuration;
+        SubRegistry(String prefix) {
+            this.configuration = RegistryImpl.this.getConfiguration(prefix);
         }
         @Override
         public <T> T get(String key) {
-            return RobotRegistryImpl.this.get(key);
+            return RegistryImpl.this.get(key);
         }
 
         @Override
         public <T> T get(Class<? extends T> interfaceClazz) {
-            return RobotRegistryImpl.this.get(interfaceClazz);
+            return RegistryImpl.this.get(interfaceClazz);
         }
 
         @Override
         public <K,V> V getIndex(K key, Class<? extends V> interfaceClazz) {
-            return RobotRegistryImpl.this.getIndex(key, interfaceClazz);
+            return RegistryImpl.this.getIndex(key, interfaceClazz);
         }
 
-        public RobotSettings.Configuration getConfiguration() {
+        public Settings.Configuration getConfiguration() {
             return this.configuration;
         }
 
-        public RobotRegistry getSubRobotRegistry(String prefix) {
-            return new SubRobotRegistry(configuration.getPrefix()+prefix);
+        public Registry getSubRegistry(String prefix) {
+            return new SubRegistry(configuration.getPrefix()+prefix);
         }
     };
 
-    RobotRegistryImpl(RobotSettings robotSettings) {
-        this.robotSettings = robotSettings;
+    RegistryImpl(Settings settings) {
+        this.settings = settings;
     }
 
-    public RobotRegistry getSubRobotRegistry(final String prefix) {
-        return new SubRobotRegistry(prefix);
+    public Registry getSubRegistry(final String prefix) {
+        return new SubRegistry(prefix);
     }
 
     @SuppressWarnings("unchecked")
@@ -114,10 +114,10 @@ class RobotRegistryImpl implements RobotRegistry {
         return Optional.of((T) this.objectsByClassMap.get(interfaceClazz)).get();
     }
 
-    private RobotSettings.Configuration getConfiguration(String prefix) {
-        return this.robotSettings.getConfiguration(prefix);
+    private Settings.Configuration getConfiguration(String prefix) {
+        return this.settings.getConfiguration(prefix);
     }
-    public RobotSettings.Configuration getConfiguration() {
-        return this.robotSettings.getConfiguration(null);
+    public Settings.Configuration getConfiguration() {
+        return this.settings.getConfiguration(null);
     }
 }

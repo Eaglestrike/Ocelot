@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class RobotSettings {
+public final class Settings {
 
     //TODO: find out the real ratio
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
@@ -41,7 +41,7 @@ public final class RobotSettings {
      */
     private Map<Integer, String> channelRegistry = new ConcurrentHashMap<>();
 
-    public RobotSettings load() throws IOException {
+    public Settings load() throws IOException {
         String filename = "/"+this.getClass().getCanonicalName().replaceAll("\\.", "/") + ".properties";
         System.out.println("Loading " + filename);
         try (InputStream io = this.getClass().getResourceAsStream(filename)) {
@@ -52,7 +52,7 @@ public final class RobotSettings {
             }
         }
     }
-    public RobotSettings load(InputStream io) throws IOException {
+    public Settings load(InputStream io) throws IOException {
         this.properties = new Properties();
         this.properties.load(io);
         return this;
@@ -75,7 +75,7 @@ public final class RobotSettings {
          */
         public String getProperty(String key) {
             String nonnullKey = getKey(key);
-            String property = RobotSettings.this.properties.getProperty(nonnullKey);
+            String property = Settings.this.properties.getProperty(nonnullKey);
             if (property == null) {
                 throw new NoSuchElementException(nonnullKey);
             }

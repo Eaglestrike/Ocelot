@@ -4,16 +4,16 @@ import junit.framework.TestCase;
 
 import java.io.IOException;
 
-public class TestRobotSettings extends TestCase {
+public class TestSettings extends TestCase {
     public void test() throws IOException {
-        RobotSettings robotSettings = new RobotSettings().load();
-        RobotSettings.Configuration config = robotSettings.getConfiguration("Drive");
+        Settings settings = new Settings().load();
+        Settings.Configuration config = settings.getConfiguration("Drive");
         boolean b = config.getBoolean("left.reversedDirection");
         assertTrue(b);
         int cA = config.getChannelAndRegister("right.channelA");
         assertEquals(7, cA);
         double d = config.getDouble("right.distancePerPulseInFeet");
         System.out.println(d);
-        System.out.println(robotSettings.getChannelRegistry().toString());
+        System.out.println(settings.getChannelRegistry().toString());
     }
 }
