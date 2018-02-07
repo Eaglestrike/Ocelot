@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
@@ -28,6 +27,7 @@ public class RobotSide {
         this.masterTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("master"));
         this.slaveTalon = new TalonSRX(robotRegistry.getConfiguration().getInt("slave"));
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
+        masterTalon.setSelectedSensorPosition(0, 0, 0);
     }
 
     public void refresh() {

@@ -1,9 +1,9 @@
 package org.team114.ocelot.modules;
 
+import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.util.PercentageRange;
 
 public interface Controller {
-
     PercentageRange throttle();
 
     PercentageRange wheel();
@@ -20,4 +20,5 @@ public interface Controller {
 
     boolean endClimb();
 
+    EdgeDetector shiftGear();
 }

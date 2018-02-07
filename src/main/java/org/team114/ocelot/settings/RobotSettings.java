@@ -26,6 +26,9 @@ public final class RobotSettings {
     //TODO: find out the real ratio
     public static final double FEET_TO_ENCODER_TICKS_RATIO = 1;
 
+    public static double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
+    public static int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
+
     public static final int MAX_NUMBER_OF_CHANNELS = 16;
 
     public static final double MAX_VELOCITY = 1;

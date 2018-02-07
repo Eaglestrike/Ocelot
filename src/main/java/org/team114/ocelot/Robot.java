@@ -1,16 +1,13 @@
 package org.team114.ocelot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.modules.Controller;
-import org.team114.ocelot.modules.DualController;
-import org.team114.ocelot.modules.GearShifter;
-import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
+import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
@@ -33,10 +30,14 @@ public class Robot extends IterativeRobot {
     public static final String headingDB = "Pose hdg";
     public static final String velocityDB = "Pose vel";
     public static final String countdownDB = "Climbing Countdown";
+    public static final String pneumaticPressureDB = "Pneumatic Pressure";
+    public static final String gearDB = "Gear";
 
     private RobotRegistryImpl robotRegistry;
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
+
+    private PneumaticPressureSensor pressureSensor;
 
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
@@ -78,16 +79,18 @@ public class Robot extends IterativeRobot {
         robotRegistry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
         robotRegistry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
         robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
+        robotRegistry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
+        robotRegistry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
 
         // register modules
         robotRegistry.put(gyro);
-        robotRegistry.put(controller);
+        robotRegistry.put(Controller.class, controller);
         robotRegistry.put(gearShifter);
         robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
         robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
 
         // register subsystems
-        robotRegistry.put(drive);
+        robotRegistry.put(AbstractDrive.class, drive);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -95,6 +98,8 @@ public class Robot extends IterativeRobot {
             drive
         );
         subsystemManager.start();
+
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
     }
 
     @Override
@@ -118,10 +123,27 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
+        DashboardHandle pneumaticPressureHandle = robotRegistry.get(pneumaticPressureDB);
+        pneumaticPressureHandle.put(pressureSensor.getPressure());
+
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
         DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
         countdownHandle.put(timeLeft);
+
+        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
+        DashboardHandle gearHandle = robotRegistry.get(gearDB);
+        switch (gearShifter.get()) {
+            case HIGH:
+                gearHandle.put(1);
+                break;
+            case LOW:
+                gearHandle.put(-1);
+                break;
+            case OFF:
+                gearHandle.put(0);
+                break;
+        }
     }
 
     @Override
@@ -134,8 +156,15 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        Controller controller = robotRegistry.get(Controller.class);
         AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
+        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
+
         drive.setDriveSignal(getDriveSignal());
+
+        if (controller.shiftGear().rising()) {
+            gearShifter.shift();
+        }
     }
 
     @Override

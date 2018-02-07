@@ -81,8 +81,8 @@ public class Drive implements AbstractDrive {
         Pose latestPose = addPoseObservation();
 
         getVelocityDB().put(latestPose.getVelocity());
-        getxPositionDB().put(latestPose.getX());
-        getyPositionDB().put(latestPose.getY());
+        getXPositionDB().put(latestPose.getX());
+        getYPositionDB().put(latestPose.getY());
         getHeadingDB().put(latestPose.getHeading());
     }
 
@@ -155,11 +155,11 @@ public class Drive implements AbstractDrive {
         return robotRegistry.get(Gyro.class);
     }
 
-    private DashboardHandle getxPositionDB() {
+    private DashboardHandle getXPositionDB() {
         return robotRegistry.get(Robot.xPositionDB);
     }
 
-    private DashboardHandle getyPositionDB() {
+    private DashboardHandle getYPositionDB() {
         return robotRegistry.get(Robot.yPositionDB);
     }
 
