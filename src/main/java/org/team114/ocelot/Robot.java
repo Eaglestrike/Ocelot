@@ -12,7 +12,7 @@ import org.team114.ocelot.settings.RobotSettings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
-import org.team114.ocelot.util.DashboardHandle;
+import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.PercentageRange;
 
@@ -94,7 +94,6 @@ public class Robot extends IterativeRobot {
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
-            robotRegistry.getSubRobotRegistry("SubsystemManager"),
             drive
         );
         subsystemManager.start();

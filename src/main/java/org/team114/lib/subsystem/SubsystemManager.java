@@ -2,8 +2,7 @@ package org.team114.lib.subsystem;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
-import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.util.DashboardHandle;
+import org.team114.lib.util.DashboardHandle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +13,14 @@ import java.util.List;
  * @see Subsystem
  */
 public class SubsystemManager {
+
+    /**
+     * Time between subsystem steps in seconds (currently {@value}).
+     */
+    public static final double STEP_PERIOD = 0.005; //200 times a second
+
     private final List<Subsystem> subsystems;
     private final Notifier notifier = new Notifier(this::step);
-    private final RobotRegistry robotRegistry;
     private final DashboardHandle hertzDB = new DashboardHandle("Subsystem Hz");
 
     private double lastTimeStamp;
@@ -25,8 +29,7 @@ public class SubsystemManager {
      * Creates a new manager from a list of subsystems.
      * @param subsystems a {@code List} of all subsystems
      */
-    public SubsystemManager(RobotRegistry robotRegistry, List<? extends Subsystem> subsystems) {
-        this.robotRegistry = robotRegistry;
+    public SubsystemManager(List<? extends Subsystem> subsystems) {
         this.subsystems = new ArrayList<>(subsystems);
     }
 
@@ -34,8 +37,8 @@ public class SubsystemManager {
      * Creates a new manager with subsystems, using a variadic constructor
      * @param subsystems all the subsystems
      */
-    public SubsystemManager(RobotRegistry robotRegistry, Subsystem... subsystems) {
-        this(robotRegistry, Arrays.asList(subsystems));
+    public SubsystemManager(Subsystem... subsystems) {
+        this(Arrays.asList(subsystems));
     }
 
     /**
@@ -57,12 +60,12 @@ public class SubsystemManager {
      * {@link #stop()} is called.
      *
      * <p>This function tells a notifier to trigger every
-     * "stepPeriod" (config file) seconds, calling the step method of each
+     * {@link SubsystemManager#STEP_PERIOD} seconds, calling the step method of each
      * subsystem.</p>
      */
     public void start() {
         subsystems.forEach(subsystem -> subsystem.onStart(timestamp()));
-        notifier.startPeriodic(robotRegistry.getConfiguration().getDouble("stepPeriod"));
+        notifier.startPeriodic(STEP_PERIOD);
         lastTimeStamp = Timer.getFPGATimestamp();
     }
 

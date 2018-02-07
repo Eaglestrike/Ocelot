@@ -1,4 +1,4 @@
-package org.team114.ocelot.util;
+package org.team114.lib.util;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
