@@ -23,8 +23,10 @@ public class Lift {
 
         this.topLimitSwitch = topLimitSwitch;
         this.bottomLimitSwitch = bottomLimitSwitch;
-        masterTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-        masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+
+        this.masterTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+        this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+        this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 
     /**
@@ -35,8 +37,7 @@ public class Lift {
         // as if the limit switches are wired to the talon
         if (topLimitSwitch.get()) {
             masterTalon.setSelectedSensorPosition(convertFeetToTicks(RobotSettings.MAX_LIFT_HEIGHT), 0, 0);
-        }
-        else if (bottomLimitSwitch.get()) {
+        } else if (bottomLimitSwitch.get()) {
             masterTalon.setSelectedSensorPosition(0, 0, 0);
         }
 
