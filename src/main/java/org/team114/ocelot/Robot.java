@@ -100,7 +100,7 @@ public class Robot extends IterativeRobot {
 
         // driver facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
-        cheesyDrive = new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper"));
+        cheesyDrive = new CheesyDriveHelper(configuration.subConfiguration("CheesyDriveHelper"));
         driverControls= new DualController(new Joystick(0), new Joystick(1));
     }
 

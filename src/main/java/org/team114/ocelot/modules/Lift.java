@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import org.team114.ocelot.settings.Settings;
 
 public class Lift {
@@ -35,7 +36,7 @@ public class Lift {
     public void goToHeight(double height) {
         // as if the limit switches are wired to the talon
         if (topLimitSwitch.get()) {
-            masterTalon.setSelectedSensorPosition(convertFeetToTicks(RobotSettings.MAX_LIFT_HEIGHT), 0, 0);
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
         } else if (bottomLimitSwitch.get()) {
             masterTalon.setSelectedSensorPosition(0, 0, 0);
         }

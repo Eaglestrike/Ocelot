@@ -3,8 +3,6 @@ package org.team114.ocelot.util;
 import org.team114.ocelot.settings.Configuration;
 
 public class CheesyDriveHelper {
-    private final RobotRegistry robotRegistry;
-
     private double quickStopAccumulator;
     private final double turnSensitivity;
 
