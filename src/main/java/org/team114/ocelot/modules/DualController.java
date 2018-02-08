@@ -9,17 +9,23 @@ public class DualController implements Controller {
     private final Joystick left;
     private final Joystick right;
 
+    private final double basicDeadband = 0.02;
+
+    private double band(double x) {
+        return Math.abs(x) < basicDeadband ? 0 : x;
+    }
+
     public DualController(Joystick left, Joystick right) {
         this.left = left;
         this.right = right;
     }
 
     public PercentageRange throttle() {
-        return new PercentageRange(left.getY());
+        return new PercentageRange(band(-1 * left.getY()));
     }
 
     public PercentageRange wheel() {
-        return new PercentageRange(right.getX());
+        return new PercentageRange(band(right.getX()));
     }
 
     public boolean startLift() {
@@ -52,9 +58,8 @@ public class DualController implements Controller {
         return left.getRawButton(1);
     }
 
-    EdgeDetector shiftEdge = new EdgeDetector(this::shiftGearButton);
     @Override
-    public EdgeDetector shiftGear() {
-        return shiftEdge;
+    public boolean wantLowGear() {
+        return shiftGearButton();
     }
 }

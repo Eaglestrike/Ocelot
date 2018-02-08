@@ -1,6 +1,8 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.settings.Settings;
 
@@ -8,19 +10,36 @@ public class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
 
-    private ControlMode controlMode;
+    private final DigitalInput topLimitSwitch;
+    private final DigitalInput bottomLimitSwitch;
+
     private double goalHeight;
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
+                DigitalInput bottomLimitSwitch) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
+
+        this.topLimitSwitch = topLimitSwitch;
+        this.bottomLimitSwitch = bottomLimitSwitch;
+
+        this.masterTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+        this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+        this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 
-    //go to height (height in feet)
-    // multiply height by constant
+    /**
+     * Set the setpoint of the lift
+     * @param height measured in feet
+     */
     public void goToHeight(double height) {
-        //TODO: think about limit switches (digital inputs)
-        //TODO: only count a switch pressed if it's pressed for a certain time
+        // as if the limit switches are wired to the talon
+        if (topLimitSwitch.get()) {
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(RobotSettings.MAX_LIFT_HEIGHT), 0, 0);
+        } else if (bottomLimitSwitch.get()) {
+            masterTalon.setSelectedSensorPosition(0, 0, 0);
+        }
+
         masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
         goalHeight = height;
     }
@@ -30,8 +49,10 @@ public class Lift {
         return convertTicksToFeet(masterTalon.getSelectedSensorPosition(0));
     }
 
-    //increment can be negative, and in that case it would be a decrement
-    //increment is measured in feet
+    /**
+     * Shift the setpoint of the lift
+     * @param increment can be negative, measured in feet
+     */
     public void incrementHeight(double increment) {
         goalHeight += increment;
         if (goalHeight > Settings.MAX_LIFT_HEIGHT) {
@@ -43,11 +64,15 @@ public class Lift {
         goToHeight(goalHeight);
     }
 
-    public double convertTicksToFeet(double ticks) {
-        return (ticks / Settings.ENCODER_TICKS_PER_REVOLUTION) / Settings.CLIMBER_FEET_PER_REVOLUTION;
+    private static double convertTicksToFeet(int ticks) {
+        double revolutions = ticks / Settings.ENCODER_TICKS_PER_REVOLUTION;
+        double feet = revolutions * Settings.CLIMBER_FEET_PER_REVOLUTION;
+        return feet;
     }
 
-    public double convertFeetToTicks(double feet) {
-        return Settings.ENCODER_TICKS_PER_REVOLUTION * (feet / Settings.CLIMBER_FEET_PER_REVOLUTION);
+    private static int convertFeetToTicks(double feet) {
+        double revolutions = feet / Settings.CLIMBER_FEET_PER_REVOLUTION;
+        double ticks = revolutions * Settings.ENCODER_TICKS_PER_REVOLUTION;
+        return (int) ticks;
     }
 }

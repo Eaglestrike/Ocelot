@@ -40,6 +40,9 @@ public class Robot extends IterativeRobot {
 
     private PneumaticPressureSensor pressureSensor;
 
+    private Controller driverControls;
+    private CheesyDriveHelper cheesyDrive;
+
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
      * That means, all talons, solenoids, etc. are created here.
@@ -57,12 +60,10 @@ public class Robot extends IterativeRobot {
 
         registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
-        CheesyDriveHelper cheesyDriveHelper = new CheesyDriveHelper(configuration.subConfiguration("CheesyDriveHelper"));
         RobotState robotState = new RobotState();
 
         // create modules
         Gyro gyro = Gyro.shared;
-        Controller controller = new DualController(new Joystick(0), new Joystick(1));
         GearShifter gearShifter = new GearShifter(configuration.subConfiguration("GearShifter"));
         DriveSide leftSide = new DriveSide(configuration.subConfiguration("DriveSide.left"));
         DriveSide rightSide = new DriveSide(configuration.subConfiguration("DriveSide.right"));
@@ -71,7 +72,6 @@ public class Robot extends IterativeRobot {
         AbstractDrive drive = new Drive(registry, configuration.subConfiguration("Drive"));
 
         // register general stuff
-        registry.put(cheesyDriveHelper);
         registry.put(robotState);
 
         // register handles
@@ -85,7 +85,6 @@ public class Robot extends IterativeRobot {
 
         // register modules
         registry.put(gyro);
-        registry.put(Controller.class, controller);
         registry.put(gearShifter);
         registry.put(DRIVE_SIDE_LEFT, leftSide);
         registry.put(DRIVE_SIDE_RIGHT, rightSide);
@@ -99,7 +98,10 @@ public class Robot extends IterativeRobot {
         );
         subsystemManager.start();
 
+        // driver facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        cheesyDrive = new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper"));
+        driverControls= new DualController(new Joystick(0), new Joystick(1));
     }
 
     @Override
@@ -135,13 +137,10 @@ public class Robot extends IterativeRobot {
         DashboardHandle gearHandle = registry.get(gearDB);
         switch (gearShifter.get()) {
             case HIGH:
-                gearHandle.put(1);
+                gearHandle.put(true);
                 break;
             case LOW:
-                gearHandle.put(-1);
-                break;
-            case OFF:
-                gearHandle.put(0);
+                gearHandle.put(false);
                 break;
         }
     }
@@ -156,28 +155,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        Controller controller = registry.get(Controller.class);
         AbstractDrive drive = registry.get(AbstractDrive.class);
         GearShifter gearShifter = registry.get(GearShifter.class);
 
-        drive.setDriveSignal(getDriveSignal());
-
-        if (controller.shiftGear().rising()) {
-            gearShifter.shift();
-        }
+        drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
+        gearShifter.set(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
 
     @Override
     public void testPeriodic() {
-    }
-
-    private DriveSignal getDriveSignal() {
-        Controller controller = registry.get(Controller.class);
-        CheesyDriveHelper cheesyDriveHelper = registry.get(CheesyDriveHelper.class);
-
-        PercentageRange throttle = controller.throttle();
-        PercentageRange wheel = controller.wheel();
-
-        return cheesyDriveHelper.cheesyDrive(throttle, wheel, controller.quickTurn());
     }
 }

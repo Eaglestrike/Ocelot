@@ -14,7 +14,7 @@ public class SingleController implements Controller {
 
     @Override
     public PercentageRange throttle() {
-        return new PercentageRange(stick.getRawAxis(1));
+        return new PercentageRange(-1 * stick.getRawAxis(1));
     }
 
     @Override
@@ -56,9 +56,7 @@ public class SingleController implements Controller {
         return stick.getRawButton(7);
     }
 
-    EdgeDetector shiftEdge = new EdgeDetector(this::shiftGearButton);
-    @Override
-    public EdgeDetector shiftGear() {
-        return shiftEdge;
+    public boolean wantLowGear() {
+        return shiftGearButton();
     }
 }
