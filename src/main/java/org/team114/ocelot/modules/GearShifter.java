@@ -16,19 +16,21 @@ public class GearShifter {
     public void set(State state) {
         switch (state) {
             case LOW:
-                gearSolenoid.set(DoubleSolenoid.Value.kReverse);
-                break;
-            default: // high
                 gearSolenoid.set(DoubleSolenoid.Value.kForward);
+                break;
+            case HIGH:
+                gearSolenoid.set(DoubleSolenoid.Value.kReverse);
                 break;
         }
     }
 
     public State get() {
         switch (gearSolenoid.get()) {
-            case kReverse:
+            case kForward:
                 return State.LOW;
-            default: // high
+            case kReverse:
+                return State.HIGH;
+            default: // maybe throw exception?
                 return State.HIGH;
         }
     }
