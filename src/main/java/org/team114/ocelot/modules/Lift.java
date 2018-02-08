@@ -4,8 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 
 public class Lift {
     private final TalonSRX masterTalon;
@@ -56,8 +55,8 @@ public class Lift {
      */
     public void incrementHeight(double increment) {
         goalHeight += increment;
-        if (goalHeight > RobotSettings.MAX_LIFT_HEIGHT) {
-            goalHeight = RobotSettings.MAX_LIFT_HEIGHT;
+        if (goalHeight > Settings.MAX_LIFT_HEIGHT) {
+            goalHeight = Settings.MAX_LIFT_HEIGHT;
         }
         else if (goalHeight < 0) {
             goalHeight = 0;
@@ -66,14 +65,14 @@ public class Lift {
     }
 
     private static double convertTicksToFeet(int ticks) {
-        double revolutions = ticks / RobotSettings.ENCODER_TICKS_PER_REVOLUTION;
-        double feet = revolutions * RobotSettings.CLIMBER_FEET_PER_REVOLUTION;
+        double revolutions = ticks / Settings.ENCODER_TICKS_PER_REVOLUTION;
+        double feet = revolutions * Settings.CLIMBER_FEET_PER_REVOLUTION;
         return feet;
     }
 
     private static int convertFeetToTicks(double feet) {
-        double revolutions = feet / RobotSettings.CLIMBER_FEET_PER_REVOLUTION;
-        double ticks = revolutions * RobotSettings.ENCODER_TICKS_PER_REVOLUTION;
+        double revolutions = feet / Settings.CLIMBER_FEET_PER_REVOLUTION;
+        double ticks = revolutions * Settings.ENCODER_TICKS_PER_REVOLUTION;
         return (int) ticks;
     }
 }

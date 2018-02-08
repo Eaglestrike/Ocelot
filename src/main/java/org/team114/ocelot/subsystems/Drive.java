@@ -4,12 +4,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.lib.util.Epsilon;
+import org.team114.ocelot.Registry;
 import org.team114.ocelot.Robot;
-import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
+import org.team114.ocelot.modules.DriveSide;
 import org.team114.ocelot.modules.Gyro;
-import org.team114.ocelot.modules.RobotSide;
 import org.team114.lib.util.DashboardHandle;
+import org.team114.ocelot.settings.Configuration;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
@@ -21,18 +22,18 @@ import java.util.function.Supplier;
 
 public class Drive implements AbstractDrive {
 
-    private final Map<Side, Supplier<RobotSide>> sides = new EnumMap<>(Side.class);
-    private final RobotRegistry robotRegistry;
+    private final Map<Side, Supplier<DriveSide>> sides = new EnumMap<>(Side.class);
+    private final Registry registry;
 
     private final double halfOfWheelbase;
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    public Drive(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
-        this.sides.put(Side.LEFT, () -> robotRegistry.get(Robot.ROBOT_SIDE_LEFT));
-        this.sides.put(Side.RIGHT, () -> robotRegistry.get(Robot.ROBOT_SIDE_RIGHT));
-        this.halfOfWheelbase = robotRegistry.getConfiguration().getDouble("wheelbase_width_ft") / 2.0;
+    public Drive(Registry registry, Configuration configuration) {
+        this.registry = registry;
+        this.sides.put(Side.LEFT, () -> registry.get(Robot.DRIVE_SIDE_LEFT));
+        this.sides.put(Side.RIGHT, () -> registry.get(Robot.DRIVE_SIDE_RIGHT));
+        this.halfOfWheelbase = configuration.getDouble("wheelbase_width_ft") / 2.0;
     }
 
     private Pose addPoseObservation() {
@@ -41,10 +42,10 @@ public class Drive implements AbstractDrive {
         double newHeading = getGyro().getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
 
-        double leftDistance = getRobotSide(Side.LEFT).getPosition();
-        double rightDistance = getRobotSide(Side.RIGHT).getPosition();
-        double leftVelocity = getRobotSide(Side.LEFT).getVelocity();
-        double rightVelocity = getRobotSide(Side.RIGHT).getVelocity();
+        double leftDistance = getDriveSide(Side.LEFT).getPosition();
+        double rightDistance = getDriveSide(Side.RIGHT).getPosition();
+        double leftVelocity = getDriveSide(Side.LEFT).getVelocity();
+        double rightVelocity = getDriveSide(Side.RIGHT).getVelocity();
 
         double velocity = (leftVelocity + rightVelocity) / 2;
         double distance = (leftDistance + rightDistance - lastLeftAccumulated - lastRightAccumulated)/2;
@@ -68,7 +69,7 @@ public class Drive implements AbstractDrive {
         setSideSpeed(Side.BOTH, 0);
         getRobotState().addObservation(new Pose(0, 0,
             getGyro().getYaw(),
-            (getRobotSide(Side.LEFT).getVelocity() + getRobotSide(Side.RIGHT).getVelocity())/2
+            (getDriveSide(Side.LEFT).getVelocity() + getDriveSide(Side.RIGHT).getVelocity())/2
         ));
     }
 
@@ -90,8 +91,8 @@ public class Drive implements AbstractDrive {
     public synchronized void setSideSpeed(Side sides, double speed) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = getRobotSide(side);
-            robotSide.setSpeed(speed);
+            DriveSide driveSide = getDriveSide(side);
+            driveSide.setSpeed(speed);
         }
     }
 
@@ -99,8 +100,8 @@ public class Drive implements AbstractDrive {
     public synchronized void setControlMode(Side sides, ControlMode controlMode) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = getRobotSide(side);
-            robotSide.setControlMode(controlMode);
+            DriveSide driveSide = getDriveSide(side);
+            driveSide.setControlMode(controlMode);
         }
     }
 
@@ -108,8 +109,8 @@ public class Drive implements AbstractDrive {
     public synchronized void setNeutralMode(Side sides, NeutralMode neutralMode) {
         // loop through sides in case it is Side.BOTH
         for (Side side : sides) {
-            RobotSide robotSide = getRobotSide(side);
-            robotSide.setNeutralMode(neutralMode);
+            DriveSide driveSide = getDriveSide(side);
+            driveSide.setNeutralMode(neutralMode);
         }
     }
 
@@ -137,10 +138,10 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void selfTest() {
-        for (Supplier<RobotSide> robotSideSupplier : sides.values()) {
-            RobotSide robotSide = robotSideSupplier.get();
+        for (Supplier<DriveSide> driveSideSupplier : sides.values()) {
+            DriveSide driveSide = driveSideSupplier.get();
             // TODO: Throw an exception instead
-            for (TalonSRX talon : robotSide.getTalons()) {
+            for (TalonSRX talon : driveSide.getTalons()) {
                 int id = talon.getDeviceID();
                 if (id == 0) {
                     System.out.println("Talon " + id + " has not been configured.");
@@ -152,30 +153,30 @@ public class Drive implements AbstractDrive {
     }
 
     private Gyro getGyro() {
-        return robotRegistry.get(Gyro.class);
+        return registry.get(Gyro.class);
     }
 
     private DashboardHandle getXPositionDB() {
-        return robotRegistry.get(Robot.xPositionDB);
+        return registry.get(Robot.xPositionDB);
     }
 
     private DashboardHandle getYPositionDB() {
-        return robotRegistry.get(Robot.yPositionDB);
+        return registry.get(Robot.yPositionDB);
     }
 
     private DashboardHandle getHeadingDB() {
-        return robotRegistry.get(Robot.headingDB);
+        return registry.get(Robot.headingDB);
     }
 
     private DashboardHandle getVelocityDB() {
-        return robotRegistry.get(Robot.velocityDB);
+        return registry.get(Robot.velocityDB);
     }
 
-    private RobotSide getRobotSide(Side side) {
+    private DriveSide getDriveSide(Side side) {
         return sides.get(side).get();
     }
 
     private RobotState getRobotState() {
-        return robotRegistry.get(RobotState.class);
+        return registry.get(RobotState.class);
     }
 }

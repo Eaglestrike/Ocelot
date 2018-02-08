@@ -1,7 +1,6 @@
 package org.team114.ocelot.util;
 
-import org.team114.ocelot.RobotRegistry;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Configuration;
 
 public class CheesyDriveHelper {
     private final RobotRegistry robotRegistry;
@@ -9,10 +8,7 @@ public class CheesyDriveHelper {
     private double quickStopAccumulator;
     private final double turnSensitivity;
 
-    public CheesyDriveHelper(RobotRegistry robotRegistry) {
-        this.robotRegistry = robotRegistry;
-
-        RobotSettings.Configuration configuration = this.robotRegistry.getConfiguration();
+    public CheesyDriveHelper(Configuration configuration) {
         this.turnSensitivity = configuration.getDouble("turnSensitivity");
     }
 

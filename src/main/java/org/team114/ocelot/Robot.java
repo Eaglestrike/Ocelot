@@ -8,7 +8,8 @@ import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Configuration;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
@@ -23,8 +24,8 @@ import java.io.IOException;
  */
 public class Robot extends IterativeRobot {
 
-    public static final String ROBOT_SIDE_LEFT = "robotSide.left";
-    public static final String ROBOT_SIDE_RIGHT = "robotSide.right";
+    public static final String DRIVE_SIDE_LEFT = "DriveSide.left";
+    public static final String DRIVE_SIDE_RIGHT = "DriveSide.right";
     public static final String xPositionDB = "Pose X";
     public static final String yPositionDB = "Pose Y";
     public static final String headingDB = "Pose hdg";
@@ -33,7 +34,7 @@ public class Robot extends IterativeRobot {
     public static final String pneumaticPressureDB = "Pneumatic Pressure";
     public static final String gearDB = "Gear";
 
-    private RobotRegistryImpl robotRegistry;
+    private RegistryImpl registry;
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
 
@@ -48,48 +49,48 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        RobotSettings robotSettings = new RobotSettings();
+        Configuration configuration;
         try {
-            robotSettings.load();
+            configuration = Configuration.loadFromProperties();
         } catch (IOException e) {
             e.printStackTrace();
             // if we can't load settings, we want to crash the robot
             throw new IllegalStateException();
         }
 
-        robotRegistry = new RobotRegistryImpl(robotSettings);
+        registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
         RobotState robotState = new RobotState();
 
         // create modules
         Gyro gyro = Gyro.shared;
-        GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
-        RobotSide leftSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.left"));
-        RobotSide rightSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.right"));
+        GearShifter gearShifter = new GearShifter(configuration.subConfiguration("GearShifter"));
+        DriveSide leftSide = new DriveSide(configuration.subConfiguration("DriveSide.left"));
+        DriveSide rightSide = new DriveSide(configuration.subConfiguration("DriveSide.right"));
 
         // create subsystems
-        AbstractDrive drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
+        AbstractDrive drive = new Drive(registry, configuration.subConfiguration("Drive"));
 
         // register general stuff
-        robotRegistry.put(robotState);
+        registry.put(robotState);
 
         // register handles
-        robotRegistry.put(Robot.xPositionDB, new DashboardHandle(Robot.xPositionDB));
-        robotRegistry.put(Robot.yPositionDB, new DashboardHandle(Robot.yPositionDB));
-        robotRegistry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
-        robotRegistry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
-        robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
-        robotRegistry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
-        robotRegistry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
+        registry.put(Robot.xPositionDB, new DashboardHandle(Robot.xPositionDB));
+        registry.put(Robot.yPositionDB, new DashboardHandle(Robot.yPositionDB));
+        registry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
+        registry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
+        registry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
+        registry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
+        registry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
 
         // register modules
-        robotRegistry.put(gyro);
-        robotRegistry.put(gearShifter);
-        robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
-        robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
+        registry.put(gyro);
+        registry.put(gearShifter);
+        registry.put(DRIVE_SIDE_LEFT, leftSide);
+        registry.put(DRIVE_SIDE_RIGHT, rightSide);
 
         // register subsystems
-        robotRegistry.put(AbstractDrive.class, drive);
+        registry.put(AbstractDrive.class, drive);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -98,10 +99,9 @@ public class Robot extends IterativeRobot {
         subsystemManager.start();
 
         // driver facing stuff
-        pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper"));
         driverControls= new DualController(new Joystick(0), new Joystick(1));
-
     }
 
     @Override
@@ -111,7 +111,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        autoModeExecutor.setAutoMode(new TestMode(robotRegistry));
+        autoModeExecutor.setAutoMode(new TestMode(registry));
         autoModeExecutor.start();
     }
 
@@ -125,16 +125,16 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        DashboardHandle pneumaticPressureHandle = robotRegistry.get(pneumaticPressureDB);
+        DashboardHandle pneumaticPressureHandle = registry.get(pneumaticPressureDB);
         pneumaticPressureHandle.put(pressureSensor.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
-        double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
-        DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
+        double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME);
+        DashboardHandle countdownHandle = registry.get(countdownDB);
         countdownHandle.put(timeLeft);
 
-        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
-        DashboardHandle gearHandle = robotRegistry.get(gearDB);
+        GearShifter gearShifter = registry.get(GearShifter.class);
+        DashboardHandle gearHandle = registry.get(gearDB);
         switch (gearShifter.get()) {
             case HIGH:
                 gearHandle.put(true);
@@ -155,8 +155,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
-        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
+        AbstractDrive drive = registry.get(AbstractDrive.class);
+        GearShifter gearShifter = registry.get(GearShifter.class);
 
         drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
         gearShifter.set(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
