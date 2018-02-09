@@ -17,6 +17,15 @@ import java.util.stream.Collectors;
 
 public final class RobotSettings {
 
+    public static final int LEFT_MASTER_ID = 1;
+    public static final int LEFT_SLAVE_ID = 2;
+    public static final int RIGHT_MASTER_ID = 10;
+    public static final int RIGHT_SLAVE_ID = 9;
+
+    public static final double DRIVE_ENCODER_FEET_PER_TICK =
+            // x ticks -> * rot/tick  * sprocket/rot  * 0.5PI ft / sprocket  = y ft
+                            (1.0/4096.0) * (24.0 / 60.0) * (0.5 * Math.PI);
+
     //TODO: find out the real ratio
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
     //TODO: find out the real lift height

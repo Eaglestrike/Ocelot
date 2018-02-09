@@ -21,11 +21,11 @@ public class DualController implements Controller {
     }
 
     public PercentageRange throttle() {
-        return new PercentageRange(band(left.getY()));
+        return new PercentageRange(band(-1 * left.getY()));
     }
 
     public PercentageRange wheel() {
-        return new PercentageRange(band(right.getX() * -1));
+        return new PercentageRange(band(right.getX()));
     }
 
     public boolean startLift() {

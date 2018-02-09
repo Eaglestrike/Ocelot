@@ -1,5 +1,6 @@
 package org.team114.ocelot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -64,11 +65,11 @@ public class Robot extends IterativeRobot {
         // create modules
         Gyro gyro = Gyro.shared;
         GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
-        RobotSide leftSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.left"));
-        RobotSide rightSide = new RobotSide(robotRegistry.getSubRobotRegistry("RobotSide.right"));
 
         // create subsystems
-        AbstractDrive drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"));
+        AbstractDrive drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"),
+                new TalonSRX(RobotSettings.LEFT_MASTER_ID), new TalonSRX(RobotSettings.LEFT_SLAVE_ID),
+                new TalonSRX(RobotSettings.RIGHT_MASTER_ID), new TalonSRX(RobotSettings.RIGHT_SLAVE_ID));
 
         // register general stuff
         robotRegistry.put(robotState);
@@ -85,8 +86,6 @@ public class Robot extends IterativeRobot {
         // register modules
         robotRegistry.put(gyro);
         robotRegistry.put(gearShifter);
-        robotRegistry.put(ROBOT_SIDE_LEFT, leftSide);
-        robotRegistry.put(ROBOT_SIDE_RIGHT, rightSide);
 
         // register subsystems
         robotRegistry.put(AbstractDrive.class, drive);
@@ -159,7 +158,7 @@ public class Robot extends IterativeRobot {
         GearShifter gearShifter = robotRegistry.get(GearShifter.class);
 
         drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
-        gearShifter.set(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+        drive.setGear(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
 
     @Override
