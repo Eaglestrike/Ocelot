@@ -22,6 +22,10 @@ public final class RobotSettings {
     public static final int RIGHT_MASTER_ID = 10;
     public static final int RIGHT_SLAVE_ID = 9;
 
+    public static final int DRIVE_CURRENT_LIMIT_THRESHOLD = 40;
+    public static final int DRIVE_CURRENT_LIMIT = 35;
+    public static final int DRIVE_CURRENT_LIMIT_DURATION_MS = 200;
+
     //TODO: find out the real ratio
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
     //TODO: find out the real lift height

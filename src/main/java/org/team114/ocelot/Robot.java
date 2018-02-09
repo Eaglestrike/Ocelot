@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
         GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
         DriveSide leftSide = new DriveSide(
                 new TalonSRX(RobotSettings.LEFT_MASTER_ID),
-                new TalonSRX(RobotSettings.LEFT_MASTER_ID));
+                new TalonSRX(RobotSettings.LEFT_SLAVE_ID));
         DriveSide rightSide = new DriveSide(
                 new TalonSRX(RobotSettings.RIGHT_MASTER_ID),
                 new TalonSRX(RobotSettings.RIGHT_SLAVE_ID));

@@ -20,6 +20,12 @@ public class DriveSide {
         master.setSelectedSensorPosition(0, 0, 0);
         master.setSensorPhase(false);
         master.getSensorCollection().setQuadraturePosition(0, 0);
+
+        master.configPeakCurrentLimit(RobotSettings.DRIVE_CURRENT_LIMIT_THRESHOLD, 0);
+        master.configPeakCurrentDuration(RobotSettings.DRIVE_CURRENT_LIMIT_DURATION_MS, 0);
+        master.configContinuousCurrentLimit(RobotSettings.DRIVE_CURRENT_LIMIT, 0);
+        master.enableCurrentLimit(true);
+
     }
 
     public void setInverted(boolean inverted) {
@@ -50,6 +56,7 @@ public class DriveSide {
      * @return encoder velocity in feet/sec
      */
     public double getVelocity() {
-        return master.getSelectedSensorVelocity(0) * RobotSettings.DRIVE_ENCODER_FEET_PER_TICK;
+        // mult by 10 because talons give 100ms velocity
+        return master.getSelectedSensorVelocity(0) * RobotSettings.DRIVE_ENCODER_FEET_PER_TICK * 10;
     }
 }

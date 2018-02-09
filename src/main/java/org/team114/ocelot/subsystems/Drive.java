@@ -52,8 +52,6 @@ public class Drive implements AbstractDrive {
         double leftDistance = leftSide.getPosition();
         double rightDistance = rightSide.getPosition();
 
-        SmartDashboard.putNumber("L Enc", leftDistance);
-        SmartDashboard.putNumber("R Enc", rightDistance);
         double leftVelocity = leftSide.getVelocity();
         double rightVelocity = rightSide.getVelocity();
 
