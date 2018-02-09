@@ -59,11 +59,18 @@ public class Robot extends IterativeRobot {
         // create modules
         Gyro gyro = Gyro.shared;
         GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
+        DriveSide leftSide = new DriveSide(
+                new TalonSRX(RobotSettings.LEFT_MASTER_ID),
+                new TalonSRX(RobotSettings.LEFT_MASTER_ID));
+        DriveSide rightSide = new DriveSide(
+                new TalonSRX(RobotSettings.RIGHT_MASTER_ID),
+                new TalonSRX(RobotSettings.RIGHT_SLAVE_ID));
 
         // create subsystems
-        AbstractDrive drive = new Drive(robotRegistry.getSubRobotRegistry("Drive"),
-                new TalonSRX(RobotSettings.LEFT_MASTER_ID), new TalonSRX(RobotSettings.LEFT_SLAVE_ID),
-                new TalonSRX(RobotSettings.RIGHT_MASTER_ID), new TalonSRX(RobotSettings.RIGHT_SLAVE_ID));
+        AbstractDrive drive = new Drive(
+                robotRegistry.getSubRobotRegistry("Drive"),
+                leftSide,
+                rightSide);
 
         // register general stuff
         robotRegistry.put(robotState);

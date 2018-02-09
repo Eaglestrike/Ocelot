@@ -1,14 +1,10 @@
 package org.team114.ocelot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.Epsilon;
-import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
+import org.team114.ocelot.modules.DriveSide;
 import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.lib.util.DashboardHandle;
@@ -24,25 +20,21 @@ public class Drive implements AbstractDrive {
     private final DashboardHandle headingDB = new DashboardHandle("Pose hdg");
     private final DashboardHandle velocityDB = new DashboardHandle("Pose vel");
     // drive train talons
-    private TalonSRX lMaster;
-    private TalonSRX rMaster;
-    private TalonSRX lSlave;
-    private TalonSRX rSlave;
+    private final DriveSide leftSide;
+    private final DriveSide rightSide;
 
-    private final double ENCODER_FEET_PER_TICK = RobotSettings.DRIVE_ENCODER_FEET_PER_TICK;
     private final double halfOfWheelbase;
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
     private final RobotRegistry robotRegistry;
 
-    public Drive(RobotRegistry robotRegistry, TalonSRX lMaster, TalonSRX lSlave, TalonSRX rMaster, TalonSRX rSlave) {
+    public Drive(RobotRegistry robotRegistry, DriveSide leftSide, DriveSide rightSide) {
         // configure talons
-        this.lMaster = lMaster;
-        this.rMaster = rMaster;
-        this.lSlave = lSlave;
-        this.rSlave = rSlave;
-        initTalons();
+        this.leftSide = leftSide;
+        this.rightSide = rightSide;
+
+        leftSide.setInverted(true);
         configureTalonsForAuto();
 
         this.robotRegistry = robotRegistry;
@@ -57,16 +49,16 @@ public class Drive implements AbstractDrive {
 
         // we have to use this function to get position so that sensorPhase is taken into account
         // undocumented behavior in Phoenix
-        double leftDistance = lMaster.getSelectedSensorPosition(0);
-        double rightDistance = rMaster.getSelectedSensorPosition(0);
+        double leftDistance = leftSide.getPosition();
+        double rightDistance = rightSide.getPosition();
 
         SmartDashboard.putNumber("L Enc", leftDistance);
         SmartDashboard.putNumber("R Enc", rightDistance);
-        double leftVelocity = lMaster.getSelectedSensorVelocity(0);;
-        double rightVelocity = rMaster.getSelectedSensorVelocity(0);;
+        double leftVelocity = leftSide.getVelocity();
+        double rightVelocity = rightSide.getVelocity();
 
-        double velocity = (leftVelocity + rightVelocity) / 2 * ENCODER_FEET_PER_TICK;
-        double distance = (leftDistance + rightDistance - lastLeftAccumulated - lastRightAccumulated) / 2 * ENCODER_FEET_PER_TICK;
+        double velocity = (leftVelocity + rightVelocity) / 2;
+        double distance = (leftDistance + rightDistance - lastLeftAccumulated - lastRightAccumulated) / 2;
         lastLeftAccumulated = leftDistance;
         lastRightAccumulated = rightDistance;
 
@@ -83,8 +75,8 @@ public class Drive implements AbstractDrive {
     @Override
     public synchronized void onStart(double timestamp) {
         getGyro().init();
-        lMaster.set(ControlMode.PercentOutput, 0);
-        rMaster.set(ControlMode.PercentOutput, 0);
+        leftSide.setPercentOutput(0);
+        rightSide.setPercentOutput(0);
 
         getRobotState().addObservation(new Pose(0, 0,
             getGyro().getYaw(),
@@ -112,8 +104,8 @@ public class Drive implements AbstractDrive {
 
     @Override
     public void setDriveSignal(DriveSignal signal) {
-        lMaster.set(ControlMode.PercentOutput, signal.getLeft());
-        rMaster.set(ControlMode.PercentOutput, signal.getRight());
+        leftSide.setPercentOutput(signal.getLeft());
+        rightSide.setPercentOutput(signal.getRight());
         SmartDashboard.putNumber("left cmd", signal.getLeft());
         SmartDashboard.putNumber("right cmd", signal.getRight());
     }
@@ -130,39 +122,20 @@ public class Drive implements AbstractDrive {
             R = Kv * a.vel * a.curvature * (1/a.curvature - halfOfWheelbase);
         }
         //TODO replace with vel config
-        lMaster.set(ControlMode.PercentOutput, L);
-        rMaster.set(ControlMode.PercentOutput, R);
+        leftSide.setPercentOutput(L);
+        rightSide.setPercentOutput(R);
     }
 
     @Override
     public synchronized void configureTalonsForAuto() {
-        lMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 3, 0);
-        rMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 3, 0);
+        leftSide.configureForAuto();
+        rightSide.configureForAuto();
     }
 
     @Override
     public synchronized void configureTalonsForTeleop() {
-        lMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 50, 0);
-        rMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 50, 0);
-    }
-
-    private void initTalons() {
-        // constitutive features of this drive train
-        // will only change if mechanical or electrical changes, and those are universal
-        lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
-        rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
-
-        lMaster.setInverted(true);
-        lSlave.setInverted(true);
-
-        lMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-        rMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-
-        lMaster.setSensorPhase(false);
-        rMaster.setSensorPhase(false);
-
-        lMaster.getSensorCollection().setQuadraturePosition(0, 0);
-        rMaster.getSensorCollection().setQuadraturePosition(0, 0);
+        leftSide.configureForTeleop();
+        rightSide.configureForTeleop();
     }
 
     private Gyro getGyro() {

@@ -22,16 +22,18 @@ public final class RobotSettings {
     public static final int RIGHT_MASTER_ID = 10;
     public static final int RIGHT_SLAVE_ID = 9;
 
-    public static final double DRIVE_ENCODER_FEET_PER_TICK =
-            // x ticks -> * rot/tick  * sprocket/rot  * 0.5PI ft / sprocket  = y ft
-                            (1.0/4096.0) * (24.0 / 60.0) * (0.5 * Math.PI);
-
     //TODO: find out the real ratio
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
     //TODO: find out the real lift height
     public static final int MAX_LIFT_HEIGHT = 1;
 
     public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+
+    // x ticks -> * rev/tick  * sprocket/rev  * 0.5PI ft / sprocket  = y ft
+    public static final double DRIVE_ENCODER_FEET_PER_TICK =
+            (1.0 / ENCODER_TICKS_PER_REVOLUTION) *
+            (24.0 / 60.0) *
+            (0.5 * Math.PI);
 
     public static double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
     public static int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
