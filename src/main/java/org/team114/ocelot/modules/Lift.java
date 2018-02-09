@@ -14,8 +14,6 @@ public class Lift {
     private final DigitalInput topLimitSwitch;
     private final DigitalInput bottomLimitSwitch;
 
-    private double goalHeight;
-
     public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
                 DigitalInput bottomLimitSwitch) {
         this.masterTalon = masterTalon;
@@ -42,27 +40,11 @@ public class Lift {
         }
 
         masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
-        goalHeight = height;
     }
 
     //get the height in feet
     public double getHeight() {
         return convertTicksToFeet(masterTalon.getSelectedSensorPosition(0));
-    }
-
-    /**
-     * Shift the setpoint of the lift
-     * @param increment can be negative, measured in feet
-     */
-    public void incrementHeight(double increment) {
-        goalHeight += increment;
-        if (goalHeight > Settings.MAX_LIFT_HEIGHT) {
-            goalHeight = Settings.MAX_LIFT_HEIGHT;
-        }
-        else if (goalHeight < 0) {
-            goalHeight = 0;
-        }
-        goToHeight(goalHeight);
     }
 
     private static double convertTicksToFeet(int ticks) {

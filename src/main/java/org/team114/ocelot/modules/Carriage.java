@@ -6,81 +6,48 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Carriage {
-    private final Solenoid leftIntake;
-    private final Solenoid rightIntake;
-    private final Solenoid rightLift1;
-    private final Solenoid rightLift2;
-    private final Solenoid leftLift1;
-    private final Solenoid leftLift2;
-    private final Ultrasonic leftDistanceSensor;
-    private final Ultrasonic rightDistanceSensor;
-    private final TalonSRX leftTalon;
-    private final TalonSRX rightTalon;
+    private final Solenoid intake;
+    private final Solenoid liftStageOne;
+    private final Solenoid liftStageTwo;
+    private final TalonSRX leftSpinner;
+    private final TalonSRX rightSpinner;
+    private final Ultrasonic distanceSensor;
 
-    public Carriage(Solenoid leftIntake,
-                    Solenoid rightIntake,
-                    Solenoid rightLift1,
-                    Solenoid rightLift2,
-                    Solenoid leftLift1,
-                    Solenoid leftLift2,
-                    Ultrasonic leftDistanceSensor,
-                    Ultrasonic rightDistanceSensor,
-                    TalonSRX leftTalon,
-                    TalonSRX rightTalon) {
-        this.leftIntake = leftIntake;
-        this.rightIntake = rightIntake;
-        this.rightLift1 = rightLift1;
-        this.rightLift2 = rightLift2;
-        this.leftLift1 = leftLift1;
-        this.leftLift2 = leftLift2;
-        this.leftDistanceSensor = leftDistanceSensor;
-        this.rightDistanceSensor = rightDistanceSensor;
-        this.leftTalon = leftTalon;
-        this.rightTalon = rightTalon;
-    }
-
-    public double getLeftDistanceInFeet() {
-        double range = toFeet(leftDistanceSensor.getRangeInches());
-        return range;
-    }
-
-    private double toFeet(double rangeInches) {
-        return 12.0 * rangeInches;
-    }
-
-    public double getRightDistanceInFeet() {
-        double range = toFeet(rightDistanceSensor.getRangeInches());
-        return range;
+    public Carriage(Solenoid intake,
+                    Solenoid liftStageOne,
+                    Solenoid liftStageTwo,
+                    TalonSRX leftSpinner,
+                    TalonSRX rightSpinner,
+                    Ultrasonic distanceSensor) {
+        this.intake = intake;
+        this.liftStageOne = liftStageOne;
+        this.liftStageTwo = liftStageTwo;
+        this.leftSpinner = leftSpinner;
+        this.rightSpinner = rightSpinner;
+        this.distanceSensor = distanceSensor;
     }
 
     public void actuateIntake(boolean actuate) {
-        leftIntake.set(actuate);
-        rightIntake.set(actuate);
+        intake.set(actuate);
     }
 
-    public void actuateFirstLift(boolean actuate) {
-        rightLift1.set(actuate);
-        rightLift2.set(actuate);
+    public void actuateLift(boolean dropped) {
+        liftStageOne.set(!dropped);
+        liftStageTwo.set(!dropped);
     }
 
-    public void actuateSecondLift(boolean actuate) {
-        leftLift1.set(actuate);
-        leftLift2.set(actuate);
+    public void setSpin(boolean spin) {
+        double velocity = spin ? 1 : 0;
+        leftSpinner.set(ControlMode.Velocity, velocity);
+        rightSpinner.set(ControlMode.Velocity, velocity);
     }
 
-    public void rotateLeft() {
-        leftTalon.set(ControlMode.Velocity, -1);
+    public double getDistanceInFeet() {
+        double range = toFeet(distanceSensor.getRangeInches());
+        return range;
     }
 
-    public void rotateRight() {
-        rightTalon.set(ControlMode.Velocity, 1);
-    }
-
-    public void stopLeft() {
-        leftTalon.set(ControlMode.Velocity, 0);
-    }
-
-    public void stopRight() {
-        rightTalon.set(ControlMode.Velocity, 0);
+    private static double toFeet(double rangeInches) {
+        return 12.0 * rangeInches;
     }
 }
