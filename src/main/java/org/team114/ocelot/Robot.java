@@ -9,15 +9,11 @@ import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
-import org.team114.ocelot.util.DriveSignal;
-import org.team114.ocelot.util.PercentageRange;
-
-import java.io.IOException;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -28,7 +24,7 @@ public class Robot extends IterativeRobot {
     public static final String pneumaticPressureDB = "Pneumatic Pressure";
     public static final String gearDB = "Gear";
 
-    private RobotRegistryImpl robotRegistry;
+    private RegistryImpl registry;
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
 
@@ -43,49 +39,41 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        RobotSettings robotSettings = new RobotSettings();
-        try {
-            robotSettings.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            // if we can't load settings, we want to crash the robot
-            throw new IllegalStateException();
-        }
 
-        robotRegistry = new RobotRegistryImpl(robotSettings);
+        registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
         RobotState robotState = new RobotState();
 
         // create modules
         Gyro gyro = Gyro.shared;
-        GearShifter gearShifter = new GearShifter(robotRegistry.getSubRobotRegistry("GearShifter"));
+        GearShifter gearShifter = new GearShifter();
         DriveSide leftSide = new DriveSide(
-                new TalonSRX(RobotSettings.LEFT_MASTER_ID),
-                new TalonSRX(RobotSettings.LEFT_SLAVE_ID));
+                new TalonSRX(Settings.DriveSide.LEFT_MASTER),
+                new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
         DriveSide rightSide = new DriveSide(
-                new TalonSRX(RobotSettings.RIGHT_MASTER_ID),
-                new TalonSRX(RobotSettings.RIGHT_SLAVE_ID));
+                new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
+                new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
 
         // create subsystems
         AbstractDrive drive = new Drive(
-                robotRegistry.getSubRobotRegistry("Drive"),
+                registry,
                 leftSide,
                 rightSide);
 
         // register general stuff
-        robotRegistry.put(robotState);
+        registry.put(robotState);
 
         // register handles
-        robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
-        robotRegistry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
-        robotRegistry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
+        registry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
+        registry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
+        registry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
 
         // register modules
-        robotRegistry.put(gyro);
-        robotRegistry.put(gearShifter);
+        registry.put(gyro);
+        registry.put(gearShifter);
 
         // register subsystems
-        robotRegistry.put(AbstractDrive.class, drive);
+        registry.put(AbstractDrive.class, drive);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -94,10 +82,9 @@ public class Robot extends IterativeRobot {
         subsystemManager.start();
 
         // driver facing stuff
-        pressureSensor = new PneumaticPressureSensor(new AnalogInput(RobotSettings.PNEUMATIC_PRESSURE_SENSOR_ID));
-        cheesyDrive = new CheesyDriveHelper(robotRegistry.getSubRobotRegistry("CheesyDriveHelper"));
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        cheesyDrive = new CheesyDriveHelper();
         driverControls= new DualController(new Joystick(0), new Joystick(1));
-
     }
 
     @Override
@@ -107,7 +94,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        autoModeExecutor.setAutoMode(new TestMode(robotRegistry));
+        autoModeExecutor.setAutoMode(new TestMode(registry));
         autoModeExecutor.start();
     }
 
@@ -121,16 +108,16 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        DashboardHandle pneumaticPressureHandle = robotRegistry.get(pneumaticPressureDB);
+        DashboardHandle pneumaticPressureHandle = registry.get(pneumaticPressureDB);
         pneumaticPressureHandle.put(pressureSensor.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
-        double timeLeft = Math.round(RobotSettings.GAME_TIME - Timer.getMatchTime() - RobotSettings.CLIMBING_TIME);
-        DashboardHandle countdownHandle = robotRegistry.get(countdownDB);
+        double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
+        DashboardHandle countdownHandle = registry.get(countdownDB);
         countdownHandle.put(timeLeft);
 
-        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
-        DashboardHandle gearHandle = robotRegistry.get(gearDB);
+        GearShifter gearShifter = registry.get(GearShifter.class);
+        DashboardHandle gearHandle = registry.get(gearDB);
         switch (gearShifter.get()) {
             case HIGH:
                 gearHandle.put(true);
@@ -151,7 +138,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
+        AbstractDrive drive = registry.get(AbstractDrive.class);
         drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
         drive.setGear(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }

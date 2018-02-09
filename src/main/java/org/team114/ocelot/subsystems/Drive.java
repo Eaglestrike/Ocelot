@@ -1,14 +1,13 @@
 package org.team114.ocelot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.Epsilon;
-import org.team114.ocelot.RobotRegistry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.DriveSide;
 import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.lib.util.DashboardHandle;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.Registry;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.motion.PurePursuitController;
@@ -19,30 +18,31 @@ public class Drive implements AbstractDrive {
     private final DashboardHandle yPositionDB = new DashboardHandle("Pose Y");
     private final DashboardHandle headingDB = new DashboardHandle("Pose hdg");
     private final DashboardHandle velocityDB = new DashboardHandle("Pose vel");
+
     // drive train talons
     private final DriveSide leftSide;
     private final DriveSide rightSide;
 
-    private final double halfOfWheelbase;
+
+    private final double halfOfWheelbase = Settings.Drive.WHEELBASE_WIDTH_FT / 2.0;
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    private final RobotRegistry robotRegistry;
+    private final Registry registry;
 
-    public Drive(RobotRegistry robotRegistry, DriveSide leftSide, DriveSide rightSide) {
+    public Drive(Registry robotRegistry, DriveSide leftSide, DriveSide rightSide) {
+        this.registry = robotRegistry;
+
         // configure talons
         this.leftSide = leftSide;
         this.rightSide = rightSide;
 
         leftSide.setInverted(true);
         configureTalonsForAuto();
-
-        this.robotRegistry = robotRegistry;
-        this.halfOfWheelbase = robotRegistry.getConfiguration().getDouble("wheelbase_width_ft") / 2.0;
     }
 
     private Pose addPoseObservation() {
-        Pose latestState = getRobotState().getLatestPose();
+        Pose latestState = getRobotState().getPose();
 
         double newHeading = getGyro().getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
@@ -67,7 +67,7 @@ public class Drive implements AbstractDrive {
             velocity
         ));
 
-        return getRobotState().getLatestPose();
+        return getRobotState().getPose();
     }
 
     @Override
@@ -97,15 +97,13 @@ public class Drive implements AbstractDrive {
 
     @Override
     public synchronized void setGear(GearShifter.State state) {
-        robotRegistry.get(GearShifter.class).set(state);
+        registry.get(GearShifter.class).set(state);
     }
 
     @Override
     public void setDriveSignal(DriveSignal signal) {
         leftSide.setPercentOutput(signal.getLeft());
         rightSide.setPercentOutput(signal.getRight());
-        SmartDashboard.putNumber("left cmd", signal.getLeft());
-        SmartDashboard.putNumber("right cmd", signal.getRight());
     }
 
     @Override
@@ -137,10 +135,10 @@ public class Drive implements AbstractDrive {
     }
 
     private Gyro getGyro() {
-        return robotRegistry.get(Gyro.class);
+        return registry.get(Gyro.class);
     }
 
     private RobotState getRobotState() {
-        return robotRegistry.get(RobotState.class);
+        return registry.get(RobotState.class);
     }
 }

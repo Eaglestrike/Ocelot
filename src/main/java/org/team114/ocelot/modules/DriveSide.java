@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.ocelot.settings.RobotSettings;
+import org.team114.ocelot.settings.Settings;
 
 public class DriveSide {
     private final TalonSRX master;
@@ -20,12 +20,6 @@ public class DriveSide {
         master.setSelectedSensorPosition(0, 0, 0);
         master.setSensorPhase(false);
         master.getSensorCollection().setQuadraturePosition(0, 0);
-
-        master.configPeakCurrentLimit(RobotSettings.DRIVE_CURRENT_LIMIT_THRESHOLD, 0);
-        master.configPeakCurrentDuration(RobotSettings.DRIVE_CURRENT_LIMIT_DURATION_MS, 0);
-        master.configContinuousCurrentLimit(RobotSettings.DRIVE_CURRENT_LIMIT, 0);
-        master.enableCurrentLimit(true);
-
     }
 
     public void setInverted(boolean inverted) {
@@ -49,14 +43,13 @@ public class DriveSide {
      * @return encoder position in feet
      */
     public double getPosition() {
-        return master.getSelectedSensorPosition(0) * RobotSettings.DRIVE_ENCODER_FEET_PER_TICK;
+        return master.getSelectedSensorPosition(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 
     /**
      * @return encoder velocity in feet/sec
      */
     public double getVelocity() {
-        // mult by 10 because talons give 100ms velocity
-        return master.getSelectedSensorVelocity(0) * RobotSettings.DRIVE_ENCODER_FEET_PER_TICK * 10;
+        return master.getSelectedSensorVelocity(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 }
