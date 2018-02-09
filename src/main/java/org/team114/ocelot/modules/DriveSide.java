@@ -1,80 +1,55 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.ocelot.util.Side;
+import org.team114.ocelot.settings.Settings;
 
-import java.util.Arrays;
-import java.util.List;
-
-/**
- * This class encapsulates one side of the drive motors.
- * This class is responsible for ensuring that the master and slave talons are linked.
- * Coupled with {@link Side}
- */
 public class DriveSide {
-    private final TalonSRX masterTalon;
-    private final TalonSRX slaveTalon;
-    private ControlMode controlMode;
-    private double lastSpeedSet;
-    private NeutralMode neutralMode;
+    private final TalonSRX master;
+    private final TalonSRX slave;
 
-    public DriveSide(int master, int slave) {
-        this.masterTalon = new TalonSRX(master);
-        this.slaveTalon = new TalonSRX(slave);
-        slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
-        masterTalon.setSelectedSensorPosition(0, 0, 0);
+    public DriveSide(TalonSRX master, TalonSRX slave) {
+        this.master = master;
+        this.slave = slave;
+
+        slave.set(ControlMode.Follower, master.getDeviceID());
+
+        master.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        master.setSelectedSensorPosition(0, 0, 0);
+        master.setSensorPhase(false);
+        master.getSensorCollection().setQuadraturePosition(0, 0);
     }
 
-    public void refresh() {
-        this.masterTalon.set(this.getControlMode(), this.getLastSpeedSet());
+    public void setInverted(boolean inverted) {
+        master.setInverted(inverted);
+        slave.setInverted(inverted);
     }
 
-    public void setNeutralMode(NeutralMode neutralMode) {
-        this.neutralMode = neutralMode;
-        this.masterTalon.setNeutralMode(this.neutralMode);
+    public void configureForTeleop() {
+        master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 50, 0);
     }
 
-    public NeutralMode getNeutralMode() {
-        return neutralMode;
+    public void configureForAuto() {
+        master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 3, 0);
     }
 
-    public ControlMode getControlMode() {
-        return controlMode;
+    public void setPercentOutput(double percentage) {
+        master.set(ControlMode.PercentOutput, percentage);
     }
 
-    public void setControlMode(ControlMode controlMode) {
-        this.controlMode = controlMode;
-        refresh();
+    /**
+     * @return encoder position in feet
+     */
+    public double getPosition() {
+        return master.getSelectedSensorPosition(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 
-    public double getLastSpeedSet() {
-        return lastSpeedSet;
-    }
-
-    public void setSpeed(double speed) {
-        this.lastSpeedSet = speed;
-        refresh();
-    }
-
-    public int getPosition() {
-        return masterTalon.getSelectedSensorPosition(0);
-    }
-
+    /**
+     * @return encoder velocity in feet/sec
+     */
     public double getVelocity() {
-        return masterTalon.getSelectedSensorVelocity(0);
-    }
-
-    public TalonSRX getMasterTalon() {
-        return masterTalon;
-    }
-
-    public TalonSRX getSlaveTalon() {
-        return slaveTalon;
-    }
-
-    public List<? extends TalonSRX> getTalons() {
-        return Arrays.asList(this.masterTalon, this.slaveTalon);
+        return master.getSelectedSensorVelocity(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 }

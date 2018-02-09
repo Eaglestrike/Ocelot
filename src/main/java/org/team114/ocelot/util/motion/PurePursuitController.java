@@ -54,6 +54,7 @@ public class PurePursuitController {
                 search < path.pathComponentList.size()-1) {
             search++;
         }
+        lastLookAheadPoint = search;
         return path.get(search);
     }
 

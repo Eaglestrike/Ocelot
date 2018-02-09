@@ -14,6 +14,6 @@ public class PneumaticPressureSensor {
     // Link to documentation: http://www.revrobotics.com/content/docs/REV-11-1107-DS.pdf
     public double getPressure() {
         double Vcc = Settings.TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE;
-        return (250 * (pressureSensor.getVoltage() / Vcc)) - 25;
+        return (250.0 * (pressureSensor.getVoltage() / Vcc)) - 25.0;
     }
 }

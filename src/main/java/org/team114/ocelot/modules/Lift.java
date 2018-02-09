@@ -66,14 +66,14 @@ public class Lift {
     }
 
     private static double convertTicksToFeet(int ticks) {
-        double revolutions = ticks / Settings.ENCODER_TICKS_PER_REVOLUTION;
+        double revolutions = ticks / Settings.Drive.ENCODER_TICKS_PER_REVOLUTION;
         double feet = revolutions * Settings.CLIMBER_FEET_PER_REVOLUTION;
         return feet;
     }
 
     private static int convertFeetToTicks(double feet) {
         double revolutions = feet / Settings.CLIMBER_FEET_PER_REVOLUTION;
-        double ticks = revolutions * Settings.ENCODER_TICKS_PER_REVOLUTION;
+        double ticks = revolutions * Settings.Drive.ENCODER_TICKS_PER_REVOLUTION;
         return (int) ticks;
     }
 }

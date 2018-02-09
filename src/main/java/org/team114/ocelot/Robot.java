@@ -1,5 +1,6 @@
 package org.team114.ocelot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,12 +20,6 @@ import org.team114.lib.util.DashboardHandle;
  */
 public class Robot extends IterativeRobot {
 
-    public static final String DRIVE_SIDE_LEFT = "DriveSide.left";
-    public static final String DRIVE_SIDE_RIGHT = "DriveSide.right";
-    public static final String xPositionDB = "Pose X";
-    public static final String yPositionDB = "Pose Y";
-    public static final String headingDB = "Pose hdg";
-    public static final String velocityDB = "Pose vel";
     public static final String countdownDB = "Climbing Countdown";
     public static final String pneumaticPressureDB = "Pneumatic Pressure";
     public static final String gearDB = "Gear";
@@ -52,20 +47,23 @@ public class Robot extends IterativeRobot {
         // create modules
         Gyro gyro = Gyro.shared;
         GearShifter gearShifter = new GearShifter();
-        DriveSide leftSide = new DriveSide(Settings.DriveSide.LEFT_MASTER, Settings.DriveSide.LEFT_SLAVE);
-        DriveSide rightSide = new DriveSide(Settings.DriveSide.RIGHT_MASTER, Settings.DriveSide.RIGHT_SLAVE);
+        DriveSide leftSide = new DriveSide(
+                new TalonSRX(Settings.DriveSide.LEFT_MASTER),
+                new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
+        DriveSide rightSide = new DriveSide(
+                new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
+                new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
 
         // create subsystems
-        AbstractDrive drive = new Drive(registry);
+        AbstractDrive drive = new Drive(
+                registry,
+                leftSide,
+                rightSide);
 
         // register general stuff
         registry.put(robotState);
 
         // register handles
-        registry.put(Robot.xPositionDB, new DashboardHandle(Robot.xPositionDB));
-        registry.put(Robot.yPositionDB, new DashboardHandle(Robot.yPositionDB));
-        registry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
-        registry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
         registry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
         registry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
         registry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
@@ -73,8 +71,6 @@ public class Robot extends IterativeRobot {
         // register modules
         registry.put(gyro);
         registry.put(gearShifter);
-        registry.put(DRIVE_SIDE_LEFT, leftSide);
-        registry.put(DRIVE_SIDE_RIGHT, rightSide);
 
         // register subsystems
         registry.put(AbstractDrive.class, drive);
@@ -116,7 +112,7 @@ public class Robot extends IterativeRobot {
         pneumaticPressureHandle.put(pressureSensor.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
-        double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME);
+        double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
         DashboardHandle countdownHandle = registry.get(countdownDB);
         countdownHandle.put(timeLeft);
 
@@ -143,10 +139,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         AbstractDrive drive = registry.get(AbstractDrive.class);
-        GearShifter gearShifter = registry.get(GearShifter.class);
-
         drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
-        gearShifter.set(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+        drive.setGear(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
 
     @Override

@@ -8,7 +8,7 @@ public class RobotState {
 
     private volatile Pose latest;
 
-    public void updatePose(Pose pose) {
+    public void addObservation(Pose pose) {
         latest = pose;
     }
 

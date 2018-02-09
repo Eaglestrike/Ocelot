@@ -24,11 +24,12 @@ public class TestMode extends AutoModeBase {
             runAction(new DriveCommandAction(registry, new DriveSignal(-0.5, -0.5)));
         } else {
             PathPointList path = PurePursuitFactory.loadPath("circle");
+//            PathPointList path = new PathPointList(Arrays.asList(new PathComponent(new Point(5.0, 5.0), 5)));
 
             runAction(new FollowPathTestAction(
-                    registry, path,
-                20, // lookahead distance
-                1 // finish margin
+                super.registry, path,
+                5, // lookahead distance
+                0.8 // finish margin
             ));
         }
     }
