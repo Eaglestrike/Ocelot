@@ -44,10 +44,11 @@ public final class Settings {
         public static final int RIGHT_MASTER = 10;
 
         public static final int RIGHT_SLAVE = 9;
-        public static final int DRIVE_CURRENT_LIMIT_THRESHOLD = 40;
 
-        public static final int DRIVE_CURRENT_LIMIT = 35;
-        public static final int DRIVE_CURRENT_LIMIT_DURATION_MS = 200;
+        // amps
+        public static final int CURRENT_LIMIT_THRESHOLD = 40;
+        public static final int CURRENT_LIMIT = 35;
+        public static final int CURRENT_LIMIT_DURATION_MS = 200;
     }
 
     public static final class GearShifter {

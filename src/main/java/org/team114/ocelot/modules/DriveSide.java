@@ -20,6 +20,11 @@ public class DriveSide {
         master.setSelectedSensorPosition(0, 0, 0);
         master.setSensorPhase(false);
         master.getSensorCollection().setQuadraturePosition(0, 0);
+
+        master.configPeakCurrentLimit(Settings.DriveSide.CURRENT_LIMIT_THRESHOLD, 0);
+        master.configPeakCurrentDuration(Settings.DriveSide.CURRENT_LIMIT_DURATION_MS, 0);
+        master.configContinuousCurrentLimit(Settings.DriveSide.CURRENT_LIMIT, 0);
+        master.enableCurrentLimit(true);
     }
 
     public void setInverted(boolean inverted) {
