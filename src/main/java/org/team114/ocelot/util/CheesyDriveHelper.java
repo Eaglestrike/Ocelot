@@ -1,14 +1,10 @@
 package org.team114.ocelot.util;
 
-import org.team114.ocelot.settings.Configuration;
+import org.team114.ocelot.settings.Settings;
 
 public class CheesyDriveHelper {
     private double quickStopAccumulator;
-    private final double turnSensitivity;
-
-    public CheesyDriveHelper(Configuration configuration) {
-        this.turnSensitivity = configuration.getDouble("turnSensitivity");
-    }
+    private final double turnSensitivity = Settings.CheesyDriveHelper.TURN_SENSITIVITY;
 
     public DriveSignal cheesyDrive(PercentageRange throttlePercentage, PercentageRange wheelPercentage, boolean isQuickTurn) {
 

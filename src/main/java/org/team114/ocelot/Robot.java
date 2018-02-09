@@ -8,16 +8,11 @@ import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
-import org.team114.ocelot.settings.Configuration;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
-import org.team114.ocelot.util.DriveSignal;
-import org.team114.ocelot.util.PercentageRange;
-
-import java.io.IOException;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -49,14 +44,6 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        Configuration configuration;
-        try {
-            configuration = Configuration.loadFromProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-            // if we can't load settings, we want to crash the robot
-            throw new IllegalStateException();
-        }
 
         registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
@@ -64,12 +51,12 @@ public class Robot extends IterativeRobot {
 
         // create modules
         Gyro gyro = Gyro.shared;
-        GearShifter gearShifter = new GearShifter(configuration.subConfiguration("GearShifter"));
-        DriveSide leftSide = new DriveSide(configuration.subConfiguration("DriveSide.left"));
-        DriveSide rightSide = new DriveSide(configuration.subConfiguration("DriveSide.right"));
+        GearShifter gearShifter = new GearShifter();
+        DriveSide leftSide = new DriveSide(Settings.DriveSide.LEFT_MASTER, Settings.DriveSide.LEFT_SLAVE);
+        DriveSide rightSide = new DriveSide(Settings.DriveSide.RIGHT_MASTER, Settings.DriveSide.RIGHT_SLAVE);
 
         // create subsystems
-        AbstractDrive drive = new Drive(registry, configuration.subConfiguration("Drive"));
+        AbstractDrive drive = new Drive(registry);
 
         // register general stuff
         registry.put(robotState);
@@ -100,7 +87,7 @@ public class Robot extends IterativeRobot {
 
         // driver facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
-        cheesyDrive = new CheesyDriveHelper(configuration.subConfiguration("CheesyDriveHelper"));
+        cheesyDrive = new CheesyDriveHelper();
         driverControls= new DualController(new Joystick(0), new Joystick(1));
     }
 

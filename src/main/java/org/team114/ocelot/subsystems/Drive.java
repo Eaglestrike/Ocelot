@@ -10,7 +10,7 @@ import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.DriveSide;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.lib.util.DashboardHandle;
-import org.team114.ocelot.settings.Configuration;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.Side;
@@ -25,15 +25,14 @@ public class Drive implements AbstractDrive {
     private final Map<Side, Supplier<DriveSide>> sides = new EnumMap<>(Side.class);
     private final Registry registry;
 
-    private final double halfOfWheelbase;
+    private final double halfOfWheelbase = Settings.Drive.WHEELBASE_WIDTH_FT / 2.0;
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    public Drive(Registry registry, Configuration configuration) {
+    public Drive(Registry registry) {
         this.registry = registry;
         this.sides.put(Side.LEFT, () -> registry.get(Robot.DRIVE_SIDE_LEFT));
         this.sides.put(Side.RIGHT, () -> registry.get(Robot.DRIVE_SIDE_RIGHT));
-        this.halfOfWheelbase = configuration.getDouble("wheelbase_width_ft") / 2.0;
     }
 
     private Pose addPoseObservation() {

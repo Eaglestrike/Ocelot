@@ -3,8 +3,6 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import org.team114.ocelot.Registry;
-import org.team114.ocelot.settings.Configuration;
 import org.team114.ocelot.util.Side;
 
 import java.util.Arrays;
@@ -22,9 +20,9 @@ public class DriveSide {
     private double lastSpeedSet;
     private NeutralMode neutralMode;
 
-    public DriveSide(Configuration configuration) {
-        this.masterTalon = new TalonSRX(configuration.getInt("master"));
-        this.slaveTalon = new TalonSRX(configuration.getInt("slave"));
+    public DriveSide(int master, int slave) {
+        this.masterTalon = new TalonSRX(master);
+        this.slaveTalon = new TalonSRX(slave);
         slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
         masterTalon.setSelectedSensorPosition(0, 0, 0);
     }
