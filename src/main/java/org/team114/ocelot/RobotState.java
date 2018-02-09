@@ -6,16 +6,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class RobotState {
 
-    private final AtomicReference<Pose> latest = new AtomicReference<>();
+    private volatile Pose latest;
 
-    public RobotState() {
+    public void updatePose(Pose pose) {
+        latest = pose;
     }
 
-    public void addObservation(Pose pose) {
-        this.latest.set(pose);
-    }
-
-    public Pose getLatestPose() {
-        return this.latest.get();
+    public Pose getPose() {
+        return latest;
     }
 }

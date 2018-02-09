@@ -37,7 +37,7 @@ public class Drive implements AbstractDrive {
     }
 
     private Pose addPoseObservation() {
-        Pose latestState = getRobotState().getLatestPose();
+        Pose latestState = getRobotState().getPose();
 
         double newHeading = getGyro().getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
@@ -52,14 +52,14 @@ public class Drive implements AbstractDrive {
         lastLeftAccumulated = leftDistance;
         lastRightAccumulated = rightDistance;
 
-        getRobotState().addObservation(new Pose(
+        getRobotState().updatePose(new Pose(
             latestState.getX() + (distance * Math.cos(angle)),
             latestState.getY() + (distance * Math.sin(angle)),
             newHeading,
             velocity
         ));
 
-        return getRobotState().getLatestPose();
+        return getRobotState().getPose();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class Drive implements AbstractDrive {
         getGyro().init();
         setControlMode(Side.BOTH, ControlMode.PercentOutput);
         setSideSpeed(Side.BOTH, 0);
-        getRobotState().addObservation(new Pose(0, 0,
+        getRobotState().updatePose(new Pose(0, 0,
             getGyro().getYaw(),
             (getDriveSide(Side.LEFT).getVelocity() + getDriveSide(Side.RIGHT).getVelocity())/2
         ));

@@ -36,7 +36,7 @@ public class FollowPathTestAction implements Action {
     @Override
     public void step() {
         PurePursuitController.DriveArcCommand command = controller.getCommand(
-                this.registry.get(RobotState.class).getLatestPose(),
+                this.registry.get(RobotState.class).getPose(),
                 Timer.getFPGATimestamp());
         registry.get(AbstractDrive.class).setDriveArcCommand(command);
     }
