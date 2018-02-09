@@ -145,8 +145,6 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         AbstractDrive drive = robotRegistry.get(AbstractDrive.class);
-        GearShifter gearShifter = robotRegistry.get(GearShifter.class);
-
         drive.setDriveSignal(cheesyDrive.cheesyDrive(driverControls.throttle(), driverControls.wheel(), driverControls.quickTurn()));
         drive.setGear(driverControls.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
