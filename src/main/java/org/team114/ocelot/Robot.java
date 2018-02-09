@@ -24,12 +24,6 @@ import java.io.IOException;
  */
 public class Robot extends IterativeRobot {
 
-    public static final String ROBOT_SIDE_LEFT = "robotSide.left";
-    public static final String ROBOT_SIDE_RIGHT = "robotSide.right";
-    public static final String xPositionDB = "Pose X";
-    public static final String yPositionDB = "Pose Y";
-    public static final String headingDB = "Pose hdg";
-    public static final String velocityDB = "Pose vel";
     public static final String countdownDB = "Climbing Countdown";
     public static final String pneumaticPressureDB = "Pneumatic Pressure";
     public static final String gearDB = "Gear";
@@ -75,10 +69,6 @@ public class Robot extends IterativeRobot {
         robotRegistry.put(robotState);
 
         // register handles
-        robotRegistry.put(Robot.xPositionDB, new DashboardHandle(Robot.xPositionDB));
-        robotRegistry.put(Robot.yPositionDB, new DashboardHandle(Robot.yPositionDB));
-        robotRegistry.put(Robot.headingDB, new DashboardHandle(Robot.headingDB));
-        robotRegistry.put(Robot.velocityDB, new DashboardHandle(Robot.velocityDB));
         robotRegistry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
         robotRegistry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
         robotRegistry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
