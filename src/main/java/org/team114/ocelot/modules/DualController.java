@@ -1,7 +1,6 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
-import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.util.PercentageRange;
 
 public class DualController implements Controller {
@@ -20,24 +19,14 @@ public class DualController implements Controller {
         this.right = right;
     }
 
+    @Override
     public PercentageRange throttle() {
         return new PercentageRange(band(left.getY()));
     }
 
+    @Override
     public PercentageRange wheel() {
         return new PercentageRange(band(right.getX() * -1));
-    }
-
-    public boolean startLift() {
-        return left.getRawButton(-1);
-    }
-
-    public boolean endLift() {
-        return left.getRawButton(-1);
-    }
-
-    public boolean intake() {
-        return left.getRawButton(-1);
     }
 
     // right trigger
@@ -45,21 +34,29 @@ public class DualController implements Controller {
         return right.getRawButton(1);
     }
 
-    public boolean startClimb() {
-        return right.getRawButton(-1);
-    }
-
-    public boolean endClimb() {
-        return right.getRawButton(-1);
-    }
-
     // left trigger
-    private boolean shiftGearButton() {
+    @Override
+    public boolean wantLowGear() {
         return left.getRawButton(1);
     }
 
     @Override
-    public boolean wantLowGear() {
-        return shiftGearButton();
+    public boolean intakeSpinning() {
+        return false;
+    }
+
+    @Override
+    public boolean intakeActuated() {
+        return false;
+    }
+
+    @Override
+    public boolean liftUp() {
+        return false;
+    }
+
+    @Override
+    public boolean liftDown() {
+        return false;
     }
 }

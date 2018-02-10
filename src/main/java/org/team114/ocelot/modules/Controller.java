@@ -7,17 +7,15 @@ public interface Controller {
 
     PercentageRange wheel();
 
-    boolean startLift();
-
-    boolean endLift();
-
-    boolean intake();
-
     boolean quickTurn();
 
-    boolean startClimb();
-
-    boolean endClimb();
-
     boolean wantLowGear();
+
+    boolean intakeSpinning();
+
+    boolean intakeActuated();
+
+    boolean liftUp();
+
+    boolean liftDown();
 }
