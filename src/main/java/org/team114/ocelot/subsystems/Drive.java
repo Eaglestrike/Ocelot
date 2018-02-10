@@ -37,7 +37,7 @@ public class Drive implements AbstractDrive {
         this.leftSide = leftSide;
         this.rightSide = rightSide;
 
-        leftSide.setInverted(true);
+        rightSide.setInverted(true);
         prepareForAuto();
     }
 

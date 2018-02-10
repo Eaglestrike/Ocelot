@@ -64,5 +64,7 @@ public final class Settings {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
         public static final double TURN_SENSITIVITY = 1.0;
+        public static final double THROTTLE_GROWTH = 0.65;
+        public static final double WHEEL_GROWTH = 0.5;
     }
 }
