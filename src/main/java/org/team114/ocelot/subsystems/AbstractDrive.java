@@ -12,7 +12,7 @@ public interface AbstractDrive extends Subsystem {
 
     void setDriveArcCommand(PurePursuitController.DriveArcCommand arc);
 
-    void configureTalonsForAuto();
+    void prepareForAuto();
 
-    void configureTalonsForTeleop();
+    void prepareForTeleop();
 }

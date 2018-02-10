@@ -38,7 +38,7 @@ public class Drive implements AbstractDrive {
         this.rightSide = rightSide;
 
         leftSide.setInverted(true);
-        configureTalonsForAuto();
+        prepareForAuto();
     }
 
     private Pose addPoseObservation() {
@@ -123,13 +123,13 @@ public class Drive implements AbstractDrive {
     }
 
     @Override
-    public synchronized void configureTalonsForAuto() {
+    public synchronized void prepareForAuto() {
         leftSide.configureForAuto();
         rightSide.configureForAuto();
     }
 
     @Override
-    public synchronized void configureTalonsForTeleop() {
+    public synchronized void prepareForTeleop() {
         leftSide.configureForTeleop();
         rightSide.configureForTeleop();
     }
