@@ -58,7 +58,7 @@ public class Superstructure implements SuperstructureInterface {
     }
 
     @Override
-    public void actuateCarriageLift(Carriage.LiftStage stage) {
+    public void actuateCarriageLift(Carriage.ElevationStage stage) {
         carriage.actuateLift(stage);
     }
 }

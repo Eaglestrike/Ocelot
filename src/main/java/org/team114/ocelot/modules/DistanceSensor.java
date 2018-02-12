@@ -17,8 +17,8 @@ public class DistanceSensor {
     }
 
     /**
-     * 3.1V at 4cm to 0.3V at 30cm
-     * @return distance the sensor reads, in feet
+     * Returns the distance the sensor reads, in feet.
+     * It converts the linear voltage reading to feet (3.1V is 4cm, 0.3V is 30cm)
      */
     public double get() {
         double voltage = distanceSensor.getVoltage();

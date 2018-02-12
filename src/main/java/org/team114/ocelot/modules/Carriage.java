@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class Carriage {
-    public enum LiftStage {
+    public enum ElevationStage {
         RAISED, STAGE_ONE, STAGE_TWO
     }
 
@@ -34,7 +34,7 @@ public class Carriage {
         intake.set(actuate);
     }
 
-    public void actuateLift(LiftStage stage) {
+    public void actuateLift(ElevationStage stage) {
         switch (stage) {
             case RAISED:
                 liftStageOne.set(false);
@@ -55,7 +55,7 @@ public class Carriage {
     }
 
     /**
-     * @return distance the carriage's sensor reads, in feet.
+     * Returns distance the carriage's sensor reads, in feet.
      */
     public double getDistanceToBox() {
         return distanceSensor.get();

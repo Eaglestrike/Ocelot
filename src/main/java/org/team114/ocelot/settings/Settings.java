@@ -43,7 +43,6 @@ public final class Settings {
         public static final int LEFT_MASTER = 1;
         public static final int LEFT_SLAVE = 2;
         public static final int RIGHT_MASTER = 10;
-
         public static final int RIGHT_SLAVE = 9;
 
         // amps

@@ -19,5 +19,5 @@ public interface Controller {
 
     boolean intakeActuated();
 
-    Carriage.LiftStage intakeLiftStage();
+    Carriage.ElevationStage intakeElevationStage();
 }

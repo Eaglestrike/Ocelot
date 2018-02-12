@@ -79,7 +79,7 @@ public class DualController implements Controller {
     }
 
     @Override
-    public Carriage.LiftStage intakeLiftStage() {
-        return Carriage.LiftStage.RAISED;
+    public Carriage.ElevationStage intakeElevationStage() {
+        return Carriage.ElevationStage.RAISED;
     }
 }
