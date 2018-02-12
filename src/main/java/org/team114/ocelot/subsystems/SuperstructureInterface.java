@@ -3,7 +3,7 @@ package org.team114.ocelot.subsystems;
 import org.team114.lib.subsystem.Subsystem;
 import org.team114.ocelot.modules.Carriage;
 
-public interface AbstractSuperstructure extends Subsystem {
+public interface SuperstructureInterface extends Subsystem {
     /**
      * Returns the height of the lift, in feet.
      */

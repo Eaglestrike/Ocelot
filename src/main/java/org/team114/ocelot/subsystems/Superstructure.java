@@ -4,7 +4,7 @@ import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.modules.Lift;
 
-public class Superstructure implements AbstractSuperstructure {
+public class Superstructure implements SuperstructureInterface {
 
     private final DashboardHandle currentHeightDB = new DashboardHandle("Current Height");
     private final DashboardHandle goalHeightDB = new DashboardHandle("Goal Height");
