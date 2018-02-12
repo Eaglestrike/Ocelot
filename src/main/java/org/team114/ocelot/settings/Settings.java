@@ -19,6 +19,7 @@ public final class Settings {
     public static final double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
     public static final double GAME_TIME = 180;
     public static final double CLIMBING_TIME_ESTIMATE = 10;
+    public static final double FEET_PER_CENTIMETER = 0.0328084;
 
     // Inner classes for Modules and Subsystems
     public static final class Drive {
@@ -51,12 +52,45 @@ public final class Settings {
         public static final int CURRENT_LIMIT_DURATION_MS = 200;
     }
 
+    public static final class Lift {
+        private Lift() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
+        public static final int MASTER = -1;
+        public static final int SLAVE = -1;
+        public static final int TOP_LIMIT_SWITCH = -1;
+    }
+
+    public static final class Carriage {
+        private Carriage() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
+        public static final int INTAKE_CHANNEL = -1;
+        public static final int LIFT_STAGE_ONE = -1;
+        public static final int LIFT_STAGE_TWO = -1;
+        public static final int LEFT_SPINNER = -1;
+        public static final int RIGHT_SPINNER = -1;
+    }
+
+    public static final class DistanceSensor {
+        private DistanceSensor() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
+        public static final int CHANNEL = -1;
+        // centimeters
+        public static final double MAX_DISTANCE = 30;
+        public static final double MIN_DISTANCE = 4;
+        // volts
+        public static final double MAX_VOLTAGE = 0.3;
+        public static final double MIN_VOLTAGE = 3.1;
+    }
+
     public static final class GearShifter {
         private GearShifter() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int HIGH_GEAR_CHANNEL = 0;
-        public static final int LOW_GEAR_CHANNEL = 1;
+        public static final int HIGH_GEAR = 0;
+        public static final int LOW_GEAR = 1;
     }
 
     public static final class CheesyDriveHelper {

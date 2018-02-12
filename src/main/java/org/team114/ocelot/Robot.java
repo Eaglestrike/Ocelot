@@ -1,10 +1,7 @@
 package org.team114.ocelot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
@@ -12,6 +9,8 @@ import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.AbstractDrive;
 import org.team114.ocelot.subsystems.Drive;
+import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.SuperstructureInterface;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
 
@@ -53,12 +52,26 @@ public class Robot extends IterativeRobot {
         DriveSide rightSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
                 new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
+        Carriage carriage = new Carriage(
+                new Solenoid(Settings.Carriage.INTAKE_CHANNEL),
+                new Solenoid(Settings.Carriage.LIFT_STAGE_ONE),
+                new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
+                new TalonSRX(Settings.Carriage.LEFT_SPINNER),
+                new TalonSRX(Settings.Carriage.RIGHT_SPINNER),
+                new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
+        Lift lift = new Lift(
+                new TalonSRX(Settings.Lift.MASTER),
+                new TalonSRX(Settings.Lift.SLAVE),
+                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
 
         // create subsystems
         AbstractDrive drive = new Drive(
                 registry,
                 leftSide,
                 rightSide);
+        SuperstructureInterface superstructure = new Superstructure(
+                carriage,
+                lift);
 
         // register general stuff
         registry.put(robotState);

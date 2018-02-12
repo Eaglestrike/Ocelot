@@ -9,8 +9,8 @@ public class GearShifter {
     }
 
     private final DoubleSolenoid gearSolenoid = new DoubleSolenoid(
-            Settings.GearShifter.HIGH_GEAR_CHANNEL,
-            Settings.GearShifter.LOW_GEAR_CHANNEL);
+            Settings.GearShifter.HIGH_GEAR,
+            Settings.GearShifter.LOW_GEAR);
 
 
     public void set(State state) {

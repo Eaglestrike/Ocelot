@@ -3,7 +3,6 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Carriage {
     public enum LiftStage {
@@ -15,14 +14,14 @@ public class Carriage {
     private final Solenoid liftStageTwo;
     private final TalonSRX leftSpinner;
     private final TalonSRX rightSpinner;
-    private final Ultrasonic distanceSensor;
+    private final DistanceSensor distanceSensor;
 
     public Carriage(Solenoid intake,
                     Solenoid liftStageOne,
                     Solenoid liftStageTwo,
                     TalonSRX leftSpinner,
                     TalonSRX rightSpinner,
-                    Ultrasonic distanceSensor) {
+                    DistanceSensor distanceSensor) {
         this.intake = intake;
         this.liftStageOne = liftStageOne;
         this.liftStageTwo = liftStageTwo;
@@ -55,11 +54,10 @@ public class Carriage {
         rightSpinner.set(ControlMode.Velocity, velocity);
     }
 
-    public double getDistanceInFeet() {
-        return toFeet(distanceSensor.getRangeInches());
-    }
-
-    private static double toFeet(double rangeInches) {
-        return 12.0 * rangeInches;
+    /**
+     * @return distance the carriage's sensor reads, in feet.
+     */
+    public double getDistanceToBox() {
+        return distanceSensor.get();
     }
 }
