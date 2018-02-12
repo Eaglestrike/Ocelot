@@ -12,7 +12,7 @@ import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
-public class Drive implements AbstractDrive {
+public class Drive implements DriveInterface {
 
     private final DashboardHandle xPositionDB = new DashboardHandle("Pose X");
     private final DashboardHandle yPositionDB = new DashboardHandle("Pose Y");

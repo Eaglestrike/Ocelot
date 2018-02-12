@@ -7,7 +7,7 @@ import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
-import org.team114.ocelot.subsystems.AbstractDrive;
+import org.team114.ocelot.subsystems.DriveInterface;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
@@ -55,7 +55,7 @@ public class Robot extends IterativeRobot {
                 new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
 
         // create subsystems
-        AbstractDrive drive = new Drive(registry, leftSide, rightSide);
+        DriveInterface drive = new Drive(registry, leftSide, rightSide);
 
         // register general stuff
         registry.put(robotState);
@@ -65,7 +65,7 @@ public class Robot extends IterativeRobot {
         registry.put(gearShifter);
 
         // register subsystems
-        registry.put(AbstractDrive.class, drive);
+        registry.put(DriveInterface.class, drive);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -127,7 +127,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        AbstractDrive drive = registry.get(AbstractDrive.class);
+        DriveInterface drive = registry.get(DriveInterface.class);
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
