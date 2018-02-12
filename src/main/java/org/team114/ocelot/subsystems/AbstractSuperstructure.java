@@ -1,6 +1,7 @@
 package org.team114.ocelot.subsystems;
 
 import org.team114.lib.subsystem.Subsystem;
+import org.team114.ocelot.modules.Carriage;
 
 public interface AbstractSuperstructure extends Subsystem {
     /**
@@ -21,14 +22,14 @@ public interface AbstractSuperstructure extends Subsystem {
     void actuateCarriage(boolean open);
 
     /**
-     * Spins the wheels on the carriage if spin is true
+     * Spins the wheels on the carriage if spin is true.
      * @param spin
      */
     void spinCarriage(boolean spin);
 
     /**
-     * Lower the carriage if dropped is true
-     * @param dropped
+     * Lift the carriage to the selected stage.
+     * @param stage
      */
-    void dropCarriage(boolean dropped);
+    void actuateCarriageLift(Carriage.LiftStage stage);
 }

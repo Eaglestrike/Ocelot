@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Carriage {
-    enum LiftStage {
+    public enum LiftStage {
         RAISED, STAGE_ONE, STAGE_TWO
     }
 
