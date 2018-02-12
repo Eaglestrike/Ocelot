@@ -1,6 +1,6 @@
-# Ocelot
+# Ocelot &nbsp;[![CircleCI](https://circleci.com/gh/Eaglestrike/Ocelot.svg?style=shield&circle-token=bc1154ecbf06f1d35aaa765db1d7eb34b550bb20)](https://circleci.com/gh/Eaglestrike/Ocelot) 
 
-Team 114's 2018 FRC code.
+Team 114's 2018 FRC code. 
 
 ## Setup Development Environment (MacOS)
 
