@@ -1,9 +1,14 @@
 package org.team114.ocelot.subsystems;
 
+import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.modules.Lift;
 
 public class Superstructure implements AbstractSuperstructure {
+
+    private final DashboardHandle currentHeightDB = new DashboardHandle("Current Height");
+    private final DashboardHandle goalHeightDB = new DashboardHandle("Goal Height");
+
     private final Carriage carriage;
     private final Lift lift;
 
@@ -26,6 +31,9 @@ public class Superstructure implements AbstractSuperstructure {
     @Override
     public void onStep(double timestamp) {
         lift.goToHeight(goalHeight);
+
+        currentHeightDB.put(lift.getHeight());
+        goalHeightDB.put(goalHeight);
     }
 
     @Override
