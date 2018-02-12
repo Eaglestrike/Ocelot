@@ -56,8 +56,7 @@ public class Carriage {
     }
 
     public double getDistanceInFeet() {
-        double range = toFeet(distanceSensor.getRangeInches());
-        return range;
+        return toFeet(distanceSensor.getRangeInches());
     }
 
     private static double toFeet(double rangeInches) {
