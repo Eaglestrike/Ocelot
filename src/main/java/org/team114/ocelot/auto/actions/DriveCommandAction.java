@@ -2,7 +2,7 @@ package org.team114.ocelot.auto.actions;
 
 import org.team114.lib.auto.actions.Action;
 import org.team114.ocelot.Registry;
-import org.team114.ocelot.subsystems.AbstractDrive;
+import org.team114.ocelot.subsystems.DriveInterface;
 import org.team114.ocelot.util.DriveSignal;
 
 public class DriveCommandAction implements Action {
@@ -21,17 +21,17 @@ public class DriveCommandAction implements Action {
 
     @Override
     public void start() {
-        registry.get(AbstractDrive.class).setDriveSignal(signal);
+        registry.get(DriveInterface.class).setDriveSignal(signal);
     }
 
     @Override
     public void stop() {
         // for testing /validation
-        registry.get(AbstractDrive.class).setDriveSignal(new DriveSignal(0,0));
+        registry.get(DriveInterface.class).setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
     public void step() {
-        registry.get(AbstractDrive.class).setDriveSignal(signal);
+        registry.get(DriveInterface.class).setDriveSignal(signal);
     }
 }

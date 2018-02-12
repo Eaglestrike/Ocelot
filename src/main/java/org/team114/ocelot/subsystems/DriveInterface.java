@@ -5,7 +5,7 @@ import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
-public interface AbstractDrive extends Subsystem {
+public interface DriveInterface extends Subsystem {
     void setGear(GearShifter.State state);
 
     void setDriveSignal(DriveSignal signal);
