@@ -86,12 +86,17 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        DriveInterface drive = registry.get(DriveInterface.class);
+        drive.prepareForAuto();
+
         autoModeExecutor.setAutoMode(new TestMode(registry));
         autoModeExecutor.start();
     }
 
     @Override
     public void teleopInit() {
+        DriveInterface drive = registry.get(DriveInterface.class);
+        drive.prepareForTeleop();
     }
 
     @Override
