@@ -13,8 +13,7 @@ public class Lift {
 
     private final DigitalInput topLimitSwitch;
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
-                DigitalInput bottomLimitSwitch) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
 
