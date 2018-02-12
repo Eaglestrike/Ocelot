@@ -52,6 +52,6 @@ public class Superstructure implements AbstractSuperstructure {
 
     @Override
     public void actuateCarriageLift(Carriage.LiftStage stage) {
-        carriage.actuageLift(stage);
+        carriage.actuateLift(stage);
     }
 }

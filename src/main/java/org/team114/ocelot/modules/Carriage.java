@@ -35,7 +35,7 @@ public class Carriage {
         intake.set(actuate);
     }
 
-    public void actuageLift(LiftStage stage) {
+    public void actuateLift(LiftStage stage) {
         switch (stage) {
             case RAISED:
                 liftStageOne.set(false);
