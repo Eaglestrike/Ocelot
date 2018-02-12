@@ -1,17 +1,17 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import org.team114.ocelot.settings.Settings;
 
 public class GearShifter {
     public enum State {
         HIGH, LOW
     }
 
-    private final DoubleSolenoid gearSolenoid = new DoubleSolenoid(
-            Settings.GearShifter.HIGH_GEAR_CHANNEL,
-            Settings.GearShifter.LOW_GEAR_CHANNEL);
+    private final DoubleSolenoid gearSolenoid;
 
+    public GearShifter(DoubleSolenoid gearSolenoid) {
+        this.gearSolenoid = gearSolenoid;
+    }
 
     public void set(State state) {
         switch (state) {

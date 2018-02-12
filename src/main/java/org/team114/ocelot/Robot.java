@@ -1,10 +1,7 @@
 package org.team114.ocelot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
@@ -46,7 +43,10 @@ public class Robot extends IterativeRobot {
 
         // create modules
         Gyro gyro = Gyro.shared;
-        GearShifter gearShifter = new GearShifter();
+        GearShifter gearShifter = new GearShifter(
+                new DoubleSolenoid(
+                        Settings.GearShifter.HIGH_GEAR_CHANNEL,
+                        Settings.GearShifter.LOW_GEAR_CHANNEL));
         DriveSide leftSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.LEFT_MASTER),
                 new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
