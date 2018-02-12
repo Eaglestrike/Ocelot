@@ -25,15 +25,19 @@ public class Lift {
     }
 
     /**
+     * Checks all the limit switches and zeros encoders as (if) necessary.
+     */
+    public void zeroEncodersIfNecessary() {
+        if (topLimitSwitch.get()) {
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
+        }
+    }
+
+    /**
      * Set the setpoint of the lift
      * @param height measured in feet
      */
     public void goToHeight(double height) {
-        // as if the limit switches are wired to the talon
-        if (topLimitSwitch.get()) {
-            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
-        }
-
         masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
     }
 

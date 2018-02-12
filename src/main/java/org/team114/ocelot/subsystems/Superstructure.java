@@ -30,6 +30,7 @@ public class Superstructure implements AbstractSuperstructure {
 
     @Override
     public void onStep(double timestamp) {
+        lift.zeroEncodersIfNecessary();
         lift.goToHeight(goalHeight);
 
         currentHeightDB.put(lift.getHeight());
