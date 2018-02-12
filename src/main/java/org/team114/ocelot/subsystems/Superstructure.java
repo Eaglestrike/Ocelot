@@ -2,7 +2,6 @@ package org.team114.ocelot.subsystems;
 
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.modules.Lift;
-import org.team114.ocelot.settings.Settings;
 
 public class Superstructure implements AbstractSuperstructure {
     private final Carriage carriage;
@@ -31,8 +30,6 @@ public class Superstructure implements AbstractSuperstructure {
     @Override
     public void incrementHeight(double increment) {
         goalHeight += increment;
-        goalHeight = Math.min(goalHeight, Settings.MAX_LIFT_HEIGHT);
-        goalHeight = Math.max(goalHeight, 0);
     }
 
     @Override
