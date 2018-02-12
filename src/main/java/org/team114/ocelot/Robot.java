@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 
     private PneumaticPressureSensor pressureSensor;
 
-    private Controller driverController;
+    private Controller controller;
     private CheesyDriveHelper cheesyDrive;
 
     /**
@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
         // driver facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
-        driverController = new DualController(new Joystick(0), new Joystick(1));
+        controller = new DualController(new Joystick(0), new Joystick(1));
     }
 
     @Override
@@ -139,8 +139,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         AbstractDrive drive = registry.get(AbstractDrive.class);
-        drive.setDriveSignal(cheesyDrive.cheesyDrive(driverController.throttle(), driverController.wheel(), driverController.quickTurn()));
-        drive.setGear(driverController.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+        drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
+        drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }
 
     @Override
