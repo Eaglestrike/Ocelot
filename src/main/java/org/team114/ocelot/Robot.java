@@ -20,9 +20,9 @@ import org.team114.lib.util.DashboardHandle;
  */
 public class Robot extends IterativeRobot {
 
-    public static final String countdownDB = "Climbing Countdown";
-    public static final String pneumaticPressureDB = "Pneumatic Pressure";
-    public static final String gearDB = "Gear";
+    private final DashboardHandle countdownDB = new DashboardHandle("Climbing Countdown");
+    private final DashboardHandle pneumaticPressureDB = new DashboardHandle("Pneumatic Pressure");
+    private final DashboardHandle gearDB = new DashboardHandle("Gear");
 
     private RegistryImpl registry;
     private SubsystemManager subsystemManager;
@@ -55,18 +55,10 @@ public class Robot extends IterativeRobot {
                 new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
 
         // create subsystems
-        AbstractDrive drive = new Drive(
-                registry,
-                leftSide,
-                rightSide);
+        AbstractDrive drive = new Drive(registry, leftSide, rightSide);
 
         // register general stuff
         registry.put(robotState);
-
-        // register handles
-        registry.put(Robot.countdownDB, new DashboardHandle(Robot.countdownDB));
-        registry.put(Robot.pneumaticPressureDB, new DashboardHandle(Robot.pneumaticPressureDB));
-        registry.put(Robot.gearDB, new DashboardHandle(Robot.gearDB));
 
         // register modules
         registry.put(gyro);
@@ -108,22 +100,19 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        DashboardHandle pneumaticPressureHandle = registry.get(pneumaticPressureDB);
-        pneumaticPressureHandle.put(pressureSensor.getPressure());
+        pneumaticPressureDB.put(pressureSensor.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
-        DashboardHandle countdownHandle = registry.get(countdownDB);
-        countdownHandle.put(timeLeft);
+        countdownDB.put(timeLeft);
 
         GearShifter gearShifter = registry.get(GearShifter.class);
-        DashboardHandle gearHandle = registry.get(gearDB);
         switch (gearShifter.get()) {
             case HIGH:
-                gearHandle.put(true);
+                gearDB.put(true);
                 break;
             case LOW:
-                gearHandle.put(false);
+                gearDB.put(false);
                 break;
         }
     }
