@@ -11,11 +11,13 @@ public interface Controller {
 
     boolean wantLowGear();
 
+    boolean liftUp();
+
+    boolean liftDown();
+
     boolean intakeSpinning();
 
     boolean intakeActuated();
 
-    boolean liftUp();
-
-    boolean liftDown();
+    Carriage.LiftStage intakeLiftStage();
 }

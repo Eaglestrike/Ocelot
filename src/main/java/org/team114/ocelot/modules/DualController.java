@@ -59,6 +59,16 @@ public class DualController implements Controller {
     }
 
     @Override
+    public boolean liftUp() {
+        return false;
+    }
+
+    @Override
+    public boolean liftDown() {
+        return false;
+    }
+
+    @Override
     public boolean intakeSpinning() {
         return false;
     }
@@ -69,12 +79,7 @@ public class DualController implements Controller {
     }
 
     @Override
-    public boolean liftUp() {
-        return false;
-    }
-
-    @Override
-    public boolean liftDown() {
-        return false;
+    public Carriage.LiftStage intakeLiftStage() {
+        return Carriage.LiftStage.RAISED;
     }
 }

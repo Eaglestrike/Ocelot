@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
 public class Carriage {
+    enum LiftStage {
+        RAISED, STAGE_ONE, STAGE_TWO
+    }
+
     private final Solenoid intake;
     private final Solenoid liftStageOne;
     private final Solenoid liftStageTwo;
@@ -31,9 +35,18 @@ public class Carriage {
         intake.set(actuate);
     }
 
-    public void actuateLift(boolean dropped) {
-        liftStageOne.set(!dropped);
-        liftStageTwo.set(!dropped);
+    public void actuageLift(LiftStage stage) {
+        switch (stage) {
+            case RAISED:
+                liftStageOne.set(false);
+                liftStageTwo.set(false);
+            case STAGE_ONE:
+                liftStageOne.set(true);
+                liftStageTwo.set(false);
+            case STAGE_TWO:
+                liftStageOne.set(true);
+                liftStageTwo.set(true);
+        }
     }
 
     public void setSpin(boolean spin) {
