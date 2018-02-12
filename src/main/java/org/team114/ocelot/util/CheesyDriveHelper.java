@@ -7,8 +7,8 @@ public class CheesyDriveHelper {
 
     public DriveSignal cheesyDrive(PercentageRange throttlePercentage, PercentageRange wheelPercentage, boolean isQuickTurn) {
 
-        double wheel = adjustWheel(wheelPercentage.unscaled());
-        double throttle = adjustThrottle(throttlePercentage.unscaled());
+        double wheel = wheelPercentage.unscaled();
+        double throttle = throttlePercentage.unscaled();
 
         double overPower, angularPower;
 
@@ -48,26 +48,5 @@ public class CheesyDriveHelper {
         }
 
         return new DriveSignal(leftPwm, rightPwm, false);
-    }
-
-    private static double adjustThrottle(double throttle) {
-        final double denominator = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH);
-        // Apply a sin function that's scaled to make it feel better.
-        throttle = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH * throttle) / denominator;
-        throttle = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH * throttle) / denominator;
-        return throttle;
-    }
-
-    private static double adjustWheel(double wheel) {
-        final double denominator = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH);
-        // Apply a sin function that's scaled to make it feel better.
-        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
-        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
-        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
-        return wheel;
-    }
-
-    private static double scale(double x, double growthRate) {
-        return Math.sin(Math.PI / 2.0 * growthRate);
     }
 }

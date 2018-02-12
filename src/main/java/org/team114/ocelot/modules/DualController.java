@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.PercentageRange;
 
 public class DualController implements Controller {
@@ -19,14 +20,31 @@ public class DualController implements Controller {
         this.right = right;
     }
 
+    private static double adjustThrottle(double throttle) {
+        final double denominator = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH);
+        // Apply a sin function that's scaled to make it feel better.
+        throttle = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH * throttle) / denominator;
+        throttle = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH * throttle) / denominator;
+        return throttle;
+    }
+
+    private static double adjustWheel(double wheel) {
+        final double denominator = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH);
+        // Apply a sin function that's scaled to make it feel better.
+        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
+        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
+        wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
+        return wheel;
+    }
+
     @Override
     public PercentageRange throttle() {
-        return new PercentageRange(band(left.getY()));
+        return new PercentageRange(adjustThrottle(band(left.getY())));
     }
 
     @Override
     public PercentageRange wheel() {
-        return new PercentageRange(band(right.getX() * -1));
+        return new PercentageRange(adjustWheel(band(right.getX() * -1)));
     }
 
     // right trigger
