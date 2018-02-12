@@ -16,6 +16,7 @@ public class Superstructure implements AbstractSuperstructure {
 
     @Override
     public void onStart(double timestamp) {
+        goalHeight = lift.getHeight();
     }
 
     @Override
