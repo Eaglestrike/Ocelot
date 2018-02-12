@@ -7,8 +7,8 @@ public class SingleController implements Controller {
 
     private final Joystick stick;
 
-    public SingleController(Joystick s) {
-        stick = s;
+    public SingleController(Joystick stick) {
+        this.stick = stick;
     }
 
     @Override
@@ -32,6 +32,16 @@ public class SingleController implements Controller {
     }
 
     @Override
+    public boolean liftUp() {
+        return false;
+    }
+
+    @Override
+    public boolean liftDown() {
+        return false;
+    }
+
+    @Override
     public boolean intakeSpinning() {
         return false;
     }
@@ -42,12 +52,7 @@ public class SingleController implements Controller {
     }
 
     @Override
-    public boolean liftUp() {
-        return false;
-    }
-
-    @Override
-    public boolean liftDown() {
-        return false;
+    public Carriage.ElevationStage intakeElevationStage() {
+        return Carriage.ElevationStage.RAISED;
     }
 }

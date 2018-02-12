@@ -9,6 +9,8 @@ import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.DriveInterface;
 import org.team114.ocelot.subsystems.Drive;
+import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.SuperstructureInterface;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
 
@@ -45,17 +47,34 @@ public class Robot extends IterativeRobot {
         Gyro gyro = Gyro.shared;
         GearShifter gearShifter = new GearShifter(
                 new DoubleSolenoid(
-                        Settings.GearShifter.HIGH_GEAR_CHANNEL,
-                        Settings.GearShifter.LOW_GEAR_CHANNEL));
+                        Settings.GearShifter.HIGH_GEAR,
+                        Settings.GearShifter.LOW_GEAR));
         DriveSide leftSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.LEFT_MASTER),
                 new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
         DriveSide rightSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
                 new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
+        Carriage carriage = new Carriage(
+                new Solenoid(Settings.Carriage.INTAKE_CHANNEL),
+                new Solenoid(Settings.Carriage.LIFT_STAGE_ONE),
+                new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
+                new TalonSRX(Settings.Carriage.LEFT_SPINNER),
+                new TalonSRX(Settings.Carriage.RIGHT_SPINNER),
+                new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
+        Lift lift = new Lift(
+                new TalonSRX(Settings.Lift.MASTER),
+                new TalonSRX(Settings.Lift.SLAVE),
+                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
 
         // create subsystems
-        DriveInterface drive = new Drive(registry, leftSide, rightSide);
+        DriveInterface drive = new Drive(
+                registry,
+                leftSide,
+                rightSide);
+        SuperstructureInterface superstructure = new Superstructure(
+                carriage,
+                lift);
 
         // register general stuff
         registry.put(robotState);
@@ -66,6 +85,7 @@ public class Robot extends IterativeRobot {
 
         // register subsystems
         registry.put(DriveInterface.class, drive);
+        registry.put(SuperstructureInterface.class, superstructure);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(

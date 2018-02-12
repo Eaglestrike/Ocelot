@@ -12,21 +12,24 @@ public class Lift {
     private final TalonSRX slaveTalon;
 
     private final DigitalInput topLimitSwitch;
-    private final DigitalInput bottomLimitSwitch;
 
-    private double goalHeight;
-
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
-                DigitalInput bottomLimitSwitch) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
 
         this.topLimitSwitch = topLimitSwitch;
-        this.bottomLimitSwitch = bottomLimitSwitch;
 
-        this.masterTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
         this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
         this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
+    }
+
+    /**
+     * Checks all the limit switches and zeros encoders as (if) necessary.
+     */
+    public void zeroEncodersIfNecessary() {
+        if (topLimitSwitch.get()) {
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
+        }
     }
 
     /**
@@ -34,35 +37,12 @@ public class Lift {
      * @param height measured in feet
      */
     public void goToHeight(double height) {
-        // as if the limit switches are wired to the talon
-        if (topLimitSwitch.get()) {
-            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
-        } else if (bottomLimitSwitch.get()) {
-            masterTalon.setSelectedSensorPosition(0, 0, 0);
-        }
-
         masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
-        goalHeight = height;
     }
 
     //get the height in feet
     public double getHeight() {
         return convertTicksToFeet(masterTalon.getSelectedSensorPosition(0));
-    }
-
-    /**
-     * Shift the setpoint of the lift
-     * @param increment can be negative, measured in feet
-     */
-    public void incrementHeight(double increment) {
-        goalHeight += increment;
-        if (goalHeight > Settings.MAX_LIFT_HEIGHT) {
-            goalHeight = Settings.MAX_LIFT_HEIGHT;
-        }
-        else if (goalHeight < 0) {
-            goalHeight = 0;
-        }
-        goToHeight(goalHeight);
     }
 
     private static double convertTicksToFeet(int ticks) {
