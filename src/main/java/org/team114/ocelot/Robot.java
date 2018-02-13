@@ -23,9 +23,11 @@ public class Robot extends IterativeRobot {
     private final DashboardHandle pneumaticPressureDB = new DashboardHandle("Pneumatic Pressure");
     private final DashboardHandle gearDB = new DashboardHandle("Gear");
 
-    private RegistryImpl registry;
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
+    private RobotState robotState;
+    private DriveInterface drive;
+    private GearShifter gearShifter;
 
     private PneumaticPressureSensor pressureSensor;
 
@@ -39,13 +41,13 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 
-        registry = new RegistryImpl();
         autoModeExecutor = new AutoModeExecutor();
-        RobotState robotState = new RobotState();
+        robotState = new RobotState();
 
         // create modules
         Gyro gyro = Gyro.shared;
-        GearShifter gearShifter = new GearShifter(
+
+        gearShifter = new GearShifter(
                 new DoubleSolenoid(
                         Settings.GearShifter.HIGH_GEAR,
                         Settings.GearShifter.LOW_GEAR));
@@ -68,24 +70,16 @@ public class Robot extends IterativeRobot {
                 new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
 
         // create subsystems
-        DriveInterface drive = new Drive(
-                registry,
-                leftSide,
-                rightSide);
+        drive = new Drive(
+            robotState,
+            gyro,
+            leftSide,
+            rightSide,
+            gearShifter);
+
         SuperstructureInterface superstructure = new Superstructure(
                 carriage,
                 lift);
-
-        // register general stuff
-        registry.put(robotState);
-
-        // register modules
-        registry.put(gyro);
-        registry.put(gearShifter);
-
-        // register subsystems
-        registry.put(DriveInterface.class, drive);
-        registry.put(SuperstructureInterface.class, superstructure);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(
@@ -106,16 +100,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        DriveInterface drive = registry.get(DriveInterface.class);
         drive.prepareForAuto();
 
-        autoModeExecutor.setAutoMode(new TestMode(registry));
+        autoModeExecutor.setAutoMode(new TestMode(drive, robotState));
         autoModeExecutor.start();
     }
 
     @Override
     public void teleopInit() {
-        DriveInterface drive = registry.get(DriveInterface.class);
         drive.prepareForTeleop();
     }
 
@@ -131,7 +123,6 @@ public class Robot extends IterativeRobot {
         double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
         countdownDB.put(timeLeft);
 
-        GearShifter gearShifter = registry.get(GearShifter.class);
         switch (gearShifter.get()) {
             case HIGH:
                 gearDB.put(true);
@@ -152,7 +143,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        DriveInterface drive = registry.get(DriveInterface.class);
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
     }

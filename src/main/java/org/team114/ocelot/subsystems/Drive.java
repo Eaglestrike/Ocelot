@@ -6,7 +6,6 @@ import org.team114.ocelot.modules.DriveSide;
 import org.team114.ocelot.modules.GearShifter;
 import org.team114.ocelot.modules.Gyro;
 import org.team114.lib.util.DashboardHandle;
-import org.team114.ocelot.Registry;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
@@ -19,32 +18,38 @@ public class Drive implements DriveInterface {
     private final DashboardHandle headingDB = new DashboardHandle("Pose hdg");
     private final DashboardHandle velocityDB = new DashboardHandle("Pose vel");
 
+    private final RobotState robotState;
     // drive train talons
     private final DriveSide leftSide;
     private final DriveSide rightSide;
 
+    private final Gyro gyro;
+    private final GearShifter shifter;
 
     private final double halfOfWheelbase = Settings.Drive.WHEELBASE_WIDTH_FT / 2.0;
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    private final Registry registry;
+    public Drive(RobotState robotState, Gyro gyro, DriveSide leftSide, DriveSide rightSide,
+                 GearShifter shifter) {
 
-    public Drive(Registry robotRegistry, DriveSide leftSide, DriveSide rightSide) {
-        this.registry = robotRegistry;
+        this.robotState = robotState;
+        this.gyro = gyro;
 
         // configure talons
         this.leftSide = leftSide;
         this.rightSide = rightSide;
+
+        this.shifter = shifter;
 
         rightSide.setInverted(true);
         prepareForAuto();
     }
 
     private Pose addPoseObservation() {
-        Pose latestState = getRobotState().getPose();
+        Pose latestState = robotState.getPose();
 
-        double newHeading = getGyro().getYaw();
+        double newHeading = gyro.getYaw();
         double angle = (newHeading + latestState.getHeading()) / 2;
 
         // we have to use this function to get position so that sensorPhase is taken into account
@@ -60,24 +65,24 @@ public class Drive implements DriveInterface {
         lastLeftAccumulated = leftDistance;
         lastRightAccumulated = rightDistance;
 
-        getRobotState().addObservation(new Pose(
+        robotState.addObservation(new Pose(
             latestState.getX() + (distance * Math.cos(angle)),
             latestState.getY() + (distance * Math.sin(angle)),
             newHeading,
             velocity
         ));
 
-        return getRobotState().getPose();
+        return robotState.getPose();
     }
 
     @Override
     public synchronized void onStart(double timestamp) {
-        getGyro().init();
+        gyro.init();
         leftSide.setPercentOutput(0);
         rightSide.setPercentOutput(0);
 
-        getRobotState().addObservation(new Pose(0, 0,
-            getGyro().getYaw(),
+        robotState.addObservation(new Pose(0, 0,
+            gyro.getYaw(),
             0
         ));
     }
@@ -97,7 +102,7 @@ public class Drive implements DriveInterface {
 
     @Override
     public synchronized void setGear(GearShifter.State state) {
-        registry.get(GearShifter.class).set(state);
+        shifter.set(state);
     }
 
     @Override
@@ -132,13 +137,5 @@ public class Drive implements DriveInterface {
     public synchronized void prepareForTeleop() {
         leftSide.configureForTeleop();
         rightSide.configureForTeleop();
-    }
-
-    private Gyro getGyro() {
-        return registry.get(Gyro.class);
-    }
-
-    private RobotState getRobotState() {
-        return registry.get(RobotState.class);
     }
 }

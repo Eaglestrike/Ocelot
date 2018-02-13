@@ -2,7 +2,6 @@ package org.team114.ocelot.auto.actions;
 
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.auto.actions.Action;
-import org.team114.ocelot.Registry;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.subsystems.DriveInterface;
 import org.team114.ocelot.util.DriveSignal;
@@ -11,11 +10,13 @@ import org.team114.ocelot.util.motion.PurePursuitController;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 public class FollowPathTestAction implements Action {
-    private Registry registry;
-    private PurePursuitController controller;
+    private final DriveInterface drive;
+    private final RobotState robotState;
+    private final PurePursuitController controller;
 
-    public FollowPathTestAction(Registry registry, PathPointList path, double lookAheadDistance, double finishMargin) {
-        this.registry = registry;
+    public FollowPathTestAction(PathPointList path, DriveInterface drive, RobotState robotState, double lookAheadDistance, double finishMargin) {
+        this.drive = drive;
+        this.robotState = robotState;
         this.controller = PurePursuitFactory.startPurePursuit(path, lookAheadDistance, finishMargin);
     }
 
@@ -30,14 +31,14 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void stop() {
-        registry.get(DriveInterface.class).setDriveSignal(new DriveSignal(0,0));
+        drive.setDriveSignal(new DriveSignal(0,0));
     }
 
     @Override
     public void step() {
         PurePursuitController.DriveArcCommand command = controller.getCommand(
-                this.registry.get(RobotState.class).getPose(),
+                robotState.getPose(),
                 Timer.getFPGATimestamp());
-        registry.get(DriveInterface.class).setDriveArcCommand(command);
+        drive.setDriveArcCommand(command);
     }
 }
