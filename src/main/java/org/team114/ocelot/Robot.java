@@ -19,21 +19,32 @@ import org.team114.lib.util.DashboardHandle;
  */
 public class Robot extends IterativeRobot {
 
+    // handles
     private final DashboardHandle countdownDB = new DashboardHandle("Climbing Countdown");
     private final DashboardHandle pneumaticPressureDB = new DashboardHandle("Pneumatic Pressure");
     private final DashboardHandle gearDB = new DashboardHandle("Gear");
 
+    // general
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
     private RobotState robotState;
+
+    // subsystems
     private DriveInterface drive;
     private SuperstructureInterface superstructure;
+
+    // modules
+    private Gyro gyro;
     private GearShifter gearShifter;
+    private DriveSide leftSide;
+    private DriveSide rightSide;
+    private Carriage carriage;
+    private Lift lift;
 
-    private PneumaticPressureSensor pressureSensor;
-
+    // driver-facing
     private Controller controller;
     private CheesyDriveHelper cheesyDrive;
+    private PneumaticPressureSensor pressureSensor;
 
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
@@ -42,31 +53,31 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 
-        robotState = new RobotState();
-
-        autoModeExecutor = new AutoModeExecutor();
+        // create driver-facing stuff
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        cheesyDrive = new CheesyDriveHelper();
+        controller = new DualController(new Joystick(0), new Joystick(1));
 
         // create modules
-        Gyro gyro = Gyro.shared;
-
+        gyro = Gyro.shared;
         gearShifter = new GearShifter(
                 new DoubleSolenoid(
                         Settings.GearShifter.HIGH_GEAR,
                         Settings.GearShifter.LOW_GEAR));
-        DriveSide leftSide = new DriveSide(
+        leftSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.LEFT_MASTER),
                 new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
-        DriveSide rightSide = new DriveSide(
+        rightSide = new DriveSide(
                 new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
                 new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
-        Carriage carriage = new Carriage(
+        carriage = new Carriage(
                 new Solenoid(Settings.Carriage.INTAKE_CHANNEL),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_ONE),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
                 new TalonSRX(Settings.Carriage.LEFT_SPINNER),
                 new TalonSRX(Settings.Carriage.RIGHT_SPINNER),
                 new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
-        Lift lift = new Lift(
+        lift = new Lift(
                 new TalonSRX(Settings.Lift.MASTER),
                 new TalonSRX(Settings.Lift.SLAVE),
                 new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
@@ -78,21 +89,19 @@ public class Robot extends IterativeRobot {
             leftSide,
             rightSide,
             gearShifter);
-
         superstructure = new Superstructure(
             carriage,
             lift);
 
-        // create & kick off subsystem manager
+        // create general stuff
+        robotState = new RobotState();
+        autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
             drive
         );
-        subsystemManager.start();
 
-        // driver facing stuff
-        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
-        cheesyDrive = new CheesyDriveHelper();
-        controller = new DualController(new Joystick(0), new Joystick(1));
+        // kick off subsystem manager
+        subsystemManager.start();
     }
 
     @Override
