@@ -27,6 +27,7 @@ public class Robot extends IterativeRobot {
     private AutoModeExecutor autoModeExecutor;
     private RobotState robotState;
     private DriveInterface drive;
+    private SuperstructureInterface superstructure;
     private GearShifter gearShifter;
 
     private PneumaticPressureSensor pressureSensor;
@@ -41,8 +42,9 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
 
-        autoModeExecutor = new AutoModeExecutor();
         robotState = new RobotState();
+
+        autoModeExecutor = new AutoModeExecutor();
 
         // create modules
         Gyro gyro = Gyro.shared;
@@ -77,9 +79,9 @@ public class Robot extends IterativeRobot {
             rightSide,
             gearShifter);
 
-        SuperstructureInterface superstructure = new Superstructure(
-                carriage,
-                lift);
+        superstructure = new Superstructure(
+            carriage,
+            lift);
 
         // create & kick off subsystem manager
         subsystemManager = new SubsystemManager(

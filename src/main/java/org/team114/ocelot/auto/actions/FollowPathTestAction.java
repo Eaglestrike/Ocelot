@@ -14,7 +14,8 @@ public class FollowPathTestAction implements Action {
     private final RobotState robotState;
     private final PurePursuitController controller;
 
-    public FollowPathTestAction(PathPointList path, DriveInterface drive, RobotState robotState, double lookAheadDistance, double finishMargin) {
+    public FollowPathTestAction(DriveInterface drive, RobotState robotState, PathPointList path,
+                                double lookAheadDistance, double finishMargin) {
         this.drive = drive;
         this.robotState = robotState;
         this.controller = PurePursuitFactory.startPurePursuit(path, lookAheadDistance, finishMargin);

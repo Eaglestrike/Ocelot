@@ -32,7 +32,7 @@ public class TestMode extends AutoModeBase {
 //            PathPointList path = new PathPointList(Arrays.asList(new PathComponent(new Point(5.0, 5.0), 5)));
 
             runAction(new FollowPathTestAction(
-                    path, drive, robotState
+                    drive, robotState, path
                     , // lookahead distance
                     // finish margin
                     5, 0.8));

@@ -19,7 +19,7 @@ public class Drive implements DriveInterface {
     private final DashboardHandle velocityDB = new DashboardHandle("Pose vel");
 
     private final RobotState robotState;
-    // drive train talons
+
     private final DriveSide leftSide;
     private final DriveSide rightSide;
 
@@ -30,13 +30,12 @@ public class Drive implements DriveInterface {
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    public Drive(RobotState robotState, Gyro gyro, DriveSide leftSide, DriveSide rightSide,
-                 GearShifter shifter) {
+    public Drive(RobotState robotState, Gyro gyro, DriveSide leftSide,
+                 DriveSide rightSide, GearShifter shifter) {
 
         this.robotState = robotState;
         this.gyro = gyro;
 
-        // configure talons
         this.leftSide = leftSide;
         this.rightSide = rightSide;
 
@@ -87,9 +86,7 @@ public class Drive implements DriveInterface {
         ));
     }
 
-    @Override
-    public synchronized void onStop(double timestamp) {
-    }
+    @Override public synchronized void onStop(double timestamp) {}
 
     @Override
     public synchronized void onStep(double timestamp) {
