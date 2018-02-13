@@ -23,7 +23,7 @@ public class Gyro {
     }
 
     /**
-     * @return the heading of the navx chip modified to co-oridnate system conventions, in radians.
+     * Returns the heading of the navx chip modified to co-oridnate system conventions, in radians.
      */
     public double getYaw() {
         return Math.toRadians(getYawDegrees());
