@@ -15,6 +15,11 @@ public interface SuperstructureInterface extends Subsystem {
     void incrementHeight(double increment);
 
     /**
+     * Set the lift height
+     */
+    void setHeight(double setPoint);
+
+    /**
      * Opens or closes the carriage
      */
     void actuateCarriage(boolean open);

@@ -39,12 +39,17 @@ public class Superstructure implements SuperstructureInterface {
 
     @Override
     public void incrementHeight(double increment) {
-        goalHeight += increment;
+        setHeight(getHeight() + increment);
     }
 
     @Override
     public double getHeight() {
         return lift.getHeight();
+    }
+
+    @Override
+    public void setHeight(double setPoint) {
+        goalHeight = setPoint;
     }
 
     @Override
