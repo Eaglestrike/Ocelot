@@ -39,7 +39,7 @@ public class Pose {
     /**
      * Transform a point in the same coordinate frame as the Pose is to one in a robot-centric frame.
      *
-     * @param p
+     * @param p point to be transformed
      * @return The point's equivalent in a right-handed robot-centric frame, the positive X-axis at 0 radians
      * and the positive Y-axis 90 degrees clockwise from that.
      */

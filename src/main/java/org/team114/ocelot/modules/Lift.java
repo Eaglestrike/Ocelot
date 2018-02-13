@@ -33,7 +33,7 @@ public class Lift {
     }
 
     /**
-     * Set the setpoint of the lift
+     * Sets the setpoint of the lift.
      * @param height measured in feet
      */
     public void goToHeight(double height) {

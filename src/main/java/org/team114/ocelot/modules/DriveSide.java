@@ -45,14 +45,14 @@ public class DriveSide {
     }
 
     /**
-     * @return encoder position in feet
+     * Returns encoder position in feet.
      */
     public double getPosition() {
         return master.getSelectedSensorPosition(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 
     /**
-     * @return encoder velocity in feet/sec
+     * Returns encoder velocity in feet/sec.
      */
     public double getVelocity() {
         return master.getSelectedSensorVelocity(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
