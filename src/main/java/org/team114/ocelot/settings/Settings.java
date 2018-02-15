@@ -36,6 +36,14 @@ public final class Settings {
                         (0.5 * Math.PI);
     }
 
+    public static final class Pneumatics {
+        private Pneumatics() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
+
+        public static final double DEFAULT_PRESSURE_MARGIN = 20;
+    }
+
     public static final class DriveSide {
         private DriveSide() {
             throw new AssertionError("Constructor must not be called on utility class.");

@@ -7,10 +7,7 @@ import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
-import org.team114.ocelot.subsystems.DriveInterface;
-import org.team114.ocelot.subsystems.Drive;
-import org.team114.ocelot.subsystems.Superstructure;
-import org.team114.ocelot.subsystems.SuperstructureInterface;
+import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
 
@@ -32,6 +29,7 @@ public class Robot extends IterativeRobot {
     // subsystems
     private DriveInterface drive;
     private SuperstructureInterface superstructure;
+    private PneumaticsInterface pneumatics;
 
     // modules
     private Gyro gyro;
@@ -92,12 +90,17 @@ public class Robot extends IterativeRobot {
         superstructure = new Superstructure(
             carriage,
             lift);
+        pneumatics = new Pneumatics(
+            new Compressor(),
+            pressureSensor);
 
         // create general stuff
         robotState = new RobotState();
         autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
-            drive
+            drive,
+            superstructure,
+            pneumatics
         );
 
         // kick off subsystem manager
@@ -128,7 +131,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        pneumaticPressureDB.put(pressureSensor.getPressure());
+        pneumaticPressureDB.put(pneumatics.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
