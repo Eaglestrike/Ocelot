@@ -77,6 +77,7 @@ public final class Settings {
         public static final int LIFT_STAGE_TWO = -1;
         public static final int LEFT_SPINNER = -1;
         public static final int RIGHT_SPINNER = -1;
+        public static final int SPIN_VELOCITY = 1;
     }
 
     public static final class DistanceSensor {

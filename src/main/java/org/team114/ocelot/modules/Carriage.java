@@ -3,6 +3,7 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
+import org.team114.ocelot.settings.Settings;
 
 public class Carriage {
     public enum ElevationStage {
@@ -49,7 +50,7 @@ public class Carriage {
     }
 
     public void setSpin(boolean spin) {
-        double velocity = spin ? 1 : 0;
+        double velocity = spin ? Settings.Carriage.SPIN_VELOCITY : 0;
         leftSpinner.set(ControlMode.Velocity, velocity);
         rightSpinner.set(ControlMode.Velocity, velocity);
     }
