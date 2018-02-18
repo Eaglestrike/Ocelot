@@ -8,7 +8,7 @@ public final class Settings {
     //TODO: find out the real ratio
     //TODO: find out the real lift height
     //TODO: move to inner class
-    public static final int MAX_LIFT_HEIGHT = 1;
+    public static final double MAX_LIFT_HEIGHT = 5.916666; // 71 in. to ft., CAD estimate from Kat
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
 
     // IDs and Channels
