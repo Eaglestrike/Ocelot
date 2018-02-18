@@ -43,6 +43,8 @@ public class Robot extends IterativeRobot {
     private Controller controller;
     private CheesyDriveHelper cheesyDrive;
     private PneumaticPressureSensor pressureSensor;
+    //Temporary fix
+    private double time = 0;
 
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
@@ -157,16 +159,14 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     }
 
-
-    //Temporary fix
-    private double time = 0;
-
     @Override
     public void teleopPeriodic() {
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
         carriage.actuateIntake(controller.intakeActuated());
+        carriage.setSpin(controller.intakeActuated());
+        carriage.actuateLift(controller.intakeElevationStage());
 
         double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
         superstructure.setHeight(superstructure.getHeight() + upDown *

@@ -11,11 +11,13 @@ public class DualController implements Controller {
     private final Joystick lift;
 
     private final double basicDeadband = 0.02;
+    private Carriage.ElevationStage lastState;
 
     public DualController(Joystick left, Joystick right, Joystick lift) {
         this.left = left;
         this.right = right;
         this.lift = lift;
+        lastState = Carriage.ElevationStage.RAISED;
     }
 
     private static double adjustThrottle(double throttle) {
@@ -72,7 +74,7 @@ public class DualController implements Controller {
 
     @Override
     public boolean intakeSpinning() {
-        return false;
+        return left.getRawButton(2);
     }
 
     @Override
@@ -82,6 +84,13 @@ public class DualController implements Controller {
 
     @Override
     public Carriage.ElevationStage intakeElevationStage() {
-        return Carriage.ElevationStage.RAISED;
+        if (left.getRawButton(2)) {
+            return Carriage.ElevationStage.RAISED;
+        } else if (left.getRawButton(3)) {
+            return Carriage.ElevationStage.STAGE_ONE;
+        } else if (left.getRawButton(4)) {
+            return Carriage.ElevationStage.RAISED;
+        }
+        return lastState;
     }
 }
