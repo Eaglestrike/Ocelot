@@ -62,12 +62,12 @@ public class DualController implements Controller {
 
     @Override
     public boolean liftUp() {
-        return lift.getY() > 0;
+        return lift.getY() > 0 && Math.abs(lift.getY()) > basicDeadband;
     }
 
     @Override
     public boolean liftDown() {
-        return lift.getY() < 0;
+        return lift.getY() < 0 && Math.abs(lift.getY()) > basicDeadband;
     }
 
     @Override
