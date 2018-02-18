@@ -3,6 +3,7 @@ package org.team114.ocelot.subsystems;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.modules.Lift;
+import org.team114.ocelot.settings.Settings;
 
 public class Superstructure implements SuperstructureInterface {
 
@@ -49,7 +50,7 @@ public class Superstructure implements SuperstructureInterface {
 
     @Override
     public void setHeight(double setPoint) {
-        goalHeight = setPoint;
+        goalHeight = Math.min(Math.max(setPoint, 0), Settings.MAX_LIFT_HEIGHT);
     }
 
     @Override
