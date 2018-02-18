@@ -65,6 +65,7 @@ public final class Settings {
         public static final int TOP_LIMIT_SWITCH = -1;
         public static final int MID_LIMIT_SWITCH = -1;
         public static final int BOTTOM_LIMIT_SWITCH = -1;
+        public static final double DEBOUNCER_REFRESH = 0.01;
 
         public static final double MAX_HEIGHT = 71 / 12; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
