@@ -26,9 +26,6 @@ public class Lift {
 
         this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
         this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
-
-        masterTalon.configPeakCurrentLimit(30, 0);
-        slaveTalon.configPeakCurrentLimit(30, 0);
     }
 
     /**
