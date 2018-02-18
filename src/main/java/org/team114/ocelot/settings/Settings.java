@@ -63,9 +63,11 @@ public final class Settings {
         private Lift() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int MASTER = -1;
-        public static final int SLAVE = -1;
+        public static final int MASTER = 3;
+        public static final int SLAVE = 4;
         public static final int TOP_LIMIT_SWITCH = -1;
+        public static final int MID_LIMIT_SWITCH = -1;
+        public static final int BOTTOM_LIMIT_SWITCH = -1;
     }
 
     public static final class Carriage {
@@ -75,8 +77,8 @@ public final class Settings {
         public static final int INTAKE_CHANNEL = -1;
         public static final int LIFT_STAGE_ONE = -1;
         public static final int LIFT_STAGE_TWO = -1;
-        public static final int LEFT_SPINNER = -1;
-        public static final int RIGHT_SPINNER = -1;
+        public static final int LEFT_SPINNER = 7;
+        public static final int RIGHT_SPINNER = 8;
         public static final int SPIN_VELOCITY = 1;
     }
 
@@ -84,7 +86,7 @@ public final class Settings {
         private DistanceSensor() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int CHANNEL = -1;
+        public static final int CHANNEL = 1;
         // centimeters
         public static final double MAX_DISTANCE = 30;
         public static final double MIN_DISTANCE = 4;
