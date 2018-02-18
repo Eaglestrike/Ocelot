@@ -164,6 +164,8 @@ public class Robot extends IterativeRobot {
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
+        carriage.actuateIntake(controller.intakeActuated());
+
         double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
         superstructure.setHeight(superstructure.getHeight() + upDown * Settings.CLIMBER_FEET_PER_REVOLUTION * (Timer.getFPGATimestamp() - time));
         time = Timer.getFPGATimestamp();

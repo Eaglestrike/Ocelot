@@ -77,7 +77,7 @@ public class DualController implements Controller {
 
     @Override
     public boolean intakeActuated() {
-        return false;
+        return right.getRawButton(2);
     }
 
     @Override
