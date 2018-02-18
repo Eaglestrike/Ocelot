@@ -78,7 +78,9 @@ public class Robot extends IterativeRobot {
         lift = new Lift(
                 new TalonSRX(Settings.Lift.MASTER),
                 new TalonSRX(Settings.Lift.SLAVE),
-                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
+                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH),
+                new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH),
+                new DigitalInput(Settings.Lift.BOTTOM_LIMIT_SWITCH));
 
         // create subsystems
         drive = new Drive(

@@ -12,12 +12,17 @@ public class Lift {
     private final TalonSRX slaveTalon;
 
     private final DigitalInput topLimitSwitch;
+    private final DigitalInput midLimitSwitch;
+    private final DigitalInput bottomLimitSwitch;
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
+                DigitalInput midLimitSwitch, DigitalInput bottomLimitSwitch) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
 
         this.topLimitSwitch = topLimitSwitch;
+        this.midLimitSwitch = midLimitSwitch;
+        this.bottomLimitSwitch = bottomLimitSwitch;
 
         this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
         this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
@@ -33,6 +38,9 @@ public class Lift {
         if (topLimitSwitch.get()) {
             masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.Lift.MAX_HEIGHT), 0, 0);
         }
+        if (bottomLimitSwitch.get()) {
+            masterTalon.setSelectedSensorPosition(0, 0, 0);
+        }
     }
 
     /**
@@ -40,6 +48,10 @@ public class Lift {
      * @param height measured in feet
      */
     public void goToHeight(double height) {
+        if (!midLimitSwitch.get()) {
+            height = height / 2 + 5 / 24;
+        }
+
         masterTalon.set(ControlMode.MotionMagic, convertFeetToTicks(height));
     }
 
@@ -55,9 +67,6 @@ public class Lift {
     }
 
     private static int convertFeetToTicks(double feet) {
-        if(feet * 12 > 5) {
-            feet = feet / 2 + 5 / 24;
-        }
         double revolutions = feet / Settings.Lift.CLIMBER_FEET_PER_REVOLUTION;
         double ticks = revolutions * Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
         return (int) ticks;
