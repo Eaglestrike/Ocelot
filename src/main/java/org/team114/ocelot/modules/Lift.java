@@ -24,7 +24,8 @@ public class Lift {
         this.midLimitSwitch = midLimitSwitch;
         this.bottomLimitSwitch = bottomLimitSwitch;
 
-        this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+        this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyOpen, Settings.TALON_CONFIG_TIMEOUT_MS);
         this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
     }
 
