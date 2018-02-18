@@ -167,7 +167,8 @@ public class Robot extends IterativeRobot {
         carriage.actuateIntake(controller.intakeActuated());
 
         double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
-        superstructure.setHeight(superstructure.getHeight() + upDown * Settings.LIFT_NORMAL_SPEED * (Timer.getFPGATimestamp() - time));
+        superstructure.setHeight(superstructure.getHeight() + upDown *
+                Settings.Lift.NORMAL_SPEED * (Timer.getFPGATimestamp() - time));
         time = Timer.getFPGATimestamp();
     }
 

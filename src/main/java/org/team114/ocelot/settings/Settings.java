@@ -5,13 +5,6 @@ public final class Settings {
         throw new AssertionError("Constructor must not be called on utility class.");
     }
 
-    //TODO: find out the real ratio
-    //TODO: find out the real lift height
-    //TODO: move to inner class
-    public static final double MAX_LIFT_HEIGHT = 5.916666; // 71 in. to ft., CAD estimate from Kat
-    public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
-    public static final double LIFT_NORMAL_SPEED = 1;
-
     // IDs and Channels
     public static final int MAX_NUMBER_OF_CHANNELS = 16;
     public static final int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
@@ -23,6 +16,7 @@ public final class Settings {
     public static final double FEET_PER_CENTIMETER = 0.0328084;
 
     // Inner classes for Modules and Subsystems
+
     public static final class Drive {
         private Drive() {
             throw new AssertionError("Constructor must not be called on utility class.");
@@ -69,6 +63,11 @@ public final class Settings {
         public static final int TOP_LIMIT_SWITCH = -1;
         public static final int MID_LIMIT_SWITCH = -1;
         public static final int BOTTOM_LIMIT_SWITCH = -1;
+
+        public static final double MAX_HEIGHT = 71 / 12; // CAD estimate from Kat
+        public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
+        public static final double NORMAL_SPEED = 1;
+        public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
     }
 
     public static final class Carriage {

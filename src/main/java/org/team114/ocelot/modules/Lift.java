@@ -28,7 +28,7 @@ public class Lift {
      */
     public void zeroEncodersIfNecessary() {
         if (topLimitSwitch.get()) {
-            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.MAX_LIFT_HEIGHT), 0, 0);
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.Lift.MAX_HEIGHT), 0, 0);
         }
     }
 
@@ -46,17 +46,17 @@ public class Lift {
     }
 
     private static double convertTicksToFeet(int ticks) {
-        double revolutions = ticks / Settings.Drive.ENCODER_TICKS_PER_REVOLUTION;
-        double feet = revolutions * Settings.CLIMBER_FEET_PER_REVOLUTION;
+        double revolutions = ticks / Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
+        double feet = revolutions * Settings.Lift.CLIMBER_FEET_PER_REVOLUTION;
         return feet;
     }
 
     private static int convertFeetToTicks(double feet) {
-        if(feet * 12 > 5){
+        if(feet * 12 > 5) {
             feet = feet / 2 + 5 / 24;
         }
-        double revolutions = feet / Settings.CLIMBER_FEET_PER_REVOLUTION;
-        double ticks = revolutions * Settings.Drive.ENCODER_TICKS_PER_REVOLUTION;
+        double revolutions = feet / Settings.Lift.CLIMBER_FEET_PER_REVOLUTION;
+        double ticks = revolutions * Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
         return (int) ticks;
     }
 }

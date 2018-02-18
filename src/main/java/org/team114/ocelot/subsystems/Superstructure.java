@@ -50,7 +50,7 @@ public class Superstructure implements SuperstructureInterface {
 
     @Override
     public void setHeight(double setPoint) {
-        goalHeight = Math.min(Math.max(setPoint, 0), Settings.MAX_LIFT_HEIGHT);
+        goalHeight = Math.min(Math.max(setPoint, 0), Settings.Lift.MAX_HEIGHT);
     }
 
     @Override
