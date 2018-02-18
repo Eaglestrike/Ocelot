@@ -10,6 +10,7 @@ public final class Settings {
     //TODO: move to inner class
     public static final double MAX_LIFT_HEIGHT = 5.916666; // 71 in. to ft., CAD estimate from Kat
     public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
+    public static final double LIFT_NORMAL_SPEED = 1;
 
     // IDs and Channels
     public static final int MAX_NUMBER_OF_CHANNELS = 16;

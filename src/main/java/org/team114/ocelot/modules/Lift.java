@@ -52,6 +52,9 @@ public class Lift {
     }
 
     private static int convertFeetToTicks(double feet) {
+        if(feet * 12 > 5){
+            feet = feet / 2 + 5 / 24;
+        }
         double revolutions = feet / Settings.CLIMBER_FEET_PER_REVOLUTION;
         double ticks = revolutions * Settings.Drive.ENCODER_TICKS_PER_REVOLUTION;
         return (int) ticks;
