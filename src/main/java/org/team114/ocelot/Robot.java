@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
         // create driver-facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
-        controller = new DualController(new Joystick(0), new Joystick(1));
+        controller = new DualController(new Joystick(0), new Joystick(1), new Joystick(2));
 
         // create modules
         gyro = Gyro.shared;
@@ -82,25 +82,25 @@ public class Robot extends IterativeRobot {
 
         // create subsystems
         drive = new Drive(
-            robotState,
-            gyro,
-            leftSide,
-            rightSide,
-            gearShifter);
+                robotState,
+                gyro,
+                leftSide,
+                rightSide,
+                gearShifter);
         superstructure = new Superstructure(
-            carriage,
-            lift);
+                carriage,
+                lift);
         pneumatics = new Pneumatics(
-            new Compressor(),
-            pressureSensor);
+                new Compressor(),
+                pressureSensor);
 
         // create general stuff
         robotState = new RobotState();
         autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
-            drive,
-            superstructure,
-            pneumatics
+                drive,
+                superstructure,
+                pneumatics
         );
 
         // kick off subsystem manager

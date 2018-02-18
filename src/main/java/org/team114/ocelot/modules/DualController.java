@@ -8,16 +8,14 @@ public class DualController implements Controller {
 
     private final Joystick left;
     private final Joystick right;
+    private final Joystick lift;
 
     private final double basicDeadband = 0.02;
 
-    private double band(double x) {
-        return Math.abs(x) < basicDeadband ? 0 : x;
-    }
-
-    public DualController(Joystick left, Joystick right) {
+    public DualController(Joystick left, Joystick right, Joystick lift) {
         this.left = left;
         this.right = right;
+        this.lift = lift;
     }
 
     private static double adjustThrottle(double throttle) {
@@ -35,6 +33,10 @@ public class DualController implements Controller {
         wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
         wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
         return wheel;
+    }
+
+    private double band(double x) {
+        return Math.abs(x) < basicDeadband ? 0 : x;
     }
 
     @Override
@@ -60,12 +62,20 @@ public class DualController implements Controller {
 
     @Override
     public boolean liftUp() {
-        return false;
+        if (lift.getY() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean liftDown() {
-        return false;
+        if (lift.getY() < 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
