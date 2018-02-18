@@ -8,15 +8,15 @@ public class DualController implements Controller {
 
     private final Joystick left;
     private final Joystick right;
-    private final Joystick lift;
+    private final Joystick operator;
 
     private final double basicDeadband = 0.02;
     private Carriage.ElevationStage lastState;
 
-    public DualController(Joystick left, Joystick right, Joystick lift) {
+    public DualController(Joystick left, Joystick right, Joystick operator) {
         this.left = left;
         this.right = right;
-        this.lift = lift;
+        this.operator = operator;
         lastState = Carriage.ElevationStage.RAISED;
     }
 
@@ -64,31 +64,31 @@ public class DualController implements Controller {
 
     @Override
     public boolean liftUp() {
-        return band(lift.getY()) > 0;
+        return band(operator.getY()) > 0;
     }
 
     @Override
     public boolean liftDown() {
-        return band(lift.getY()) < 0;
+        return band(operator.getY()) < 0;
     }
 
     @Override
     public boolean intakeSpinning() {
-        return left.getRawButton(2);
+        return operator.getRawButton(2);
     }
 
     @Override
     public boolean intakeActuated() {
-        return right.getRawButton(2);
+        return operator.getRawButton(1);
     }
 
     @Override
     public Carriage.ElevationStage intakeElevationStage() {
-        if (left.getRawButton(2)) {
+        if (operator.getRawButton(3)) {
             return Carriage.ElevationStage.RAISED;
-        } else if (left.getRawButton(3)) {
+        } else if (operator.getRawButton(4)) {
             return Carriage.ElevationStage.STAGE_ONE;
-        } else if (left.getRawButton(4)) {
+        } else if (operator.getRawButton(5)) {
             return Carriage.ElevationStage.RAISED;
         }
         return lastState;
