@@ -14,6 +14,8 @@ public final class Settings {
     public static final double GAME_TIME = 180;
     public static final double CLIMBING_TIME_ESTIMATE = 10;
     public static final double FEET_PER_CENTIMETER = 0.0328084;
+    public static final int PEAK_CURRENT_LIMIT_AMPS_775PRO = 30;
+    public static final int TALON_CONFIG_TIMEOUT_MS = 0;
 
     // Inner classes for Modules and Subsystems
 

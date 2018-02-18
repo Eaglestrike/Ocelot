@@ -1,6 +1,5 @@
 package org.team114.ocelot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
@@ -10,6 +9,9 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
+
+import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
+import static org.team114.ocelot.factory.TalonFactory.newSimTalon;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -65,21 +67,21 @@ public class Robot extends IterativeRobot {
                         Settings.GearShifter.HIGH_GEAR,
                         Settings.GearShifter.LOW_GEAR));
         leftSide = new DriveSide(
-                new TalonSRX(Settings.DriveSide.LEFT_MASTER),
-                new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
+                newSimTalon(Settings.DriveSide.LEFT_MASTER),
+                newSimTalon(Settings.DriveSide.LEFT_SLAVE));
         rightSide = new DriveSide(
-                new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
-                new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
+                newSimTalon(Settings.DriveSide.RIGHT_MASTER),
+                newSimTalon(Settings.DriveSide.RIGHT_SLAVE));
         carriage = new Carriage(
                 new Solenoid(Settings.Carriage.INTAKE_CHANNEL),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_ONE),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
-                new TalonSRX(Settings.Carriage.LEFT_SPINNER),
-                new TalonSRX(Settings.Carriage.RIGHT_SPINNER),
+                new775ProTalon(Settings.Carriage.LEFT_SPINNER),
+                new775ProTalon(Settings.Carriage.RIGHT_SPINNER),
                 new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
         lift = new Lift(
-                new TalonSRX(Settings.Lift.MASTER),
-                new TalonSRX(Settings.Lift.SLAVE),
+                new775ProTalon(Settings.Lift.MASTER),
+                new775ProTalon(Settings.Lift.SLAVE),
                 new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH),
                 new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH),
                 new DigitalInput(Settings.Lift.BOTTOM_LIMIT_SWITCH));
