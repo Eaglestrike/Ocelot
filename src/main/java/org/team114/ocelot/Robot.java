@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 
         // create driver-facing stuff
-        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
         controller = new DualController(new Joystick(0), new Joystick(1), new Joystick(2));
 
@@ -163,9 +163,9 @@ public class Robot extends IterativeRobot {
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
-        carriage.actuateIntake(controller.intakeActuated());
-        carriage.setSpin(controller.intakeActuated());
-        carriage.actuateLift(controller.intakeElevationStage());
+        superstructure.actuateCarriage(controller.intakeActuated());
+        superstructure.spinCarriage(controller.intakeActuated());
+        superstructure.actuateCarriageLift(controller.intakeElevationStage());
 
         double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
         superstructure.setHeight(superstructure.getHeight() + upDown *

@@ -5,10 +5,6 @@ public final class Settings {
         throw new AssertionError("Constructor must not be called on utility class.");
     }
 
-    // IDs and Channels
-    public static final int MAX_NUMBER_OF_CHANNELS = 16;
-    public static final int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
-
     // misc
     public static final double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
     public static final double GAME_TIME = 180;
@@ -37,8 +33,8 @@ public final class Settings {
         private Pneumatics() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-
-        public static final double DEFAULT_PRESSURE_MARGIN = 20;
+        public static final int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
+        public static final double DEFAULT_PRESSURE_MARGIN = 60;
     }
 
     public static final class DriveSide {
