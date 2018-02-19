@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
 }
 
 sourceCompatibility = 1.8
@@ -38,7 +38,7 @@ dependencies {
     compile ctre()
     compile openrio.powerup.matchData()
 
-    compile group: 'org.ejml', name: 'ejml-all', version: '0.32'
+    compile group: 'org.ejml', name: 'ejml-all', version: '0.33'
 
     compile 'com.google.code.gson:gson:2.8.2'
 
@@ -62,5 +62,5 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "4.4.1"
+    gradleVersion = "4.5.1"
 }
