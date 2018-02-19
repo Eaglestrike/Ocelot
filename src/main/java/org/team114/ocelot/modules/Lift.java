@@ -12,24 +12,17 @@ public class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
 
-    private final DigitalInput topLimitSwitch;
     private final DigitalInput midLimitSwitch;
-    private final DigitalInput bottomLimitSwitch;
-    private final Debouncer topDebouncer, middleDebouncer, bottomDebouncer;
+    private final Debouncer middleDebouncer;
 
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput topLimitSwitch,
-                DigitalInput midLimitSwitch, DigitalInput bottomLimitSwitch) {
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput midLimitSwitch) {
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
 
-        this.topLimitSwitch = topLimitSwitch;
         this.midLimitSwitch = midLimitSwitch;
-        this.bottomLimitSwitch = bottomLimitSwitch;
 
-        topDebouncer = new Debouncer(Settings.Lift.DEBOUNCER_REFRESH);
         middleDebouncer = new Debouncer(Settings.Lift.DEBOUNCER_REFRESH);
-        bottomDebouncer = new Debouncer(Settings.Lift.DEBOUNCER_REFRESH);
 
         this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyOpen, Settings.TALON_CONFIG_TIMEOUT_MS);
@@ -40,12 +33,14 @@ public class Lift {
      * Checks all the limit switches and zeros encoders as (if) necessary.
      */
     public void zeroEncodersIfNecessary() {
+        /*
         if (topDebouncer.debounce(topLimitSwitch.get())) {
             masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.Lift.MAX_HEIGHT), 0, 0);
         }
         if (bottomDebouncer.debounce(bottomLimitSwitch.get())) {
             masterTalon.setSelectedSensorPosition(0, 0, 0);
         }
+        */
     }
 
     /**

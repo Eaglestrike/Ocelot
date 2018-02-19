@@ -5,6 +5,8 @@ plugins {
     id "jaci.openrio.gradle.GradleRIO" version "2018.01.22"
 }
 
+sourceCompatibility = 1.8
+
 repositories {
     jcenter()
 }

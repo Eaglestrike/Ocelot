@@ -26,7 +26,7 @@ public class Robot extends IterativeRobot {
     // general
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
-    private RobotState robotState;
+    private RobotState robotState = new RobotState();
 
     // subsystems
     private DriveInterface drive;
@@ -82,9 +82,7 @@ public class Robot extends IterativeRobot {
         lift = new Lift(
                 new775ProTalon(Settings.Lift.MASTER),
                 new775ProTalon(Settings.Lift.SLAVE),
-                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH),
-                new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH),
-                new DigitalInput(Settings.Lift.BOTTOM_LIMIT_SWITCH));
+                new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH));
 
         // create subsystems
         drive = new Drive(
@@ -101,7 +99,6 @@ public class Robot extends IterativeRobot {
                 pressureSensor);
 
         // create general stuff
-        robotState = new RobotState();
         autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
                 drive,

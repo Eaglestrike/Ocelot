@@ -62,9 +62,9 @@ public final class Settings {
         }
         public static final int MASTER = 3;
         public static final int SLAVE = 4;
-        public static final int TOP_LIMIT_SWITCH = -1;
+        // public static final int TOP_LIMIT_SWITCH = -1;
         public static final int MID_LIMIT_SWITCH = 9;
-        public static final int BOTTOM_LIMIT_SWITCH = -1;
+        // public static final int BOTTOM_LIMIT_SWITCH = -1;
         public static final double DEBOUNCER_REFRESH = 0.01;
 
         public static final double MAX_HEIGHT = 71 / 12; // CAD estimate from Kat
