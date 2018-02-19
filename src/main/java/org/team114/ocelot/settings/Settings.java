@@ -63,7 +63,7 @@ public final class Settings {
         public static final int MASTER = 3;
         public static final int SLAVE = 4;
         public static final int TOP_LIMIT_SWITCH = -1;
-        public static final int MID_LIMIT_SWITCH = -1;
+        public static final int MID_LIMIT_SWITCH = 9;
         public static final int BOTTOM_LIMIT_SWITCH = -1;
         public static final double DEBOUNCER_REFRESH = 0.01;
 
@@ -77,9 +77,9 @@ public final class Settings {
         private Carriage() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int INTAKE_CHANNEL = -1;
-        public static final int LIFT_STAGE_ONE = -1;
-        public static final int LIFT_STAGE_TWO = -1;
+        public static final int INTAKE_CHANNEL = 7;
+        public static final int LIFT_STAGE_ONE = 2;
+        public static final int LIFT_STAGE_TWO = 3;
         public static final int LEFT_SPINNER = 7;
         public static final int RIGHT_SPINNER = 8;
         public static final int SPIN_VELOCITY = 1;
