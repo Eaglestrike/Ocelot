@@ -85,11 +85,11 @@ public class DualController implements Controller {
     @Override
     public Carriage.ElevationStage intakeElevationStage() {
         if (operator.getRawButton(3)) {
-            return Carriage.ElevationStage.RAISED;
+            return lastState = Carriage.ElevationStage.RAISED;
         } else if (operator.getRawButton(4)) {
-            return Carriage.ElevationStage.STAGE_ONE;
+            return lastState = Carriage.ElevationStage.STAGE_ONE;
         } else if (operator.getRawButton(5)) {
-            return Carriage.ElevationStage.RAISED;
+            return lastState = Carriage.ElevationStage.STAGE_TWO;
         }
         return lastState;
     }
