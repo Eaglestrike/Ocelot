@@ -73,8 +73,13 @@ public class DualController implements Controller {
     }
 
     @Override
-    public boolean intakeSpinning() {
+    public boolean spinIntakeIn() {
         return operator.getRawButton(2);
+    }
+
+    @Override
+    public boolean spinIntakeOut() {
+        return operator.getRawButton(6);
     }
 
     @Override

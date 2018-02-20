@@ -16,6 +16,7 @@ public class Carriage {
     private final TalonSRX leftSpinner;
     private final TalonSRX rightSpinner;
     private final DistanceSensor distanceSensor;
+    private ElevationStage currentStage = ElevationStage.RAISED;
 
     public Carriage(Solenoid intake,
                     Solenoid liftStageOne,
@@ -32,27 +33,34 @@ public class Carriage {
     }
 
     public void actuateIntake(boolean actuate) {
-        intake.set(actuate);
-    }
-
-    public void actuateLift(ElevationStage stage) {
-        switch (stage) {
-            case RAISED:
-                liftStageOne.set(false);
-                liftStageTwo.set(false);
-            case STAGE_ONE:
-                liftStageOne.set(true);
-                liftStageTwo.set(false);
-            case STAGE_TWO:
-                liftStageOne.set(true);
-                liftStageTwo.set(true);
+        if (intake.get() != actuate) {
+            intake.set(actuate);
         }
     }
 
-    public void setSpin(boolean spin) {
-        double velocity = spin ? Settings.Carriage.SPIN_VELOCITY : 0;
-        leftSpinner.set(ControlMode.Velocity, velocity);
-        rightSpinner.set(ControlMode.Velocity, velocity);
+    public void actuateLift(ElevationStage stage) {
+        if (stage != currentStage) {
+            currentStage = stage;
+            switch (currentStage) {
+                case RAISED:
+                    liftStageOne.set(false);
+                    liftStageTwo.set(false);
+                    break;
+                case STAGE_ONE:
+                    liftStageOne.set(true);
+                    liftStageTwo.set(false);
+                    break;
+                case STAGE_TWO:
+                    liftStageOne.set(true);
+                    liftStageTwo.set(true);
+                    break;
+            }
+        }
+    }
+
+    public void setSpin(double command) {
+        leftSpinner.set(ControlMode.PercentOutput, command);
+        rightSpinner.set(ControlMode.PercentOutput, command);
     }
 
     /**

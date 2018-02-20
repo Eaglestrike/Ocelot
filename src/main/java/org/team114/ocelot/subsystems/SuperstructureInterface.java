@@ -27,7 +27,7 @@ public interface SuperstructureInterface extends Subsystem {
     /**
      * Spins the wheels on the carriage if spin is true.
      */
-    void spinCarriage(boolean spin);
+    void spinCarriage(double command);
 
     /**
      * Lift the carriage to the selected stage.

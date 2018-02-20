@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.Debouncer;
 
+import java.util.Set;
+
 public class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
@@ -17,30 +19,39 @@ public class Lift {
 
 
     public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput midLimitSwitch) {
+        this.midLimitSwitch = midLimitSwitch;
+        middleDebouncer = new Debouncer(Settings.Lift.DEBOUNCER_REFRESH);
+
         this.masterTalon = masterTalon;
         this.slaveTalon = slaveTalon;
 
-        this.midLimitSwitch = midLimitSwitch;
+        this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
 
-        middleDebouncer = new Debouncer(Settings.Lift.DEBOUNCER_REFRESH);
+        this.masterTalon.setInverted(false);
+        this.slaveTalon.setInverted(true);
 
         this.masterTalon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
                 LimitSwitchNormal.NormallyOpen, Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
+        this.masterTalon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+                LimitSwitchNormal.NormallyOpen, Settings.TALON_CONFIG_TIMEOUT_MS);
     }
 
     /**
      * Checks all the limit switches and zeros encoders as (if) necessary.
      */
     public void zeroEncodersIfNecessary() {
-        /*
-        if (topDebouncer.debounce(topLimitSwitch.get())) {
+        //upper zero
+        if (masterTalon.getSensorCollection().isFwdLimitSwitchClosed()) {
             masterTalon.setSelectedSensorPosition(convertFeetToTicks(Settings.Lift.MAX_HEIGHT), 0, 0);
+            return;
         }
-        if (bottomDebouncer.debounce(bottomLimitSwitch.get())) {
-            masterTalon.setSelectedSensorPosition(0, 0, 0);
+
+        //lower zero
+        if (masterTalon.getSensorCollection().isRevLimitSwitchClosed()) {
+            //TODO is it really zero?
+            masterTalon.setSelectedSensorPosition(convertFeetToTicks(0), 0, 0);
+            return;
         }
-        */
     }
 
     /**
@@ -61,14 +72,14 @@ public class Lift {
     }
 
     private static double convertTicksToFeet(int ticks) {
-        double revolutions = ticks / Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
+        double revolutions = (double)ticks / (double)Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
         double feet = revolutions * Settings.Lift.CLIMBER_FEET_PER_REVOLUTION;
         return feet;
     }
 
     private static int convertFeetToTicks(double feet) {
         double revolutions = feet / Settings.Lift.CLIMBER_FEET_PER_REVOLUTION;
-        double ticks = revolutions * Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
-        return (int) ticks;
+        double ticks = revolutions * (double)Settings.Lift.ENCODER_TICKS_PER_REVOLUTION;
+        return (int)ticks;
     }
 }

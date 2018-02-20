@@ -59,8 +59,8 @@ public class Superstructure implements SuperstructureInterface {
     }
 
     @Override
-    public void spinCarriage(boolean spin) {
-        carriage.setSpin(spin);
+    public void spinCarriage(double command) {
+        carriage.setSpin(command);
     }
 
     @Override

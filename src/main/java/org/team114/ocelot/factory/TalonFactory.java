@@ -14,12 +14,24 @@ public final class TalonFactory {
 
     public static TalonSRX new775ProTalon(int id) {
         TalonSRX talon = new TalonSRX(id);
-        talon.configPeakCurrentLimit(Settings.PEAK_CURRENT_LIMIT_AMPS_775PRO, TALON_CONFIG_TIMEOUT_MS);
+        commonConfig(talon);
+
+        talon.configPeakCurrentLimit(Settings.Lift.CURRENT_LIMIT_THRESHOLD, TALON_CONFIG_TIMEOUT_MS);
+        talon.configPeakCurrentDuration(Settings.Lift.CURRENT_LIMIT_DURATION_MS, TALON_CONFIG_TIMEOUT_MS);
+        talon.configContinuousCurrentLimit(Settings.Lift.CURRENT_LIMIT, TALON_CONFIG_TIMEOUT_MS);
+        talon.enableCurrentLimit(true);
+
         return talon;
     }
 
-    public static TalonSRX newSimTalon(int id) {
+    private static void commonConfig(TalonSRX talon) {
+        talon.setInverted(false);
+        talon.setSensorPhase(false);
+    }
+
+    public static TalonSRX newCimTalon(int id) {
         TalonSRX talon = new TalonSRX(id);
+        commonConfig(talon);
 
         talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0,
                 TALON_CONFIG_TIMEOUT_MS);

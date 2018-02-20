@@ -10,7 +10,6 @@ public final class Settings {
     public static final double GAME_TIME = 180;
     public static final double CLIMBING_TIME_ESTIMATE = 10;
     public static final double FEET_PER_CENTIMETER = 0.0328084;
-    public static final int PEAK_CURRENT_LIMIT_AMPS_775PRO = 30;
     public static final int TALON_CONFIG_TIMEOUT_MS = 0;
 
     // Inner classes for Modules and Subsystems
@@ -53,6 +52,7 @@ public final class Settings {
     }
 
     public static final class Lift {
+
         private Lift() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
@@ -67,6 +67,11 @@ public final class Settings {
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
         public static final double NORMAL_SPEED = 1;
         public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+
+        // amps
+        public static final int CURRENT_LIMIT_THRESHOLD = 200;
+        public static final int CURRENT_LIMIT = 180;
+        public static final int CURRENT_LIMIT_DURATION_MS = 200;
     }
 
     public static final class Carriage {
@@ -78,7 +83,8 @@ public final class Settings {
         public static final int LIFT_STAGE_TWO = 3;
         public static final int LEFT_SPINNER = 7;
         public static final int RIGHT_SPINNER = 8;
-        public static final int SPIN_VELOCITY = 1;
+        public static final double INTAKE_IN_COMMAND = -0.5;
+        public static final double INTAKE_OUT_COMMAND = 1.0;
     }
 
     public static final class DistanceSensor {
