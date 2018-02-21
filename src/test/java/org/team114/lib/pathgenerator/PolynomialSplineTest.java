@@ -11,13 +11,9 @@ public class PolynomialSplineTest {
         PolynomialSpline p = new PolynomialSpline(new double[]{7, 3, 5, 15, 2.2, -5.5, 0.0145, -0.234});
 
         //for values
-        try {
-            p.at(0);
-            p.at(0.5);
-            p.at(1);
-        } catch (Exception e) {
-            fail();
-        }
+        p.at(0);
+        p.at(0.5);
+        p.at(1);
 
         try {
             p.at(-0.1);
@@ -44,13 +40,9 @@ public class PolynomialSplineTest {
         }
 
         //for derivatives
-        try {
-            p.dfdt(0);
-            p.dfdt(0.5);
-            p.dfdt(1);
-        } catch (Exception e) {
-            fail();
-        }
+        p.dfdt(0);
+        p.dfdt(0.5);
+        p.dfdt(1);
 
         try {
             p.dfdt(-0.1);

@@ -52,6 +52,7 @@ public class DualController implements Controller {
     }
 
     // right trigger
+    @Override
     public boolean quickTurn() {
         return right.getRawButton(1);
     }
