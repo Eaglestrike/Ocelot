@@ -180,8 +180,8 @@ public class PathFactory {
 
     /**
      * Returns the coefficient in the deg'th derivative of the monomial x^exp.
-     * @param exp
-     * @param deg
+     * @param exp the exponent of the variable
+     * @param deg the degree of the derivative (0 is nothing, 1 is the first, 2 is the second)
      */
     private static int ddxCoeff(int exp, int deg) {
         int total = 1;

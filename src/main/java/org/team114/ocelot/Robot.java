@@ -3,6 +3,7 @@ package org.team114.ocelot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
@@ -197,9 +198,10 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void testPeriodic() {
-        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1)*0.4);
+        subsystemManager.stop();
+        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1)*1.0);
         System.out.println(testing.getRawAxis(1));
-        System.out.println(liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
-        System.out.println(liftMaster.getSensorCollection().isRevLimitSwitchClosed());
+        SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
+        SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
     }
 }
