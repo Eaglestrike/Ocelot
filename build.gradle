@@ -3,6 +3,7 @@ plugins {
     id "eclipse"
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
+    id "net.ltgt.errorprone" version "0.0.13"
 }
 
 sourceCompatibility = 1.8
@@ -43,9 +44,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
 
     // nullable annotations
-    compile (
-        ['com.google.code.findbugs:jsr305:2.0.1'],
-        ['com.google.code.findbugs:annotations:2.0.1']
+    compile(
+            ['com.google.code.findbugs:jsr305:2.0.1'],
+            ['com.google.code.findbugs:annotations:2.0.1']
     )
 
     // testing and mocking
