@@ -3,7 +3,9 @@ plugins {
     id "eclipse"
     id "idea"
     id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
+//    id "com.github.spotbugs" version "1.6.0"
 }
+
 
 sourceCompatibility = 1.8
 
@@ -18,7 +20,6 @@ deploy {
         target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
             team = 114
         }
-
     }
     artifacts {
         artifact("frcJava", jaci.openrio.gradle.frc.FRCJavaArtifact) {
