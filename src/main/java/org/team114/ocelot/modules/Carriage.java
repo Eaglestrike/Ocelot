@@ -39,22 +39,24 @@ public class Carriage {
     }
 
     public void actuateLift(ElevationStage stage) {
-        if (stage != currentStage) {
-            currentStage = stage;
-            switch (currentStage) {
-                case RAISED:
-                    liftStageOne.set(false);
-                    liftStageTwo.set(false);
-                    break;
-                case STAGE_ONE:
-                    liftStageOne.set(true);
-                    liftStageTwo.set(false);
-                    break;
-                case STAGE_TWO:
-                    liftStageOne.set(true);
-                    liftStageTwo.set(true);
-                    break;
-            }
+        if (stage == currentStage) {
+            return;
+        }
+
+        currentStage = stage;
+        switch (currentStage) {
+            case RAISED:
+                liftStageOne.set(false);
+                liftStageTwo.set(false);
+                break;
+            case STAGE_ONE:
+                liftStageOne.set(true);
+                liftStageTwo.set(false);
+                break;
+            case STAGE_TWO:
+                liftStageOne.set(true);
+                liftStageTwo.set(true);
+                break;
         }
     }
 
