@@ -48,11 +48,8 @@ public class Robot extends IterativeRobot {
     private Controller controller;
     private CheesyDriveHelper cheesyDrive;
     private PneumaticPressureSensor pressureSensor;
-    //Temporary fix
-    private double time = 0;
 
-
-    //testing
+    // testing
     TalonSRX liftMaster;
     TalonSRX liftSlave;
     Joystick testing;
