@@ -8,7 +8,7 @@ Use [this guide](http://wat.sinnpi.com/dl/FRC%20Getting%20Started%20-%20IntelliJ
 more comprehensive. Or refer to this shorter set of instructions, up to you.
 
 ### Clone repository
-In your shell, run `git clone https://github.com/Eaglestrike/Javalotl/`. `cd` into the directory.
+In your shell, run `git clone https://github.com/Eaglestrike/Ocelot/`. `cd` into the directory.
 
 ### Bootstrap `Gradle`
 In your shell, run `./gradlew`. It will automatically install any missing dependencies.
@@ -27,7 +27,7 @@ and select the Community Edition. If you apply for their
 ### Generate IDEA project
 In the project directory, run `./gradlew idea`. It will generate several files...
 
-Go ahead and open `Javalotl.ipr` with IntelliJ IDEA. This will open a blank screen, and hopefully
+Go ahead and open `Ocelot.ipr` with IntelliJ IDEA. This will open a blank screen, and hopefully
 a popup in the bottom right-hand corner will appear asking to link your Gradle project.
 
 On the popup, `Import Gradle Project`. Select *only* `Use auto-import` and
