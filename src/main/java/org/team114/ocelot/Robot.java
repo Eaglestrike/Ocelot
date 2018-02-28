@@ -185,7 +185,7 @@ public class Robot extends IterativeRobot {
             superstructure.spinCarriage(0);
         }
 
-        double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
+        int upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
         superstructure.incrementHeight(upDown * Settings.Lift.NORMAL_SPEED);
     }
 

@@ -7,17 +7,17 @@ public interface SuperstructureInterface extends Subsystem {
     /**
      * Returns the height of the lift, in feet.
      */
-    double getHeight();
+    int getHeight();
 
     /**
      * Shift the setpoint of the lift, in feet.
      */
-    void incrementHeight(double increment);
+    void incrementHeight(int increment);
 
     /**
      * Set the lift height
      */
-    void setHeight(double setPoint);
+    void setHeight(int setPoint);
 
     /**
      * Opens or closes the carriage

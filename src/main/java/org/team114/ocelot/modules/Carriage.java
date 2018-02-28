@@ -65,6 +65,12 @@ public class Carriage {
         rightSpinner.set(ControlMode.PercentOutput, command);
     }
 
+    public void setSpeedToProximitySensor() {
+        if (getDistanceToBox() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD) {
+            setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
+        }
+    }
+
     /**
      * Returns distance the carriage's sensor reads, in feet.
      */

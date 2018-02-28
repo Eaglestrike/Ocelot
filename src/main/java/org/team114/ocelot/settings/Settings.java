@@ -63,9 +63,10 @@ public final class Settings {
         // public static final int BOTTOM_LIMIT_SWITCH = -1;
         public static final double DEBOUNCER_REFRESH = 0.01;
 
-        public static final double MAX_HEIGHT = 71 / 12; // CAD estimate from Kat
+        public static final int MAX_HEIGHT_TICKS = 71 / 12; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
-        public static final double NORMAL_SPEED = 1;
+        //TODO tune
+        public static final int NORMAL_SPEED = 200;
         public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
 
         // amps
@@ -85,6 +86,14 @@ public final class Settings {
         public static final int RIGHT_SPINNER = 8;
         public static final double INTAKE_IN_COMMAND = -0.5;
         public static final double INTAKE_OUT_COMMAND = 1.0;
+        //TODO tune these two
+        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -0.25;
+        public static final double BOX_DISTANCE_INTAKE_THRESHOLD = 0.04;
+    }
+
+    public static final class SuperStructure {
+        public static final double OUTTAKE_TIME_SECONDS = 2;
+        public static final int ZEROING_INCREMENT_TICKS = -50;
     }
 
     public static final class DistanceSensor {
