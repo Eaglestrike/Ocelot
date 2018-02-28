@@ -105,18 +105,18 @@ public class Robot extends IterativeRobot {
         superstructure = new Superstructure(
                 carriage,
                 lift);
-//        pneumatics = new Pneumatics(
-//                new Compressor(),
-//                pressureSensor);
-//        pneumatics.setMinimumPressure(0);
-//        pneumatics.setPressureMargin(-1);
+        pneumatics = new Pneumatics(
+                new Compressor(),
+                pressureSensor);
+        pneumatics.setMinimumPressure(100);
+        pneumatics.setPressureMargin(-1);
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
                 drive,
-                superstructure//,
-//                pneumatics
+                superstructure,
+                pneumatics
         );
 
         // kick off subsystem manager
@@ -138,13 +138,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        autoModeExecutor.stop();
+        //TODO add more reset stuff
         drive.prepareForTeleop();
     }
 
     @Override
     public void robotPeriodic() {
-//        pneumaticPressureDB.put(pneumatics.getPressure());
-        pneumaticPressureDB.put(pressureSensor.getPressure());
+        pneumaticPressureDB.put(pneumatics.getPressure());
 
         // calculates how much time the driver has until they should start climbing, and sends to dashboard
         double timeLeft = Math.round(Settings.GAME_TIME - Timer.getMatchTime() - Settings.CLIMBING_TIME_ESTIMATE);
@@ -185,9 +186,7 @@ public class Robot extends IterativeRobot {
         }
 
         double upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
-        superstructure.setHeight(superstructure.getHeight() + upDown *
-                Settings.Lift.NORMAL_SPEED * (Timer.getFPGATimestamp() - time));
-        time = Timer.getFPGATimestamp();
+        superstructure.incrementHeight(upDown * Settings.Lift.NORMAL_SPEED);
     }
 
     @Override
@@ -199,7 +198,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void testPeriodic() {
         subsystemManager.stop();
-        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1)*1.0);
+        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1) * 1.0);
         System.out.println(testing.getRawAxis(1));
         SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
         SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
