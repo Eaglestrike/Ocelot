@@ -1,7 +1,9 @@
 package org.team114.ocelot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
@@ -10,6 +12,9 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
+
+import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
+import static org.team114.ocelot.factory.TalonFactory.newCimTalon;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.
@@ -24,7 +29,7 @@ public class Robot extends IterativeRobot {
     // general
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
-    private RobotState robotState;
+    private RobotState robotState = new RobotState();
 
     // subsystems
     private DriveInterface drive;
@@ -44,6 +49,11 @@ public class Robot extends IterativeRobot {
     private CheesyDriveHelper cheesyDrive;
     private PneumaticPressureSensor pressureSensor;
 
+    // testing
+    TalonSRX liftMaster;
+    TalonSRX liftSlave;
+    Joystick testing;
+
     /**
      * The main purpose of robot init is to create the mappings between physical objects and their representations.
      * That means, all talons, solenoids, etc. are created here.
@@ -52,9 +62,9 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 
         // create driver-facing stuff
-        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.PNEUMATIC_PRESSURE_SENSOR_ID));
+        pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
-        controller = new DualController(new Joystick(0), new Joystick(1));
+        controller = new DualController(new Joystick(0), new Joystick(1), new Joystick(2));
 
         // create modules
         gyro = Gyro.shared;
@@ -63,44 +73,47 @@ public class Robot extends IterativeRobot {
                         Settings.GearShifter.HIGH_GEAR,
                         Settings.GearShifter.LOW_GEAR));
         leftSide = new DriveSide(
-                new TalonSRX(Settings.DriveSide.LEFT_MASTER),
-                new TalonSRX(Settings.DriveSide.LEFT_SLAVE));
+                newCimTalon(Settings.DriveSide.LEFT_MASTER),
+                newCimTalon(Settings.DriveSide.LEFT_SLAVE));
         rightSide = new DriveSide(
-                new TalonSRX(Settings.DriveSide.RIGHT_MASTER),
-                new TalonSRX(Settings.DriveSide.RIGHT_SLAVE));
+                newCimTalon(Settings.DriveSide.RIGHT_MASTER),
+                newCimTalon(Settings.DriveSide.RIGHT_SLAVE));
         carriage = new Carriage(
                 new Solenoid(Settings.Carriage.INTAKE_CHANNEL),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_ONE),
                 new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
-                new TalonSRX(Settings.Carriage.LEFT_SPINNER),
-                new TalonSRX(Settings.Carriage.RIGHT_SPINNER),
+                new775ProTalon(Settings.Carriage.LEFT_SPINNER),
+                new775ProTalon(Settings.Carriage.RIGHT_SPINNER),
                 new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
+        liftMaster = new775ProTalon(Settings.Lift.MASTER);
+        liftSlave = new775ProTalon(Settings.Lift.SLAVE);
         lift = new Lift(
-                new TalonSRX(Settings.Lift.MASTER),
-                new TalonSRX(Settings.Lift.SLAVE),
-                new DigitalInput(Settings.Lift.TOP_LIMIT_SWITCH));
+                liftMaster,
+                liftSlave,
+                new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH));
 
         // create subsystems
         drive = new Drive(
-            robotState,
-            gyro,
-            leftSide,
-            rightSide,
-            gearShifter);
+                robotState,
+                gyro,
+                leftSide,
+                rightSide,
+                gearShifter);
         superstructure = new Superstructure(
-            carriage,
-            lift);
+                carriage,
+                lift);
         pneumatics = new Pneumatics(
-            new Compressor(),
-            pressureSensor);
+                new Compressor(),
+                pressureSensor);
+        pneumatics.setMinimumPressure(100);
+        pneumatics.setPressureMargin(-1);
 
         // create general stuff
-        robotState = new RobotState();
         autoModeExecutor = new AutoModeExecutor();
         subsystemManager = new SubsystemManager(
-            drive,
-            superstructure,
-            pneumatics
+                drive,
+                superstructure,
+                pneumatics
         );
 
         // kick off subsystem manager
@@ -122,11 +135,9 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        autoModeExecutor.stop();
+        //TODO add more reset stuff
         drive.prepareForTeleop();
-    }
-
-    @Override
-    public void testInit() {
     }
 
     @Override
@@ -159,9 +170,34 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+
+        superstructure.actuateCarriage(controller.intakeActuated());
+        superstructure.actuateCarriageLift(controller.intakeElevationStage());
+
+        if (controller.spinIntakeIn() && !controller.spinIntakeOut()) {
+            superstructure.spinCarriage(Settings.Carriage.INTAKE_IN_COMMAND);
+        } else if (!controller.spinIntakeIn() && controller.spinIntakeOut()) {
+            superstructure.spinCarriage(Settings.Carriage.INTAKE_OUT_COMMAND);
+        } else {
+            superstructure.spinCarriage(0);
+        }
+
+        int upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
+        superstructure.incrementHeight(upDown * Settings.Lift.NORMAL_SPEED);
+    }
+
+    @Override
+    public void testInit() {
+        testing = new Joystick(2);
+        subsystemManager.stop();
     }
 
     @Override
     public void testPeriodic() {
+        subsystemManager.stop();
+        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1) * 1.0);
+        System.out.println(testing.getRawAxis(1));
+        SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
+        SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
     }
 }

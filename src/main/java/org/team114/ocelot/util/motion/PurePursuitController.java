@@ -5,7 +5,6 @@ import org.team114.ocelot.util.Pose;
 
 public class PurePursuitController {
 
-
     public static class DriveArcCommand {
         // negative curvature is left, positive is right in accordance with coordinate standards for the x-axis
         public final double curvature;

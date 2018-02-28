@@ -42,7 +42,12 @@ public class SingleController implements Controller {
     }
 
     @Override
-    public boolean intakeSpinning() {
+    public boolean spinIntakeIn() {
+        return false;
+    }
+
+    @Override
+    public boolean spinIntakeOut() {
         return false;
     }
 

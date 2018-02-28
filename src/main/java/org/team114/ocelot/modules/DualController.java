@@ -8,16 +8,16 @@ public class DualController implements Controller {
 
     private final Joystick left;
     private final Joystick right;
+    private final Joystick operator;
 
     private final double basicDeadband = 0.02;
+    private Carriage.ElevationStage lastState;
 
-    private double band(double x) {
-        return Math.abs(x) < basicDeadband ? 0 : x;
-    }
-
-    public DualController(Joystick left, Joystick right) {
+    public DualController(Joystick left, Joystick right, Joystick operator) {
         this.left = left;
         this.right = right;
+        this.operator = operator;
+        lastState = Carriage.ElevationStage.RAISED;
     }
 
     private static double adjustThrottle(double throttle) {
@@ -37,6 +37,10 @@ public class DualController implements Controller {
         return wheel;
     }
 
+    private double band(double x) {
+        return Math.abs(x) < basicDeadband ? 0 : x;
+    }
+
     @Override
     public PercentageRange throttle() {
         return new PercentageRange(adjustThrottle(band(left.getY())));
@@ -48,6 +52,7 @@ public class DualController implements Controller {
     }
 
     // right trigger
+    @Override
     public boolean quickTurn() {
         return right.getRawButton(1);
     }
@@ -60,26 +65,38 @@ public class DualController implements Controller {
 
     @Override
     public boolean liftUp() {
-        return false;
+        return band(operator.getY()) > 0;
     }
 
     @Override
     public boolean liftDown() {
-        return false;
+        return band(operator.getY()) < 0;
     }
 
     @Override
-    public boolean intakeSpinning() {
-        return false;
+    public boolean spinIntakeIn() {
+        return operator.getRawButton(2);
+    }
+
+    @Override
+    public boolean spinIntakeOut() {
+        return operator.getRawButton(6);
     }
 
     @Override
     public boolean intakeActuated() {
-        return false;
+        return operator.getRawButton(1);
     }
 
     @Override
     public Carriage.ElevationStage intakeElevationStage() {
-        return Carriage.ElevationStage.RAISED;
+        if (operator.getRawButton(3)) {
+            return lastState = Carriage.ElevationStage.RAISED;
+        } else if (operator.getRawButton(4)) {
+            return lastState = Carriage.ElevationStage.STAGE_ONE;
+        } else if (operator.getRawButton(5)) {
+            return lastState = Carriage.ElevationStage.STAGE_TWO;
+        }
+        return lastState;
     }
 }

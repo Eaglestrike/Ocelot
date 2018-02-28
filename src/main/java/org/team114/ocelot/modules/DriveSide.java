@@ -1,7 +1,6 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.settings.Settings;
@@ -15,16 +14,6 @@ public class DriveSide {
         this.slave = slave;
 
         slave.set(ControlMode.Follower, master.getDeviceID());
-
-        master.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-        master.setSelectedSensorPosition(0, 0, 0);
-        master.setSensorPhase(false);
-        master.getSensorCollection().setQuadraturePosition(0, 0);
-
-        master.configPeakCurrentLimit(Settings.DriveSide.CURRENT_LIMIT_THRESHOLD, 0);
-        master.configPeakCurrentDuration(Settings.DriveSide.CURRENT_LIMIT_DURATION_MS, 0);
-        master.configContinuousCurrentLimit(Settings.DriveSide.CURRENT_LIMIT, 0);
-        master.enableCurrentLimit(true);
     }
 
     public void setInverted(boolean inverted) {

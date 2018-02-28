@@ -5,23 +5,15 @@ public final class Settings {
         throw new AssertionError("Constructor must not be called on utility class.");
     }
 
-    //TODO: find out the real ratio
-    //TODO: find out the real lift height
-    //TODO: move to inner class
-    public static final int MAX_LIFT_HEIGHT = 1;
-    public static final double CLIMBER_FEET_PER_REVOLUTION = 1;
-
-    // IDs and Channels
-    public static final int MAX_NUMBER_OF_CHANNELS = 16;
-    public static final int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
-
     // misc
     public static final double TYPICAL_PNEUMATIC_SUPPLY_VOLTAGE = 5;
     public static final double GAME_TIME = 180;
     public static final double CLIMBING_TIME_ESTIMATE = 10;
     public static final double FEET_PER_CENTIMETER = 0.0328084;
+    public static final int TALON_CONFIG_TIMEOUT_MS = 0;
 
     // Inner classes for Modules and Subsystems
+
     public static final class Drive {
         private Drive() {
             throw new AssertionError("Constructor must not be called on utility class.");
@@ -40,8 +32,8 @@ public final class Settings {
         private Pneumatics() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-
-        public static final double DEFAULT_PRESSURE_MARGIN = 20;
+        public static final int PNEUMATIC_PRESSURE_SENSOR_ID = 0;
+        public static final double DEFAULT_PRESSURE_MARGIN = 60;
     }
 
     public static final class DriveSide {
@@ -60,31 +52,55 @@ public final class Settings {
     }
 
     public static final class Lift {
+
         private Lift() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int MASTER = -1;
-        public static final int SLAVE = -1;
-        public static final int TOP_LIMIT_SWITCH = -1;
+        public static final int MASTER = 3;
+        public static final int SLAVE = 4;
+        // public static final int TOP_LIMIT_SWITCH = -1;
+        public static final int MID_LIMIT_SWITCH = 9;
+        // public static final int BOTTOM_LIMIT_SWITCH = -1;
+        public static final double DEBOUNCER_REFRESH = 0.01;
+
+        public static final int MAX_HEIGHT_TICKS = 71 / 12; // CAD estimate from Kat
+        public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
+        //TODO tune
+        public static final int NORMAL_SPEED = 200;
+        public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
+
+        // amps
+        public static final int CURRENT_LIMIT_THRESHOLD = 200;
+        public static final int CURRENT_LIMIT = 180;
+        public static final int CURRENT_LIMIT_DURATION_MS = 200;
     }
 
     public static final class Carriage {
         private Carriage() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int INTAKE_CHANNEL = -1;
-        public static final int LIFT_STAGE_ONE = -1;
-        public static final int LIFT_STAGE_TWO = -1;
-        public static final int LEFT_SPINNER = -1;
-        public static final int RIGHT_SPINNER = -1;
-        public static final int SPIN_VELOCITY = 1;
+        public static final int INTAKE_CHANNEL = 7;
+        public static final int LIFT_STAGE_ONE = 2;
+        public static final int LIFT_STAGE_TWO = 3;
+        public static final int LEFT_SPINNER = 7;
+        public static final int RIGHT_SPINNER = 8;
+        public static final double INTAKE_IN_COMMAND = -0.5;
+        public static final double INTAKE_OUT_COMMAND = 1.0;
+        //TODO tune these two
+        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -0.25;
+        public static final double BOX_DISTANCE_INTAKE_THRESHOLD = 0.04;
+    }
+
+    public static final class SuperStructure {
+        public static final double OUTTAKE_TIME_SECONDS = 2;
+        public static final int ZEROING_INCREMENT_TICKS = -50;
     }
 
     public static final class DistanceSensor {
         private DistanceSensor() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int CHANNEL = -1;
+        public static final int CHANNEL = 1;
         // centimeters
         public static final double MAX_DISTANCE = 30;
         public static final double MIN_DISTANCE = 4;

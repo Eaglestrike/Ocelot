@@ -15,7 +15,9 @@ public interface Controller {
 
     boolean liftDown();
 
-    boolean intakeSpinning();
+    boolean spinIntakeIn();
+
+    boolean spinIntakeOut();
 
     boolean intakeActuated();
 
