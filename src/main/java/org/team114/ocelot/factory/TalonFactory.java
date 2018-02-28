@@ -24,11 +24,6 @@ public final class TalonFactory {
         return talon;
     }
 
-    private static void commonConfig(TalonSRX talon) {
-        talon.setInverted(false);
-        talon.setSensorPhase(false);
-    }
-
     public static TalonSRX newCimTalon(int id) {
         TalonSRX talon = new TalonSRX(id);
         commonConfig(talon);
@@ -45,5 +40,10 @@ public final class TalonFactory {
         talon.enableCurrentLimit(true);
 
         return new TalonSRX(id);
+    }
+
+    private static void commonConfig(TalonSRX talon) {
+        talon.setInverted(false);
+        talon.setSensorPhase(false);
     }
 }
