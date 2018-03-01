@@ -4,12 +4,16 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import org.team114.lib.util.InterpolatingTreeMap;
 import org.team114.lib.util.InterpolatingDouble;
 
-public class ProximitySensorGP2Y0A41SK0F {
+public class GP2YProximitySensor implements ProximitySensor {
 
     private final AnalogInput distanceSensor;
     private final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> voltageToDistanceCm;
 
-    public ProximitySensorGP2Y0A41SK0F(AnalogInput distanceSensor) {
+    /**
+     * Represents a GP2Y0A41SK0F proximity sensor.
+     * @param distanceSensor sensor to be contained
+     */
+    public GP2YProximitySensor(AnalogInput distanceSensor) {
         this.distanceSensor = distanceSensor;
         voltageToDistanceCm = new InterpolatingTreeMap<>();
 

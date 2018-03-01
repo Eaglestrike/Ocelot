@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
                 new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
                 new775ProTalon(Settings.Carriage.LEFT_SPINNER),
                 new775ProTalon(Settings.Carriage.RIGHT_SPINNER),
-                new ProximitySensorGP2Y0A41SK0F(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
+                new GP2YProximitySensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
         liftMaster = new775ProTalon(Settings.Lift.MASTER);
         liftSlave = new775ProTalon(Settings.Lift.SLAVE);
         lift = new Lift(

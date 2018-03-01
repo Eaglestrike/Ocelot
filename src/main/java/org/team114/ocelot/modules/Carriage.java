@@ -15,7 +15,7 @@ public class Carriage {
     private final Solenoid liftStageTwo;
     private final TalonSRX leftSpinner;
     private final TalonSRX rightSpinner;
-    private final ProximitySensorGP2Y0A41SK0F distanceSensor;
+    private final ProximitySensor distanceSensor;
     private ElevationStage currentStage = ElevationStage.RAISED;
 
     public Carriage(Solenoid intake,
@@ -23,7 +23,7 @@ public class Carriage {
                     Solenoid liftStageTwo,
                     TalonSRX leftSpinner,
                     TalonSRX rightSpinner,
-                    ProximitySensorGP2Y0A41SK0F distanceSensor) {
+                    ProximitySensor distanceSensor) {
         this.intake = intake;
         this.liftStageOne = liftStageOne;
         this.liftStageTwo = liftStageTwo;
