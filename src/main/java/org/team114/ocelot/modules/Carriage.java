@@ -7,7 +7,7 @@ import org.team114.ocelot.settings.Settings;
 
 public class Carriage {
     public enum ElevationStage {
-        RAISED, STAGE_ONE, STAGE_TWO
+        RAISED, MIDDLE, LOWERED
     }
 
     private final Solenoid intake;
@@ -15,7 +15,7 @@ public class Carriage {
     private final Solenoid liftStageTwo;
     private final TalonSRX leftSpinner;
     private final TalonSRX rightSpinner;
-    private final DistanceSensor distanceSensor;
+    private final ProximitySensorGP2Y0A41SK0F distanceSensor;
     private ElevationStage currentStage = ElevationStage.RAISED;
 
     public Carriage(Solenoid intake,
@@ -23,7 +23,7 @@ public class Carriage {
                     Solenoid liftStageTwo,
                     TalonSRX leftSpinner,
                     TalonSRX rightSpinner,
-                    DistanceSensor distanceSensor) {
+                    ProximitySensorGP2Y0A41SK0F distanceSensor) {
         this.intake = intake;
         this.liftStageOne = liftStageOne;
         this.liftStageTwo = liftStageTwo;
@@ -49,11 +49,11 @@ public class Carriage {
                 liftStageOne.set(false);
                 liftStageTwo.set(false);
                 break;
-            case STAGE_ONE:
+            case MIDDLE:
                 liftStageOne.set(true);
                 liftStageTwo.set(false);
                 break;
-            case STAGE_TWO:
+            case LOWERED:
                 liftStageOne.set(true);
                 liftStageTwo.set(true);
                 break;
@@ -66,15 +66,8 @@ public class Carriage {
     }
 
     public void setSpeedToProximitySensor() {
-        if (getDistanceToBox() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD) {
+        if (distanceSensor.get() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD_CM) {
             setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
         }
-    }
-
-    /**
-     * Returns distance the carriage's sensor reads, in feet.
-     */
-    public double getDistanceToBox() {
-        return distanceSensor.get();
     }
 }

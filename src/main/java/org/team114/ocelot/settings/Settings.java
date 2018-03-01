@@ -88,7 +88,7 @@ public final class Settings {
         public static final double INTAKE_OUT_COMMAND = 1.0;
         //TODO tune these two
         public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -0.25;
-        public static final double BOX_DISTANCE_INTAKE_THRESHOLD = 0.04;
+        public static final double BOX_DISTANCE_INTAKE_THRESHOLD_CM = 6.0;
     }
 
     public static final class SuperStructure {
@@ -101,12 +101,6 @@ public final class Settings {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
         public static final int CHANNEL = 1;
-        // centimeters
-        public static final double MAX_DISTANCE = 30;
-        public static final double MIN_DISTANCE = 4;
-        // volts
-        public static final double MAX_VOLTAGE = 0.3;
-        public static final double MIN_VOLTAGE = 3.1;
     }
 
     public static final class GearShifter {

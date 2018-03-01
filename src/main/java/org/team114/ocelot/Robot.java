@@ -84,7 +84,7 @@ public class Robot extends IterativeRobot {
                 new Solenoid(Settings.Carriage.LIFT_STAGE_TWO),
                 new775ProTalon(Settings.Carriage.LEFT_SPINNER),
                 new775ProTalon(Settings.Carriage.RIGHT_SPINNER),
-                new DistanceSensor(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
+                new ProximitySensorGP2Y0A41SK0F(new AnalogInput(Settings.DistanceSensor.CHANNEL)));
         liftMaster = new775ProTalon(Settings.Lift.MASTER);
         liftSlave = new775ProTalon(Settings.Lift.SLAVE);
         lift = new Lift(
@@ -105,6 +105,7 @@ public class Robot extends IterativeRobot {
         pneumatics = new Pneumatics(
                 new Compressor(),
                 pressureSensor);
+        //TODO refactor these somewhere in settings and find the actual values
         pneumatics.setMinimumPressure(100);
         pneumatics.setPressureMargin(-1);
 

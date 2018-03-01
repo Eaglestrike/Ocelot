@@ -93,9 +93,9 @@ public class DualController implements Controller {
         if (operator.getRawButton(3)) {
             return lastState = Carriage.ElevationStage.RAISED;
         } else if (operator.getRawButton(4)) {
-            return lastState = Carriage.ElevationStage.STAGE_ONE;
+            return lastState = Carriage.ElevationStage.MIDDLE;
         } else if (operator.getRawButton(5)) {
-            return lastState = Carriage.ElevationStage.STAGE_TWO;
+            return lastState = Carriage.ElevationStage.LOWERED;
         }
         return lastState;
     }

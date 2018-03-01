@@ -66,6 +66,7 @@ public class Superstructure implements SuperstructureInterface {
                 carriage.setSpeedToProximitySensor();
                 break;
             case INTAKING:
+                actuateCarriageLift(Carriage.ElevationStage.LOWERED);
                 actuateCarriage(true);
                 spinCarriage(Settings.Carriage.INTAKE_IN_COMMAND);
                 break;
