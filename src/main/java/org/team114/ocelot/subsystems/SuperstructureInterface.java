@@ -32,5 +32,51 @@ public interface SuperstructureInterface extends Subsystem {
     /**
      * Lift the carriage to the selected stage.
      */
-    void actuateCarriageLift(Carriage.ElevationStage stage);
+    void actuateIntakeLift(Carriage.ElevationStage stage);
+
+
+    /**
+     * Configures the carriage for intaking boxes
+     * Open and Motors running
+     */
+    void setWantIntake();
+
+    /**
+     * Configures the carriage to be closed
+     * Open and Motors running in if there is a box
+     */
+    void setWantClosed();
+
+    /**
+     * Configures the carriage to idle in the open position
+     * Open and Motors off
+     */
+    void setWantOpenIdle();
+
+    /**
+     * Configures the carriage for outtaking boxes
+     * Closed and motors running OUT quickly
+     * This will, after a few moments, effectively call setWantClosed();
+     */
+    void setWantClosedOuttaking();
+
+    /**
+     * Configures the carriage for intaking boxes
+     * Open and Motors running
+     */
+    void setWantZero();
+
+    /**
+     * Moves the lift to the height of the scale for outtaking
+     */
+    void setWantScaleHeight();
+    /**
+     * Moves the lift to the low height for intaking
+     */
+    void setWantLowHeight();
+
+    /**
+     * Moves the lift to the height of the switch for outtaking
+     */
+    void setWantSwitchHeight();
 }

@@ -94,6 +94,9 @@ public final class Settings {
     public static final class SuperStructure {
         public static final double OUTTAKE_TIME_SECONDS = 2;
         public static final int ZEROING_INCREMENT_TICKS = -50;
+        public static final int LOW_HEIGHT_TICKS = 0;
+        public static final int SWITCH_HEIGHT_TICKS = 10_000;
+        public static final int SCALE_HEIGHT_TICKS = 20_000;
     }
 
     public static final class DistanceSensor {

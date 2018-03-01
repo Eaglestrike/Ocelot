@@ -5,8 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.subsystem.SubsystemManager;
+import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
+import org.team114.ocelot.controllers.ComposedEdgeDetectingController;
+import org.team114.ocelot.controllers.Controller;
+import org.team114.ocelot.controllers.DualController;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
@@ -64,7 +68,7 @@ public class Robot extends IterativeRobot {
         // create driver-facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
-        controller = new DualController(new Joystick(0), new Joystick(1), new Joystick(2));
+        controller = new ComposedEdgeDetectingController(new DualController(), EdgeDetector.EdgeType.RISING);
 
         // create modules
         gyro = Gyro.shared;
@@ -169,22 +173,35 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        // ==== DRIVER ====
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
         drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
-        superstructure.actuateCarriage(controller.intakeActuated());
-        superstructure.actuateCarriageLift(controller.intakeElevationStage());
+        // ==== OPERATOR ====
 
-        if (controller.spinIntakeIn() && !controller.spinIntakeOut()) {
-            superstructure.spinCarriage(Settings.Carriage.INTAKE_IN_COMMAND);
-        } else if (!controller.spinIntakeIn() && controller.spinIntakeOut()) {
-            superstructure.spinCarriage(Settings.Carriage.INTAKE_OUT_COMMAND);
-        } else {
-            superstructure.spinCarriage(0);
+        // carriage
+        superstructure.actuateIntakeLift(controller.intakeElevation());
+        if (controller.carriageClose()) {
+            superstructure.setWantClosed();
+        } else if (controller.carriageOuttake()) {
+            superstructure.setWantClosedOuttaking();
+        } else if (controller.carriageIntake()) {
+            superstructure.setWantIntake();
+        } else if (controller.carriageOpen()) {
+            superstructure.setWantOpenIdle();
+        } else if (controller.liftZeroCalibration()) {
+            superstructure.setWantZero();
         }
 
-        int upDown = (controller.liftUp() ? 1 : 0) - (controller.liftDown() ? 1 : 0);
-        superstructure.incrementHeight(upDown * Settings.Lift.NORMAL_SPEED);
+        // lift height
+        if (controller.lowHeight()) {
+            superstructure.setWantLowHeight();
+        } else if (controller.switchHeight()) {
+            superstructure.setWantSwitchHeight();
+        } else if (controller.scaleHeight()) {
+            superstructure.setWantScaleHeight();
+        }
+        superstructure.incrementHeight((int)(controller.liftIncrement() * Settings.Lift.NORMAL_SPEED));
     }
 
     @Override

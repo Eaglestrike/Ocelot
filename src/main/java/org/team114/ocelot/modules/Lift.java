@@ -51,6 +51,14 @@ public class Lift {
     }
 
     /**
+     * Returns true if either of the forward or reverse limit switch is triggered.
+     */
+    public boolean isLimitSwitchTriggered() {
+        return masterTalon.getSensorCollection().isRevLimitSwitchClosed() ||
+                masterTalon.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+
+    /**
      * Sets the setpoint of the lift.
      * @param height measured in ticks
      */
