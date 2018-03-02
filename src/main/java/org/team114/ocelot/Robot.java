@@ -176,7 +176,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         // ==== DRIVER ====
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
-        drive.setGear(!controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+        drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
         // ==== OPERATOR ====
 
@@ -203,7 +203,6 @@ public class Robot extends IterativeRobot {
             superstructure.setWantScaleHeight();
         }
         superstructure.incrementHeight((int)(controller.liftIncrement() * Settings.Lift.NORMAL_SPEED));
-        System.out.println("Control: " + controller.liftIncrement());
     }
 
     @Override
