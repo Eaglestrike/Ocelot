@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.settings.Settings;
@@ -13,7 +14,9 @@ public class DriveSide {
         this.master = master;
         this.slave = slave;
 
-        slave.set(ControlMode.Follower, master.getDeviceID());
+        this.slave.set(ControlMode.Follower, master.getDeviceID());
+        this.master.setNeutralMode(NeutralMode.Coast);
+        this.slave.setNeutralMode(NeutralMode.Coast);
     }
 
     public void setInverted(boolean inverted) {

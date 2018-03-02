@@ -1,6 +1,7 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
+import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.PercentageRange;
 
@@ -13,13 +14,24 @@ public class DualController implements Controller {
     private final double basicDeadband = 0.02;
     private Carriage.ElevationStage lastState;
 
-    public DualController(Joystick left, Joystick right, Joystick operator) {
-        this.left = left;
-        this.right = right;
-        this.operator = operator;
+    // ====== UTIL ======
+    private double band(double x) {
+        return Math.abs(x) < basicDeadband ? 0 : x;
+    }
+
+    private double bandBigger(double x) {
+        return Math.abs(x) < 0.15 ? 0 : x;
+    }
+
+
+    public DualController() {
+        this.left = new Joystick(0);
+        this.right = new Joystick(1);
+        this.operator = new Joystick(2);
         lastState = Carriage.ElevationStage.RAISED;
     }
 
+    // ====== DRIVER ======
     private static double adjustThrottle(double throttle) {
         final double denominator = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.THROTTLE_GROWTH);
         // Apply a sin function that's scaled to make it feel better.
@@ -35,10 +47,6 @@ public class DualController implements Controller {
         wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
         wheel = Math.sin(Math.PI / 2.0 * Settings.CheesyDriveHelper.WHEEL_GROWTH * wheel) / denominator;
         return wheel;
-    }
-
-    private double band(double x) {
-        return Math.abs(x) < basicDeadband ? 0 : x;
     }
 
     @Override
@@ -63,40 +71,66 @@ public class DualController implements Controller {
         return left.getRawButton(1);
     }
 
-    @Override
-    public boolean liftUp() {
-        return band(operator.getY()) > 0;
-    }
+    // ====== OPERATOR ======
 
+    // carriage states
     @Override
-    public boolean liftDown() {
-        return band(operator.getY()) < 0;
-    }
-
-    @Override
-    public boolean spinIntakeIn() {
+    public boolean carriageOpen() {
         return operator.getRawButton(2);
     }
 
     @Override
-    public boolean spinIntakeOut() {
-        return operator.getRawButton(6);
-    }
-
-    @Override
-    public boolean intakeActuated() {
+    public boolean carriageIntake()  {
         return operator.getRawButton(1);
     }
 
     @Override
-    public Carriage.ElevationStage intakeElevationStage() {
-        if (operator.getRawButton(3)) {
+    public boolean carriageClose()  {
+        return operator.getRawButton(4);
+    }
+
+    @Override
+    public boolean carriageOuttake() {
+        return operator.getRawButton(3);
+    }
+
+    @Override
+    public Carriage.ElevationStage intakeElevation() {
+        if (operator.getRawButton(5)) {
             return lastState = Carriage.ElevationStage.RAISED;
-        } else if (operator.getRawButton(4)) {
+        } else if (operator.getRawAxis(2) > 0.75) {
             return lastState = Carriage.ElevationStage.MIDDLE;
-        } else if (operator.getRawButton(5)) {
+        } else if (operator.getRawAxis(3) > 0.75) {
             return lastState = Carriage.ElevationStage.LOWERED;
         }
         return lastState;
+    }
+
+    // lift height
+    @Override
+    public double liftIncrement() {
+//        return (operator.getRawButton(1) ? 1.0 : 0) + (operator.getRawButton(1) ? -1.0 : 0);
+        return bandBigger(-operator.getRawAxis(5));
+    }
+
+    @Override
+    public boolean lowHeight() {
+        System.out.println("pov: " + operator.getPOV(0));
+        return operator.getPOV(0) == 180;
+    }
+
+    @Override
+    public boolean switchHeight() {
+        return operator.getPOV(0) == 270;
+    }
+
+    @Override
+    public boolean scaleHeight() {
+        return operator.getPOV(0) == 0;
+    }
+
+    @Override
+    public boolean liftZeroCalibration() {
+        return operator.getRawButton(10);
     }
 }
