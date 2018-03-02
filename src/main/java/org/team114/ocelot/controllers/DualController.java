@@ -19,6 +19,11 @@ public class DualController implements Controller {
         return Math.abs(x) < basicDeadband ? 0 : x;
     }
 
+    private double bandBigger(double x) {
+        return Math.abs(x) < 0.15 ? 0 : x;
+    }
+
+
     public DualController() {
         this.left = new Joystick(0);
         this.right = new Joystick(1);
@@ -71,7 +76,7 @@ public class DualController implements Controller {
     // carriage states
     @Override
     public boolean carriageOpen() {
-        return operator.getRawButton(1);
+        return operator.getRawButton(2);
     }
 
     @Override
@@ -81,21 +86,21 @@ public class DualController implements Controller {
 
     @Override
     public boolean carriageClose()  {
-        return operator.getRawButton(1);
+        return operator.getRawButton(4);
     }
 
     @Override
     public boolean carriageOuttake() {
-        return operator.getRawButton(1);
+        return operator.getRawButton(3);
     }
 
     @Override
     public Carriage.ElevationStage intakeElevation() {
-        if (operator.getRawButton(3)) {
+        if (operator.getRawButton(5)) {
             return lastState = Carriage.ElevationStage.RAISED;
-        } else if (operator.getRawButton(4)) {
+        } else if (operator.getRawAxis(2) > 0.75) {
             return lastState = Carriage.ElevationStage.MIDDLE;
-        } else if (operator.getRawButton(5)) {
+        } else if (operator.getRawAxis(3) > 0.75) {
             return lastState = Carriage.ElevationStage.LOWERED;
         }
         return lastState;
@@ -104,26 +109,28 @@ public class DualController implements Controller {
     // lift height
     @Override
     public double liftIncrement() {
-        return (operator.getRawButton(1) ? 1.0 : 0) + (operator.getRawButton(1) ? -1.0 : 0);
+//        return (operator.getRawButton(1) ? 1.0 : 0) + (operator.getRawButton(1) ? -1.0 : 0);
+        return bandBigger(-operator.getRawAxis(5));
     }
 
     @Override
     public boolean lowHeight() {
-        return operator.getRawButton(1);
+        System.out.println("pov: " + operator.getPOV(0));
+        return operator.getPOV(0) == 180;
     }
 
     @Override
     public boolean switchHeight() {
-        return operator.getRawButton(1);
+        return operator.getPOV(0) == 270;
     }
 
     @Override
     public boolean scaleHeight() {
-        return operator.getRawButton(1);
+        return operator.getPOV(0) == 0;
     }
 
     @Override
     public boolean liftZeroCalibration() {
-        return operator.getRawButton(1);
+        return operator.getRawButton(10);
     }
 }

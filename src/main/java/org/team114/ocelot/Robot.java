@@ -17,6 +17,17 @@ import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
 
+// camera imports
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.IterativeRobot;
+
+
 import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
 import static org.team114.ocelot.factory.TalonFactory.newCimTalon;
 
@@ -110,8 +121,8 @@ public class Robot extends IterativeRobot {
                 new Compressor(),
                 pressureSensor);
         //TODO refactor these somewhere in settings and find the actual values
-        pneumatics.setMinimumPressure(100);
-        pneumatics.setPressureMargin(-1);
+        pneumatics.setMinimumPressure(85);
+        pneumatics.setPressureMargin(25);
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
@@ -120,6 +131,27 @@ public class Robot extends IterativeRobot {
                 superstructure,
                 pneumatics
         );
+
+        // camera
+        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setResolution(80, 60);
+//
+//        new Thread(() -> {
+//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+//            camera.setResolution(160, 120);
+//
+//            CvSink cvSink = CameraServer.getInstance().getVideo();
+//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 160, 120);
+//
+//            Mat source = new Mat();
+//            Mat output = new Mat();
+//
+//            while(!Thread.interrupted()) {
+//                cvSink.grabFrame(source);
+//                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+//                outputStream.putFrame(output);
+//            }
+//        }).start();
 
         // kick off subsystem manager
         subsystemManager.start();
@@ -143,6 +175,7 @@ public class Robot extends IterativeRobot {
         autoModeExecutor.stop();
         //TODO add more reset stuff
         drive.prepareForTeleop();
+        superstructure.setWantZero();
     }
 
     @Override
@@ -175,7 +208,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         // ==== DRIVER ====
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
-        drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
+        drive.setGear(!controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
 
         // ==== OPERATOR ====
 
@@ -202,6 +235,7 @@ public class Robot extends IterativeRobot {
             superstructure.setWantScaleHeight();
         }
         superstructure.incrementHeight((int)(controller.liftIncrement() * Settings.Lift.NORMAL_SPEED));
+        System.out.println("Control: " + controller.liftIncrement());
     }
 
     @Override

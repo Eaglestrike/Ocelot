@@ -7,8 +7,17 @@ import org.team114.ocelot.util.PercentageRange;
 public class ComposedEdgeDetectingController implements Controller {
 
     // would make it final but it doesn't compile
-    private Controller controller;
+    private final Controller controller;
     private final EdgeDetector.EdgeType toDetect;
+
+    private EdgeDetector cairrageOpen;
+    private EdgeDetector carriageIntake;
+    private EdgeDetector carriageClose;
+    private EdgeDetector carriageOuttake;
+    private EdgeDetector lowHeight;
+    private EdgeDetector switchHeight;
+    private EdgeDetector scaleHeight;
+    private EdgeDetector liftZeroCalibration;
 
     public ComposedEdgeDetectingController(Controller controller, EdgeDetector.EdgeType toDetect) {
         if (controller == null) {
@@ -16,6 +25,16 @@ public class ComposedEdgeDetectingController implements Controller {
         }
         this.controller = controller;
         this.toDetect = toDetect;
+
+        cairrageOpen = new EdgeDetector(controller::carriageOpen);
+        carriageIntake = new EdgeDetector(controller::carriageIntake);
+        carriageClose = new EdgeDetector(controller::carriageClose);
+        carriageOuttake = new EdgeDetector(controller::carriageOuttake);
+        lowHeight = new EdgeDetector(controller::lowHeight);
+        switchHeight = new EdgeDetector(controller::switchHeight);
+        scaleHeight = new EdgeDetector(controller::scaleHeight);
+        liftZeroCalibration = new EdgeDetector(controller::liftZeroCalibration);
+
     }
 
     @Override
@@ -41,25 +60,21 @@ public class ComposedEdgeDetectingController implements Controller {
     // ====== OPERATOR ======
 
     // carriage states
-    EdgeDetector cairrageOpen = new EdgeDetector(controller::carriageOpen);
     @Override
     public boolean carriageOpen() {
         return cairrageOpen.getEdge() == toDetect;
     }
 
-    EdgeDetector carriageIntake = new EdgeDetector(controller::carriageIntake);
     @Override
     public boolean carriageIntake() {
         return carriageIntake.getEdge() == toDetect;
     }
 
-    EdgeDetector carriageClose = new EdgeDetector(controller::carriageClose);
     @Override
     public boolean carriageClose() {
         return carriageClose.getEdge() == toDetect;
     }
 
-    EdgeDetector carriageOuttake = new EdgeDetector(controller::carriageOuttake);
     @Override
     public boolean carriageOuttake() {
         return carriageOuttake.getEdge() == toDetect;
@@ -76,26 +91,22 @@ public class ComposedEdgeDetectingController implements Controller {
         return controller.liftIncrement();
     }
 
-    EdgeDetector lowHeight = new EdgeDetector(controller::lowHeight);
     @Override
     public boolean lowHeight() {
-        return switchHeight.getEdge() == toDetect;
+        return lowHeight.getEdge() == toDetect;
     }
 
-    EdgeDetector switchHeight = new EdgeDetector(controller::switchHeight);
     @Override
     public boolean switchHeight() {
         return switchHeight.getEdge() == toDetect;
     }
 
-    EdgeDetector scaleHeight = new EdgeDetector(controller::scaleHeight);
     @Override
     public boolean scaleHeight() {
         return scaleHeight.getEdge() == toDetect;
     }
 
 
-    EdgeDetector liftZeroCalibration = new EdgeDetector(controller::liftZeroCalibration);
     @Override
     public boolean liftZeroCalibration() {
         return liftZeroCalibration.getEdge() == toDetect;

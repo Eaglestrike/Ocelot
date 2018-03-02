@@ -24,7 +24,7 @@ public class Pneumatics implements PneumaticsInterface {
     @Override
     public void onStep(double timestamp) {
         // give control to compressor look if desired
-        if (activationPressure < 0 && !compressor.getClosedLoopControl()) {
+        if (activationPressure < 0) {
             compressor.start();
             return;
         }
@@ -35,7 +35,7 @@ public class Pneumatics implements PneumaticsInterface {
             return;
         }
 
-        if (getPressure() > activationPressure + pressureMargin && compressor.getClosedLoopControl()) {
+        if (getPressure() > (activationPressure + pressureMargin) && compressor.getClosedLoopControl()) {
             compressor.stop();
             return;
         }

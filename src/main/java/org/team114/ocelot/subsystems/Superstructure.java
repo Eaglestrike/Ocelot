@@ -30,6 +30,8 @@ public class Superstructure implements SuperstructureInterface {
 
     private final DashboardHandle currentHeightDB = new DashboardHandle("Current Height");
     private final DashboardHandle goalHeightDB = new DashboardHandle("Goal Height");
+    private final DashboardHandle distanceSensorDB = new DashboardHandle("Distance To 'Box'");
+
 
     private final Carriage carriage;
     private final Lift lift;
@@ -57,6 +59,7 @@ public class Superstructure implements SuperstructureInterface {
 
         currentHeightDB.put(lift.getHeight());
         goalHeightDB.put(goalHeight);
+        distanceSensorDB.put(carriage.getDistance());
 
         // handle intake transitions
         switch (state.state) {
@@ -71,6 +74,7 @@ public class Superstructure implements SuperstructureInterface {
                 break;
             case OUTTAKING:
                 spinCarriage(Settings.Carriage.INTAKE_OUT_COMMAND);
+                System.out.println(timestamp + " : " + state.timestamp);
                 if (timestamp - state.timestamp > Settings.SuperStructure.OUTTAKE_TIME_SECONDS) {
                     setState(State.StateEnum.CLOSED, timestamp);
                 }
@@ -141,7 +145,13 @@ public class Superstructure implements SuperstructureInterface {
 
     @Override
     public void incrementHeight(int increment) {
-        setHeight(getHeight() + increment);
+        if (increment > 0 && lift.upperLimitSwitch()) {
+            return;
+        } else if (increment < 0 && lift.lowerLimitSwitch()) {
+            return;
+        }
+
+        setHeight(this.goalHeight + increment);
     }
 
     @Override
@@ -151,7 +161,7 @@ public class Superstructure implements SuperstructureInterface {
 
     @Override
     public void setHeight(int setPoint) {
-        goalHeight = Math.min(Math.max(setPoint, 0), Settings.Lift.MAX_HEIGHT_TICKS);
+        this.goalHeight = setPoint;
     }
 
     @Override

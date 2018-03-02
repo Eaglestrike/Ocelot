@@ -38,6 +38,7 @@ public class ProximitySensorGP2Y0A41SK0F {
      * Returns a linearized distance measurement, in centimeters.
      */
     public double get() {
+//        System.out.println("volt: " + distanceSensor.getVoltage());
         return voltageToDistanceCm.getInterpolated(new InterpolatingDouble(distanceSensor.getVoltage())).value;
     }
 }

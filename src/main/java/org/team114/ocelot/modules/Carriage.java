@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.team114.ocelot.settings.Settings;
@@ -29,6 +30,10 @@ public class Carriage {
         this.liftStageTwo = liftStageTwo;
         this.leftSpinner = leftSpinner;
         this.rightSpinner = rightSpinner;
+
+        this.leftSpinner.setNeutralMode(NeutralMode.Coast);
+        this.rightSpinner.setNeutralMode(NeutralMode.Coast);
+
         this.distanceSensor = distanceSensor;
     }
 
@@ -65,9 +70,15 @@ public class Carriage {
         rightSpinner.set(ControlMode.PercentOutput, command);
     }
 
+    public double getDistance() {
+        return distanceSensor.get();
+    }
+
     public void setSpeedToProximitySensor() {
         if (distanceSensor.get() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD_CM) {
             setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
+        } else {
+            setSpin(0);
         }
     }
 }

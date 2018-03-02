@@ -15,10 +15,10 @@ public class GearShifter {
 
     public void set(State state) {
         switch (state) {
-            case LOW:
+            case HIGH:
                 gearSolenoid.set(DoubleSolenoid.Value.kForward);
                 break;
-            case HIGH:
+            case LOW:
                 gearSolenoid.set(DoubleSolenoid.Value.kReverse);
                 break;
         }
