@@ -16,7 +16,6 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
-import edu.wpi.first.wpilibj.IterativeRobot;
 
 import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
 import static org.team114.ocelot.factory.TalonFactory.newCimTalon;
