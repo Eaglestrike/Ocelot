@@ -60,32 +60,21 @@ public class Lift {
 		/* zero the sensor */
     }
 
-    /**
-     * Checks all the limit switches and zeros encoders as (if) necessary.
-     * @return whether zero-ing was done
-     */
-    public boolean zeroEncodersIfNecessary() {
-        //lower zero
+    public boolean zeroLowerIfNecessary() {
         if (masterTalon.getSensorCollection().isRevLimitSwitchClosed()) {
             //TODO is it really zero?
             masterTalon.setSelectedSensorPosition(0, 0, 0);
             return true;
         }
+        return false;
+    }
 
-        //upper zero
+    public boolean zeroUpperIfNecessary() {
         if (masterTalon.getSensorCollection().isFwdLimitSwitchClosed()) {
             masterTalon.setSelectedSensorPosition(Settings.Lift.MAX_HEIGHT_TICKS, 0, 0);
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns true if either of the forward or reverse limit switch is triggered.
-     */
-    public boolean isLimitSwitchTriggered() {
-        return masterTalon.getSensorCollection().isRevLimitSwitchClosed() ||
-                masterTalon.getSensorCollection().isFwdLimitSwitchClosed();
     }
 
     /**

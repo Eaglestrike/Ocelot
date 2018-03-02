@@ -86,8 +86,7 @@ public class Superstructure implements SuperstructureInterface {
             case ZEROING:
                 carriage.setSpeedToProximitySensor();
                 incrementHeight(Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
-                if (lift.isLimitSwitchTriggered()) {
-                    lift.zeroEncodersIfNecessary();
+                if (lift.zeroLowerIfNecessary()) {
                     setHeight(0);
                     setState(State.StateEnum.CLOSED, timestamp);
                 }
@@ -96,7 +95,7 @@ public class Superstructure implements SuperstructureInterface {
     }
 
     private void setState(State.StateEnum state) {
-        this.state = new State(state, Timer.getFPGATimestamp());
+        setState(state, Timer.getFPGATimestamp());
     }
 
     private void setState(State.StateEnum state, double time) {
