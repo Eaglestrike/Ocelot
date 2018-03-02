@@ -16,17 +16,7 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
 import org.team114.lib.util.DashboardHandle;
-
-// camera imports
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-
 
 import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
 import static org.team114.ocelot.factory.TalonFactory.newCimTalon;
@@ -131,27 +121,6 @@ public class Robot extends IterativeRobot {
                 superstructure,
                 pneumatics
         );
-
-        // camera
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution(80, 60);
-//
-//        new Thread(() -> {
-//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-//            camera.setResolution(160, 120);
-//
-//            CvSink cvSink = CameraServer.getInstance().getVideo();
-//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 160, 120);
-//
-//            Mat source = new Mat();
-//            Mat output = new Mat();
-//
-//            while(!Thread.interrupted()) {
-//                cvSink.grabFrame(source);
-//                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-//                outputStream.putFrame(output);
-//            }
-//        }).start();
 
         // kick off subsystem manager
         subsystemManager.start();
