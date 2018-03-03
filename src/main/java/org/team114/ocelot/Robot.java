@@ -36,9 +36,9 @@ public class Robot extends IterativeRobot {
     private RobotState robotState = new RobotState();
 
     // subsystems
-    private DriveInterface drive;
-    private SuperstructureInterface superstructure;
-    private PneumaticsInterface pneumatics;
+    private Drive drive;
+    private Superstructure superstructure;
+    private Pneumatics pneumatics;
 
     // modules
     private Gyro gyro;
@@ -97,16 +97,16 @@ public class Robot extends IterativeRobot {
                 new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH));
 
         // create subsystems
-        drive = new Drive(
+        drive = new StandardDrive(
                 robotState,
                 gyro,
                 leftSide,
                 rightSide,
                 gearShifter);
-        superstructure = new Superstructure(
+        superstructure = new StandardSuperstructure(
                 carriage,
                 lift);
-        pneumatics = new Pneumatics(
+        pneumatics = new StandardPneumatics(
                 new Compressor(),
                 pressureSensor);
         //TODO refactor these somewhere in settings and find the actual values
