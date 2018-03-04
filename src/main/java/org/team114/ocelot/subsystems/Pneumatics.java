@@ -1,68 +1,34 @@
 package org.team114.ocelot.subsystems;
 
-import edu.wpi.first.wpilibj.Compressor;
-import org.team114.ocelot.modules.PneumaticPressureSensor;
-import org.team114.ocelot.settings.Settings;
+import org.team114.lib.subsystem.Subsystem;
 
-public class Pneumatics implements PneumaticsInterface {
-    private final Compressor compressor;
-    private final PneumaticPressureSensor pressureSensor;
-    private double activationPressure = -1;
-    private double pressureMargin = Settings.Pneumatics.DEFAULT_PRESSURE_MARGIN;
+public interface Pneumatics extends Subsystem {
+    /**
+     * Returns the pressure of the pneumatic system
+     */
+    double getPressure();
 
-    public Pneumatics(Compressor compressor, PneumaticPressureSensor pressureSensor) {
-        this.compressor = compressor;
-        this.pressureSensor = pressureSensor;
-    }
+    /**
+     * Returns the state of the compressor (on/off).
+     */
+    boolean compressing();
 
-    @Override
-    public void onStart(double timestamp) {}
+    /**
+     * Hands off controlling pressure to the compressor.
+     * Re-enable by setting minimum pressure.
+     */
+    void unset();
 
-    @Override
-    public void onStop(double timestamp) {}
+    /**
+     * Sets the point at which the pressure will turn on. The guarantee is that
+     * the compressor will be on (hence conserving power) if the pressure is
+     * below this point.
+     * @param pressure the point which will trigger the compressor.
+     */
+    void setMinimumPressure(double pressure);
 
-    @Override
-    public void onStep(double timestamp) {
-        // give control to compressor look if desired
-        if (activationPressure < 0) {
-            compressor.start();
-            return;
-        }
-
-        // handle thresholding
-        if (getPressure() < activationPressure && !compressor.getClosedLoopControl()) {
-            compressor.start();
-            return;
-        }
-
-        if (getPressure() > (activationPressure + pressureMargin) && compressor.getClosedLoopControl()) {
-            compressor.stop();
-            return;
-        }
-    }
-
-    @Override
-    public double getPressure() {
-        return pressureSensor.getPressure();
-    }
-
-    @Override
-    public boolean compressing() {
-        return compressor.enabled();
-    }
-
-    @Override
-    public void setMinimumPressure(double pressure) {
-        activationPressure = Math.min(pressure, 100);
-    }
-
-    @Override
-    public void unset() {
-        setMinimumPressure(-1);
-    }
-
-    @Override
-    public void setPressureMargin(double margin) {
-        pressureMargin = margin;
-    }
+    /**
+     * The psi above the minimum pressure at which the compressor will stop compressing.
+     */
+    void setPressureMargin(double margin);
 }
