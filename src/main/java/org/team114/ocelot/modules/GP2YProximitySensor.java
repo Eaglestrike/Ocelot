@@ -41,6 +41,7 @@ public class GP2YProximitySensor implements ProximitySensor {
     /**
      * Returns a linearized distance measurement, in centimeters.
      */
+    @Override
     public double get() {
         return voltageToDistanceCm.getInterpolated(new InterpolatingDouble(distanceSensor.getVoltage())).value;
     }
