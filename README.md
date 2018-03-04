@@ -43,7 +43,6 @@ Congratulations.
 
 We attempt to follow the
 [Google Java Style guide](https://google.github.io/styleguide/javaguide.html),
-except that:
-
-1. We use 4 spaces for indents, in contravention of section
-[4.2](https://google.github.io/styleguide/javaguide.html).
+except that we follow the Intellij defaults in most cases where they disagree.
+We do not support any other editor, although programmers are permitted to use one
+if they configure it to follow the same conventions.
