@@ -36,6 +36,18 @@ public final class Settings {
         public static final double DEFAULT_PRESSURE_MARGIN = 60;
     }
 
+    public static final class Controller {
+        private Controller() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
+        public static final int LEFT_ID = 0;
+        public static final int RIGHT_ID = 1;
+        public static final int XBOX_ID = 2;
+
+        public static final double STANDARD_DEADBAND = 0.2;
+        public static final double FREER_DEADBAND = 0.15;
+    }
+
     public static final class DriveSide {
         private DriveSide() {
             throw new AssertionError("Constructor must not be called on utility class.");

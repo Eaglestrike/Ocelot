@@ -9,27 +9,27 @@ public class DualController implements Controller {
 
     private final Joystick left;
     private final Joystick right;
-    private final Joystick operator;
+    private final XboxController xbox;
 
-    private final double basicDeadband = 0.02;
     private Carriage.ElevationStage lastState;
+
+    public DualController(Joystick left, Joystick right, XboxController xbox) {
+        this.left = left;
+        this.right = right;
+        this.xbox = xbox;
+
+        lastState = Carriage.ElevationStage.RAISED;
+    }
 
     // ====== UTIL ======
     private double band(double x) {
-        return Math.abs(x) < basicDeadband ? 0 : x;
+        return Math.abs(x) < Settings.Controller.STANDARD_DEADBAND ? 0 : x;
     }
 
     private double bandBigger(double x) {
-        return Math.abs(x) < 0.15 ? 0 : x;
+        return Math.abs(x) < Settings.Controller.FREER_DEADBAND ? 0 : x;
     }
 
-
-    public DualController() {
-        this.left = new Joystick(0);
-        this.right = new Joystick(1);
-        this.operator = new Joystick(2);
-        lastState = Carriage.ElevationStage.RAISED;
-    }
 
     // ====== DRIVER ======
     private static double adjustThrottle(double throttle) {
@@ -76,31 +76,31 @@ public class DualController implements Controller {
     // carriage states
     @Override
     public boolean carriageOpen() {
-        return operator.getRawButton(2);
+        return xbox.b();
     }
 
     @Override
     public boolean carriageIntake()  {
-        return operator.getRawButton(1);
+        return xbox.a();
     }
 
     @Override
     public boolean carriageClose()  {
-        return operator.getRawButton(4);
+        return xbox.y();
     }
 
     @Override
     public boolean carriageOuttake() {
-        return operator.getRawButton(3);
+        return xbox.x();
     }
 
     @Override
     public Carriage.ElevationStage intakeElevation() {
-        if (operator.getRawButton(5)) {
+        if (xbox.leftBumper()) {
             return lastState = Carriage.ElevationStage.RAISED;
-        } else if (operator.getRawAxis(2) > 0.75) {
+        } else if (xbox.leftTrigger() > 0.75) {
             return lastState = Carriage.ElevationStage.MIDDLE;
-        } else if (operator.getRawAxis(3) > 0.75) {
+        } else if (xbox.rightTrigger() > 0.75) {
             return lastState = Carriage.ElevationStage.LOWERED;
         }
         return lastState;
@@ -109,28 +109,27 @@ public class DualController implements Controller {
     // lift height
     @Override
     public double liftIncrement() {
-//        return (operator.getRawButton(1) ? 1.0 : 0) + (operator.getRawButton(1) ? -1.0 : 0);
-        return bandBigger(-operator.getRawAxis(5));
+        return bandBigger(-xbox.rightYAxis());
     }
 
     @Override
     public boolean lowHeight() {
-        System.out.println("pov: " + operator.getPOV(0));
-        return operator.getPOV(0) == 180;
+        System.out.println("pov: " + xbox.arrowPad());
+        return xbox.arrowPad() == 180;
     }
 
     @Override
     public boolean switchHeight() {
-        return operator.getPOV(0) == 270;
+        return xbox.arrowPad() == 270;
     }
 
     @Override
     public boolean scaleHeight() {
-        return operator.getPOV(0) == 0;
+        return xbox.arrowPad() == 0;
     }
 
     @Override
     public boolean liftZeroCalibration() {
-        return operator.getRawButton(10);
+        return xbox.rightStickPressed();
     }
 }

@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -46,6 +46,14 @@ public class XboxController {
         return stick.getRawButton(6);
     }
 
+    public boolean leftStickPressed() {
+        return stick.getRawButton(9);
+    }
+
+    public boolean rightStickPressed() {
+        return stick.getRawButton(10);
+    }
+
     /**
      * Gets the left trigger value.
      * @return trigger value, always positive
@@ -77,4 +85,9 @@ public class XboxController {
     public double rightYAxis() {
         return stick.getRawAxis(5);
     }
+
+    public int arrowPad() {
+        return stick.getPOV(0);
+    }
+
 }
