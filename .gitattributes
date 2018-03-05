@@ -5,3 +5,7 @@
 *.txt text
 *.java text
 *.md text
+
+# Make exception for Windows scripts
+
+*.bat eol=crlf
