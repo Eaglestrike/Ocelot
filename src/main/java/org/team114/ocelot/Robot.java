@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
         ), EdgeDetector.EdgeType.RISING);
 
         // create modules
-        gyro = Gyro.shared;
+        gyro = NavXGyro.shared;
         gearShifter = new GearShifter(
                 new DoubleSolenoid(
                         Settings.GearShifter.HIGH_GEAR,
