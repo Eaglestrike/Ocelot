@@ -5,35 +5,40 @@ import org.team114.ocelot.modules.Carriage;
 
 public interface Superstructure extends Subsystem {
     /**
-     * Returns the height of the lift, in feet.
+     * Returns the height of the lift.
+     * @return height of the lift in feet
      */
     int getHeight();
 
     /**
-     * Shift the setpoint of the lift, in feet.
+     * Shift the setpoint of the lift.
+     * @param increment height by which to move the lift up, in feet.
      */
     void incrementHeight(int increment);
 
     /**
-     * Set the lift height
+     * Set the lift height.
+     * @param setPoint goal height in feet.
      */
     void setHeight(int setPoint);
 
     /**
-     * Opens or closes the carriage
+     * Opens or closes the carriage.
+     * @param open whether the carriage should be open or closed.
      */
     void actuateCarriage(boolean open);
 
     /**
      * Spins the wheels on the carriage if spin is true.
+     * @param command percentage output for the carriage
      */
     void spinCarriage(double command);
 
     /**
      * Lift the carriage to the selected stage.
+     * @param stage which height the carriage should go to
      */
     void actuateIntakeLift(Carriage.ElevationStage stage);
-
 
     /**
      * Configures the carriage for intaking boxes

@@ -6,6 +6,9 @@ import org.team114.ocelot.settings.Settings;
 
 import static org.team114.ocelot.settings.Settings.TALON_CONFIG_TIMEOUT_MS;
 
+/**
+ * Constructs appropriately configured talons from ids.
+ */
 public final class TalonFactory {
 
     private TalonFactory() {

@@ -2,15 +2,25 @@ package org.team114.ocelot.util;
 
 import org.team114.lib.geometry.Point;
 
+/**
+ * Represents the position and direction of the robot.
+ */
 public class Pose {
     private final double x;
     private final double y;
     private final double velocity;
     /**
-     * The direction it is facing, in radians.
+     * The direction the robot is facing, in radians.
      */
     private final double heading;
 
+    /**
+     * Constructs a pose from required data.
+     * @param x the x location of the robot
+     * @param y the y location of the robot
+     * @param heading the direction the robot is facing, in radians
+     * @param velocity the speed the robot is moving in feet per second
+     */
     public Pose(double x, double y, double heading, double velocity) {
         this.x = x;
         this.y = y;
@@ -18,10 +28,18 @@ public class Pose {
         this.velocity = velocity;
     }
 
+    /**
+     * Returns the location of the robot.
+     * @return the robot location represented by this pose, translated into a point
+     */
     public Point getPoint() {
         return new Point(x, y);
     }
 
+    /**
+     * Returns the direction the robot is facing.
+     * @return the direction the robot is facing according to this pose in radians
+     */
     public double getHeading() {
         return this.heading;
     }
@@ -34,7 +52,13 @@ public class Pose {
         return this.y;
     }
 
-    public double getVelocity() {return velocity;}
+    /**
+     * Returns the current speed of the robot.
+     * @return speed the robot is moving according to this pose in feet per second
+     */
+    public double getVelocity() {
+        return velocity;
+    }
 
     /**
      * Transform a point in the same coordinate frame as the Pose is to one in a robot-centric frame.

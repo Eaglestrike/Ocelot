@@ -6,6 +6,10 @@ import org.team114.ocelot.util.PercentageRange;
 
 import java.util.Objects;
 
+/**
+ * Wraps a controller with {@link EdgeDetector EdgeDetectors} to check
+ * for only changes in inputs.
+ */
 public class ComposedEdgeDetectingController implements Controller {
 
     private final Controller controller;
@@ -20,6 +24,12 @@ public class ComposedEdgeDetectingController implements Controller {
     private final EdgeDetector scaleHeight;
     private final EdgeDetector liftZeroCalibration;
 
+    /**
+     * Constructs an instance from a controller and a detected edge type.
+     * @param controller The controller to wrap.
+     * @param toDetect The type of edge to be detected. This will usually be either RISING
+     *                 or FALLING.
+     */
     public ComposedEdgeDetectingController(Controller controller, EdgeDetector.EdgeType toDetect) {
         Objects.requireNonNull(controller, "The controller cannot be null!");
 

@@ -5,6 +5,9 @@ import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.PercentageRange;
 
+/**
+ * Our primary controller, based upon two joysticks and an xbox controller.
+ */
 public class DualController implements Controller {
 
     private final Joystick left;

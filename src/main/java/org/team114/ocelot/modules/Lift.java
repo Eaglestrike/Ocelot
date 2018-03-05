@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.team114.ocelot.settings.Settings;
 
+/**
+ * The elevator for the robot.
+ */
 public class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;

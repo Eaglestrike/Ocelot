@@ -1,12 +1,11 @@
 package org.team114.lib.util;
 
 /*
- * This code was released by FRC Team 254 under the MIT license
- * it has been modified.
+ * The original version of this code was released by FRC Team 254 under the MIT license.
  */
 
 /**
- * A Double that can be interpolated using the InterpolatingTreeMap.
+ * Double that can be interpolated using the InterpolatingTreeMap.
  * 
  * @see InterpolatingTreeMap
  */
@@ -27,26 +26,20 @@ public class InterpolatingDouble implements Interpolable<InterpolatingDouble>, I
 
     @Override
     public double inverseInterpolate(InterpolatingDouble upper, InterpolatingDouble query) {
-        double upper_to_lower = upper.value - value;
-        if (upper_to_lower <= 0) {
+        double upperToLower = upper.value - value;
+        if (upperToLower <= 0) {
             return 0;
         }
-        double query_to_lower = query.value - value;
-        if (query_to_lower <= 0) {
+        double queryToLower = query.value - value;
+        if (queryToLower <= 0) {
             return 0;
         }
-        return query_to_lower / upper_to_lower;
+        return queryToLower / upperToLower;
     }
 
     @Override
     public int compareTo(InterpolatingDouble other) {
-        if (other.value < value) {
-            return 1;
-        } else if (other.value > value) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Double.compare(value, other.value);
     }
 
 }

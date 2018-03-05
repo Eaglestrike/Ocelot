@@ -3,7 +3,7 @@ package org.team114.ocelot.util;
 import org.team114.ocelot.logging.Errors;
 
 /**
- * Represents a (-1.0,1.0) range
+ * Represents a (-1.0, 1.0) range
  */
 public class PercentageRange {
     private static final PercentageRange ZERO = new PercentageRange(0.0);

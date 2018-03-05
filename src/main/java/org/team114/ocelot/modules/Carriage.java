@@ -6,6 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.team114.ocelot.settings.Settings;
 
+/**
+ * The grabber/thrower unit of the robot.
+ */
 public class Carriage {
     public enum ElevationStage {
         RAISED, MIDDLE, LOWERED

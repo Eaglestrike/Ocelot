@@ -3,6 +3,9 @@ package org.team114.ocelot.logging;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * An abstract implementation of {@link Loggable}.
+ */
 public abstract class AbstractLoggable implements Loggable {
     private final UUID id = UUID.randomUUID();
     private final Instant timestamp = Instant.now();

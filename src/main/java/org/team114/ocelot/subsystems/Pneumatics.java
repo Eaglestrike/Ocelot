@@ -4,12 +4,14 @@ import org.team114.lib.subsystem.Subsystem;
 
 public interface Pneumatics extends Subsystem {
     /**
-     * Returns the pressure of the pneumatic system
+     * Returns the pressure of the pneumatic system.
+     * @return pressure in psi
      */
     double getPressure();
 
     /**
      * Returns the state of the compressor (on/off).
+     * @return whether the compressor is on or not.
      */
     boolean compressing();
 
@@ -28,7 +30,8 @@ public interface Pneumatics extends Subsystem {
     void setMinimumPressure(double pressure);
 
     /**
-     * The psi above the minimum pressure at which the compressor will stop compressing.
+     * Sets the pressure margin.
+     * @param margin the psi above the minimum pressure at which the compressor will stop compressing.
      */
     void setPressureMargin(double margin);
 }

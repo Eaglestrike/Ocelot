@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Anything which can be logged.
+ */
 public interface Loggable {
 
     UUID getId();

@@ -3,6 +3,9 @@ package org.team114.ocelot.controllers;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.util.PercentageRange;
 
+/**
+ * Translates requests for functional control input into bindings.
+ */
 public interface Controller {
     // ====== DRIVER ======
 
