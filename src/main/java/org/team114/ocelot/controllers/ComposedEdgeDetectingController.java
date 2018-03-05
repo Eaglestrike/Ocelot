@@ -4,25 +4,25 @@ import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.util.PercentageRange;
 
+import java.util.Objects;
+
 public class ComposedEdgeDetectingController implements Controller {
 
-    // would make it final but it doesn't compile
     private final Controller controller;
     private final EdgeDetector.EdgeType toDetect;
 
-    private EdgeDetector cairrageOpen;
-    private EdgeDetector carriageIntake;
-    private EdgeDetector carriageClose;
-    private EdgeDetector carriageOuttake;
-    private EdgeDetector lowHeight;
-    private EdgeDetector switchHeight;
-    private EdgeDetector scaleHeight;
-    private EdgeDetector liftZeroCalibration;
+    private final EdgeDetector cairrageOpen;
+    private final EdgeDetector carriageIntake;
+    private final EdgeDetector carriageClose;
+    private final EdgeDetector carriageOuttake;
+    private final EdgeDetector lowHeight;
+    private final EdgeDetector switchHeight;
+    private final EdgeDetector scaleHeight;
+    private final EdgeDetector liftZeroCalibration;
 
     public ComposedEdgeDetectingController(Controller controller, EdgeDetector.EdgeType toDetect) {
-        if (controller == null) {
-            throw new IllegalArgumentException("The controller cannot be null!");
-        }
+        Objects.requireNonNull(controller, "The controller cannot be null!");
+
         this.controller = controller;
         this.toDetect = toDetect;
 
