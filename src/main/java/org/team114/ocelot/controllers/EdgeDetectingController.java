@@ -10,7 +10,7 @@ import java.util.Objects;
  * Wraps a controller with {@link EdgeDetector EdgeDetectors} to check
  * for only changes in inputs.
  */
-public class ComposedEdgeDetectingController implements Controller {
+public class EdgeDetectingController implements Controller {
 
     private final Controller controller;
     private final EdgeDetector.EdgeType toDetect;
@@ -30,7 +30,7 @@ public class ComposedEdgeDetectingController implements Controller {
      * @param toDetect The type of edge to be detected. This will usually be either RISING
      *                 or FALLING.
      */
-    public ComposedEdgeDetectingController(Controller controller, EdgeDetector.EdgeType toDetect) {
+    public EdgeDetectingController(Controller controller, EdgeDetector.EdgeType toDetect) {
         Objects.requireNonNull(controller, "The controller cannot be null!");
 
         this.controller = controller;
