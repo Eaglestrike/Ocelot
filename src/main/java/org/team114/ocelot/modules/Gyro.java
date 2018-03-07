@@ -2,6 +2,7 @@ package org.team114.ocelot.modules;
 
 /**
  * A gyroscope.
+ * All angles are CCW.
  */
 public interface Gyro {
     /**
@@ -18,6 +19,7 @@ public interface Gyro {
 
     /**
      * Runs initial setup for the gyroscope.
+     * After this method is run, the gyro points at 90 degrees.
      */
     void init();
 }
