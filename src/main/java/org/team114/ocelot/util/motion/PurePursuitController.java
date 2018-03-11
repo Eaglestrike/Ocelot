@@ -1,6 +1,7 @@
 package org.team114.ocelot.util.motion;
 
 import org.team114.lib.geometry.Point;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.util.Pose;
 
 public class PurePursuitController {
@@ -20,11 +21,9 @@ public class PurePursuitController {
     private final double lookAheadDistance;
 
     private boolean isFinished = false;
-    private int lastLookAheadPoint;
+    private int lastLookAheadIndex;
     private double finishMargin;
-
-    // not currently used, may be needed for a motion profile
-    double finalVelocity;
+    
     double pathLength;
 
     public PurePursuitController(PathPointList path, double lookAheadDistance, double finishMargin, double finalVelocity) {
@@ -32,28 +31,20 @@ public class PurePursuitController {
         this.path = path;
         this.finishMargin = finishMargin;
 
-        this.lastLookAheadPoint = 0;
-
-        if (false) { // will be used if a motion profile is implemented
-            this.finalVelocity = finalVelocity;
-            if (this.path.pathComponentList.size() > 0) {
-                pathLength = this.path.get(this.path.pathComponentList.size()-1).getDistance();
-            } else {
-                pathLength = 0;
-            }
-        }
+        this.lastLookAheadIndex = 0;
+        pathLength = this.path.goalComponent.getDistance();
     }
 
     /**
      * Returns the closest point on the path to the pose
      */
     private PathComponent getLookAheadPoint(Pose pose) {
-        int search = lastLookAheadPoint;
+        int search = lastLookAheadIndex;
         while (path.get(search).getLocation().dist(pose.getPoint()) < lookAheadDistance &&
-                search < path.pathComponentList.size()-1) {
+                search < path.mainPathPoints.size()-1) {
             search++;
         }
-        lastLookAheadPoint = search;
+        lastLookAheadIndex = search;
         return path.get(search);
     }
 
@@ -61,11 +52,8 @@ public class PurePursuitController {
         // closest point to pose along path
         PathComponent targetComponent = getLookAheadPoint(pose);
 
-        if (isFinished ||
-            path.pathComponentList.isEmpty() ||
-            path.pathComponentList.get(path.pathComponentList.size() - 1).getLocation().dist(pose.getPoint()) < finishMargin) {
-            isFinished = true;
-            return new DriveArcCommand(0,0);
+        if (testIsFinished(pose)) {
+            return new DriveArcCommand(0, 0);
         }
 
         Point targetPoint = targetComponent.getLocation();
@@ -73,10 +61,22 @@ public class PurePursuitController {
         double signedCurvature = (2 * robotCentricTarget.x()) / robotCentricTarget.hyp2(new Point(0,0));
 
         //TODO: replace with a motion profile?
-        //TODO: update constant with something in robot settings
-        double targetVelocity = Math.min(5.0, 1.5 * targetPoint.dist(pose.getPoint()));
+        double targetVelocity = Math.min(Settings.PurePursuit.CRUISE_VELOCITY,
+                // might get jittery with very few points, can replace lookAheadDistance with actual distance
+                Settings.PurePursuit.DISTANCE_DECAY_CONSTANT *
+                        (lookAheadDistance + pathLength - targetComponent.getDistance())
+        );
 
         return new DriveArcCommand(signedCurvature, targetVelocity);
+    }
+
+
+    private boolean testIsFinished(Pose pose) {
+        // if we finish for real, our lookahead is past the goal and our robot has crossed the finish line
+        return isFinished = (isFinished ||
+            path.mainPathPoints.isEmpty() ||
+                (lastLookAheadIndex > path.goalComponentIndex && path.isPastFinishLine(pose.getPoint()))
+        );
     }
 
     public boolean isFinished() {
