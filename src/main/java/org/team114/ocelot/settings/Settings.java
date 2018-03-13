@@ -29,7 +29,9 @@ public final class Settings {
     }
 
     public static final class PurePursuit {
-        private PurePursuit() {throw new AssertionError("Constructor must not be called on utility class."); }
+        private PurePursuit() {
+            throw new AssertionError("Constructor must not be called on utility class.");
+        }
         public static final double CRUISE_VELOCITY = 5.0;
         public static final double DISTANCE_DECAY_CONSTANT = 1.5;
     }
