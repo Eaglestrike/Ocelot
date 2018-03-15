@@ -12,6 +12,7 @@ import org.team114.ocelot.controllers.EdgeDetectingController;
 import org.team114.ocelot.controllers.Controller;
 import org.team114.ocelot.controllers.DualController;
 import org.team114.ocelot.controllers.XboxController;
+import org.team114.ocelot.factory.ControllerFactory;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
@@ -69,11 +70,7 @@ public class Robot extends IterativeRobot {
         // create driver-facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
         cheesyDrive = new CheesyDriveHelper();
-        controller = new EdgeDetectingController(new DualController(
-                new Joystick(Settings.Controller.LEFT_ID),
-                new Joystick(Settings.Controller.RIGHT_ID),
-                new XboxController(new Joystick(Settings.Controller.XBOX_ID))
-        ), EdgeDetector.EdgeType.RISING);
+        controller = new EdgeDetectingController(ControllerFactory.dualController(), EdgeDetector.EdgeType.RISING);
 
         // create modules
         gyro = NavXGyro.shared;
