@@ -2,15 +2,23 @@ package org.team114.ocelot.auto.actions;
 
 import org.team114.ocelot.subsystems.Superstructure;
 
-public class ZeroLiftAction extends MoveLiftAction {
+/**
+ * Tells the lift to zero.
+ */
+public class ZeroLiftOneShotAction extends OneShotAction {
+    private Superstructure superstructure;
+
     /**
      * Given the superstructure, constructs an instance.
      * @param superstructure the superstructure
      */
-    public ZeroLiftAction(Superstructure superstructure) {
-        super(superstructure, 0);
+    public ZeroLiftOneShotAction(Superstructure superstructure) {
+        this.superstructure = superstructure;
     }
 
+    /**
+     * Zeros the lift.
+     */
     @Override
     public void start() {
         superstructure.setWantZero();
