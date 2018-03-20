@@ -6,19 +6,19 @@ import org.team114.ocelot.modules.Carriage;
 public interface Superstructure extends Subsystem {
     /**
      * Returns the height of the lift.
-     * @return height of the lift in feet
+     * @return height of the lift in ticks
      */
     int getHeight();
 
     /**
      * Shift the setpoint of the lift.
-     * @param increment height by which to move the lift up, in feet.
+     * @param increment height by which to move the lift up, in ticks.
      */
     void incrementHeight(int increment);
 
     /**
      * Set the lift height.
-     * @param setPoint goal height in feet.
+     * @param setPoint goal height in ticks.
      */
     void setHeight(int setPoint);
 
