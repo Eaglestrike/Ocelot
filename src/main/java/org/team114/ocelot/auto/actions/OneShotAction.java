@@ -3,7 +3,7 @@ package org.team114.ocelot.auto.actions;
 import org.team114.lib.auto.actions.Action;
 
 /**
- * An action that happens all at once.
+ * An action that happens all at once, in the start method.
  */
 public abstract class OneShotAction implements Action {
 
@@ -28,5 +28,4 @@ public abstract class OneShotAction implements Action {
     public final boolean finished() {
         return true;
     }
-
 }

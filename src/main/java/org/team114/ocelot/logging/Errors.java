@@ -24,9 +24,9 @@ public class Errors {
 
     /**
      * Asserts that something is true, logging and throwing an error if it isn't.
-     * @throws AssertionError if assertion is false
      * @param assertion condition which must be true
      * @param messageSource a supplied for a message to log if assertion is false.
+     * @throws AssertionError if assertion is false
      */
     public static void assertThat(boolean assertion, Supplier<String> messageSource) {
         if (assertion) {
