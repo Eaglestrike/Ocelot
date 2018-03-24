@@ -2,10 +2,9 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
+    id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
     id "net.ltgt.errorprone" version "0.0.13"
 }
-
 
 sourceCompatibility = 1.8
 
@@ -63,5 +62,5 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "4.5.1"
+    gradleVersion = "4.6"
 }
