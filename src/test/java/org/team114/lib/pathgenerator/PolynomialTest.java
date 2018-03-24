@@ -1,9 +1,8 @@
 package org.team114.lib.pathgenerator;
 
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // NOTE: this test depends on EpsilonTest!
 public class PolynomialTest {

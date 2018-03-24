@@ -1,27 +1,23 @@
 package org.team114.lib.pathgenerator;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CubicHermiteSplineTest {
 
     @Test
     public void testDegreeChecking() {
-            new CubicHermiteSpline(new double[]{7, 3, 5, 1});
-            new CubicHermiteSpline(new double[]{0, 3, 5, 0});
-            new CubicHermiteSpline(new double[]{0, 0, 0, 0});
+        // must not throw
+        new CubicHermiteSpline(new double[]{7, 3, 5, 1});
+        new CubicHermiteSpline(new double[]{0, 3, 5, 0});
+        new CubicHermiteSpline(new double[]{0, 0, 0, 0});
 
-        try {
-            new CubicHermiteSpline(new double[]{7, 3, 5});
-            fail();
-        } catch (Exception ignored) {
-        }
+        // must throw
+        assertThrows(IllegalArgumentException.class, () -> new CubicHermiteSpline(new double[]{7, 3, 5}),
+                "Must throw for degree ≠ 3.");
 
-        try {
-            new CubicHermiteSpline(new double[]{7, 3, 5, 19, 21});
-            fail();
-        } catch (Exception ignored) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> new CubicHermiteSpline(new double[]{7, 3, 5, 19, 21}),
+                "Must throw for degree ≠ 3.");
     }
 }
