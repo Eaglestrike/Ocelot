@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PolynomialSplineTest {
+class PolynomialSplineTest {
 
     private PolynomialSpline p = new PolynomialSpline(new double[]{7, 3, 5, 15, 2.2, -5.5, 0.0145, -0.234});
 
     @Test
-    public void testBoundsCheckingValues() {
+    void testBoundsCheckingValues() {
         // must not throw
         p.at(0);
         p.at(0.5);
@@ -26,7 +26,7 @@ public class PolynomialSplineTest {
     }
 
     @Test
-    public void testBoundsCheckingDerivatives() {
+    void testBoundsCheckingDerivatives() {
 
         //must not throw
         p.dfdt(0);

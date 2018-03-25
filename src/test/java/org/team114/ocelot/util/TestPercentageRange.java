@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.team114.lib.util.Epsilon.EPSILON;
 
-public class TestPercentageRange {
+class TestPercentageRange {
     @Test
-    public void testDeadBand() {
+    void testDeadBand() {
         PercentageRange percentageRange = new PercentageRange(0.01);
         assertEquals(0.0, percentageRange.deadband(0.02).unscaled(), EPSILON);
         percentageRange = new PercentageRange(0.021);
@@ -20,7 +20,7 @@ public class TestPercentageRange {
      * Ensures that the limit of [-1.0, 1.0] is respected.
      */
     @Test
-    public void testLimit() {
+    void testLimit() {
         PercentageRange percentageRange = new PercentageRange(1.0);
         assertEquals(1.0, percentageRange.unscaled(), EPSILON);
         percentageRange = new PercentageRange(1.01);
@@ -34,7 +34,7 @@ public class TestPercentageRange {
     }
 
     @Test
-    public void testScaling() {
+    void testScaling() {
         PercentageRange pr = new PercentageRange(0.5);
         assertEquals(pr.scaled(10), 5, EPSILON);
         assertEquals(pr.scaled(-1), -0.5, EPSILON);

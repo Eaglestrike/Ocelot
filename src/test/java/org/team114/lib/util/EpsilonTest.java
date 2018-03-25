@@ -5,36 +5,36 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EpsilonTest {
+class EpsilonTest {
     @Test
-    public void testEpsilonEqualsNearZero() {
+    void testEpsilonEqualsNearZero() {
         generalEpsilonTest(0);
         generalEpsilonTest(1e-5);
         generalEpsilonTest(-1e-3);
     }
 
     @Test
-    public void testEpsilonNegativeSmall() {
+    void testEpsilonNegativeSmall() {
         generalEpsilonTest(-5);
     }
 
     @Test
-    public void testEpsilonPositiveSmall() {
+    void testEpsilonPositiveSmall() {
         generalEpsilonTest(7);
     }
 
     @Test
-    public void testEpsilonNegativeLarge() {
+    void testEpsilonNegativeLarge() {
         generalEpsilonTest(-1e10 + 31278);
     }
 
     @Test
-    public void testEpsilonPositiveLarge() {
+    void testEpsilonPositiveLarge() {
         generalEpsilonTest(1e10 + 3123);
     }
 
 
-    public void generalEpsilonTest(double start) {
+    void generalEpsilonTest(double start) {
         assertTrue(Epsilon.epsilonEquals(start, start)); //reflexive
 
         assertFalse(Epsilon.epsilonEquals(start, start + 1)); //converse reflexive

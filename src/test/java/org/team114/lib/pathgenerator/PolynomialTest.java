@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // NOTE: this test depends on EpsilonTest!
-public class PolynomialTest {
+class PolynomialTest {
 
     @Test
-    public void lowCoefficientPolynomialsEvaluation() {
+    void lowCoefficientPolynomialsEvaluation() {
         Polynomial p = new Polynomial(new double[]{7, 3, 5, 15, 2.2, -5.5, 0.0145, -0.234});
         assertEquals(35312.3125, p.eval(-5), 1.0);
         assertEquals(-757174244.355, p.eval(22.7), 1.0);
@@ -17,7 +17,7 @@ public class PolynomialTest {
     }
 
     @Test
-    public void lowCoefficientPolynomialsDerivatives() {
+    void lowCoefficientPolynomialsDerivatives() {
         Polynomial p = new Polynomial(new double[]{7, 3, 5, 15, 2.2, -5.5, 0.0145, -0.234}).ddx();
         System.out.println(p.coefficients[1]);
         assertEquals(-43075.125, p.eval(-5), 1.0);

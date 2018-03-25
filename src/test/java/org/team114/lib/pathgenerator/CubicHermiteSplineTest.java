@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CubicHermiteSplineTest {
+class CubicHermiteSplineTest {
 
     @Test
-    public void testDegreeChecking() {
+    void testDegreeChecking() {
         // must not throw
         new CubicHermiteSpline(new double[]{7, 3, 5, 1});
         new CubicHermiteSpline(new double[]{0, 3, 5, 0});

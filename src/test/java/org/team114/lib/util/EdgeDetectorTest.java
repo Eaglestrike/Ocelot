@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests for {@link EdgeDetector}.
  */
-public class EdgeDetectorTest  {
+class EdgeDetectorTest  {
 
     private boolean value;
     private final EdgeDetector edgeDetector = new EdgeDetector(this::getValue);
@@ -19,7 +19,7 @@ public class EdgeDetectorTest  {
      * Tests the enum response of the getEdge function.
      */
     @Test
-    public void testGetEdge() {
+    void testGetEdge() {
 
         value = false;
         edgeDetector.update();
@@ -46,7 +46,7 @@ public class EdgeDetectorTest  {
      * Tests the boolean response of the falling (true -> false) function.
      */
     @Test
-    public void testFalling() {
+    void testFalling() {
         value = false;
         edgeDetector.update();
         value = true;
@@ -72,7 +72,7 @@ public class EdgeDetectorTest  {
      * Tests the boolean response of the rising (false -> true) function.
      */
     @Test
-    public void testRising() {
+    void testRising() {
         value = false;
         edgeDetector.update();
         value = true;
@@ -99,7 +99,7 @@ public class EdgeDetectorTest  {
      * function.
      */
     @Test
-    public void testFlatlining() {
+    void testFlatlining() {
         value = false;
         edgeDetector.update();
         value = true;
