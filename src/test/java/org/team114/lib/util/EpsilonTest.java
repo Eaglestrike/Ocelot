@@ -1,40 +1,16 @@
 package org.team114.lib.util;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EpsilonTest {
-    @Test
-    void testEpsilonEqualsNearZero() {
-        generalEpsilonTest(0);
-        generalEpsilonTest(1e-5);
-        generalEpsilonTest(-1e-3);
-    }
 
-    @Test
-    void testEpsilonNegativeSmall() {
-        generalEpsilonTest(-5);
-    }
-
-    @Test
-    void testEpsilonPositiveSmall() {
-        generalEpsilonTest(7);
-    }
-
-    @Test
-    void testEpsilonNegativeLarge() {
-        generalEpsilonTest(-1e10 + 31278);
-    }
-
-    @Test
-    void testEpsilonPositiveLarge() {
-        generalEpsilonTest(1e10 + 3123);
-    }
-
-
-    void generalEpsilonTest(double start) {
+    @ParameterizedTest
+    @ValueSource(doubles = {-0, 1e-5, -1e-3, 5, 7, -1e10 + 31278, 1e10 + 3123})
+    void testEpsilon(double start) {
         assertTrue(Epsilon.epsilonEquals(start, start)); //reflexive
 
         assertFalse(Epsilon.epsilonEquals(start, start + 1)); //converse reflexive
