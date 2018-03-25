@@ -95,8 +95,7 @@ public class Robot extends IterativeRobot {
         liftSlave = new775ProTalon(Settings.Lift.SLAVE);
         lift = new Lift(
                 liftMaster,
-                liftSlave,
-                new DigitalInput(Settings.Lift.MID_LIMIT_SWITCH));
+                liftSlave);
 
         // create subsystems
         drive = new StandardDrive(

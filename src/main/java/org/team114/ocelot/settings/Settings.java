@@ -49,7 +49,7 @@ public final class Settings {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
         public static final double STANDARD_DEADBAND = 0.2;
-        public static final double FREER_DEADBAND = 0.15;
+        public static final double FREER_DEADBAND = 0.5;
     }
 
     public static final class DriveSide {
@@ -74,10 +74,6 @@ public final class Settings {
         }
         public static final int MASTER = 3;
         public static final int SLAVE = 4;
-        // public static final int TOP_LIMIT_SWITCH = -1;
-        public static final int MID_LIMIT_SWITCH = 9;
-        // public static final int BOTTOM_LIMIT_SWITCH = -1;
-        public static final double DEBOUNCER_REFRESH = 0.01;
 
         public static final int MAX_HEIGHT_TICKS = 36_000; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert

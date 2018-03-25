@@ -12,10 +12,7 @@ public class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
 
-    private final DigitalInput midLimitSwitch;
-
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon, DigitalInput midLimitSwitch) {
-        this.midLimitSwitch = midLimitSwitch;
+    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
         this.masterTalon = masterTalon;
         
         this.slaveTalon = slaveTalon;
@@ -32,12 +29,16 @@ public class Lift {
                 FeedbackDevice.CTRE_MagEncoder_Relative,
                 Settings.Lift.MAGIC_PID_LOOP_INDEX,
                 Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.setSensorPhase(true);
+
         // VENTURA: switch back
-//        this.masterTalon.setSensorPhase(true); // Competition robot
-        this.masterTalon.setSensorPhase(false); // Practice robot -- because assembly is dumb
-        this.masterTalon.setInverted(false);
-        this.slaveTalon.setInverted(true);
-        
+        // competition
+//        this.masterTalon.setInverted(false);
+//        this.slaveTalon.setInverted(true);
+        // practice
+        this.masterTalon.setInverted(true);
+        this.slaveTalon.setInverted(false);
+
         // neutral modes
         this.masterTalon.setNeutralMode(NeutralMode.Brake);
         this.slaveTalon.setNeutralMode(NeutralMode.Brake);
