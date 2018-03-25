@@ -17,8 +17,9 @@ public class TestPercentageRange {
     }
 
     /**
-     * make sure that the limit of [-1.0, 1.0] is respected
+     * Ensures that the limit of [-1.0, 1.0] is respected.
      */
+    @Test
     public void testLimit() {
         PercentageRange percentageRange = new PercentageRange(1.0);
         assertEquals(1.0, percentageRange.unscaled(), EPSILON);
@@ -30,5 +31,16 @@ public class TestPercentageRange {
         assertEquals(-1.00, percentageRange.unscaled(), EPSILON);
         percentageRange = new PercentageRange(-0.99);
         assertEquals(-0.990, percentageRange.unscaled(), EPSILON);
+    }
+
+    @Test
+    public void testScaling() {
+        PercentageRange pr = new PercentageRange(0.5);
+        assertEquals(pr.scaled(10), 5, EPSILON);
+        assertEquals(pr.scaled(-1), -0.5, EPSILON);
+
+        pr = new PercentageRange(1 / 3.0);
+        assertEquals(pr.scaled(100.0), 100 / 3.0, EPSILON);
+        assertEquals(pr.scaled(-23), -23 / 3.0, EPSILON);
     }
 }
