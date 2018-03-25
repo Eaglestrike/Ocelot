@@ -117,7 +117,6 @@ public class DualController implements Controller {
 
     @Override
     public boolean lowHeight() {
-        System.out.println("pov: " + xbox.arrowPad());
         return xbox.arrowPad() == 180;
     }
 

@@ -112,8 +112,8 @@ public class Robot extends IterativeRobot {
                 new Compressor(),
                 pressureSensor);
         //TODO refactor these somewhere in settings and find the actual values
-        pneumatics.setMinimumPressure(85);
-        pneumatics.setPressureMargin(25);
+        pneumatics.setMinimumPressure(80);
+        pneumatics.setPressureMargin(20);
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
@@ -220,5 +220,6 @@ public class Robot extends IterativeRobot {
         System.out.println(testing.getRawAxis(1));
         SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
         SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
+
     }
 }

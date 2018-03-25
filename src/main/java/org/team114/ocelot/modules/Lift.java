@@ -32,7 +32,9 @@ public class Lift {
                 FeedbackDevice.CTRE_MagEncoder_Relative,
                 Settings.Lift.MAGIC_PID_LOOP_INDEX,
                 Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.masterTalon.setSensorPhase(true);
+        // VENTURA: switch back
+//        this.masterTalon.setSensorPhase(true); // Competition robot
+        this.masterTalon.setSensorPhase(false); // Practice robot -- because assembly is dumb
         this.masterTalon.setInverted(false);
         this.slaveTalon.setInverted(true);
         

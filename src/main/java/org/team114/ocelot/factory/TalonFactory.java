@@ -49,6 +49,7 @@ public final class TalonFactory {
     private static void commonConfig(TalonSRX talon) {
         talon.setInverted(false);
         talon.setSensorPhase(false);
+        talon.setNeutralMode(NeutralMode.Brake);
     }
 
     public static TalonSRX factoryReset(TalonSRX t) {

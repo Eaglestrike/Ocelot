@@ -83,5 +83,6 @@ public class Carriage {
         } else {
             setSpin(0);
         }
+        System.out.println("distance:" + distanceSensor.get());
     }
 }

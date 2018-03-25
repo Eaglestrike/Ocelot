@@ -23,8 +23,8 @@ public class DriveSide {
         this.slave = slave;
 
         this.slave.set(ControlMode.Follower, master.getDeviceID());
-        this.master.setNeutralMode(NeutralMode.Coast);
-        this.slave.setNeutralMode(NeutralMode.Coast);
+        this.master.setNeutralMode(NeutralMode.Brake);
+        this.slave.setNeutralMode(NeutralMode.Brake);
     }
 
     /**

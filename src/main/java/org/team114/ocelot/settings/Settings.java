@@ -82,7 +82,7 @@ public final class Settings {
         public static final int MAX_HEIGHT_TICKS = 36_000; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
         //TODO tune
-        public static final int NORMAL_SPEED = 250;
+        public static final int NORMAL_SPEED = 100;
         public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
 
         // amps
@@ -106,8 +106,8 @@ public final class Settings {
         public static final double INTAKE_IN_COMMAND = -0.5;
         public static final double INTAKE_OUT_COMMAND = 0.5;
         //TODO tune these two
-        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -0.25;
-        public static final double BOX_DISTANCE_INTAKE_THRESHOLD_CM = 10.0;
+        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -4.0 / 12.0;
+        public static final double BOX_DISTANCE_INTAKE_THRESHOLD_CM = 20.0;
     }
 
     public static final class SuperStructure {
