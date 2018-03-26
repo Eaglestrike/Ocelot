@@ -37,6 +37,7 @@ public class StandardSuperstructure implements Superstructure {
     private final Lift lift;
 
     private int goalHeight;
+    private double outtakeSpeed;
 
     public StandardSuperstructure(Carriage carriage, Lift lift) {
         this.carriage = carriage;
@@ -75,7 +76,7 @@ public class StandardSuperstructure implements Superstructure {
             case OUTTAKING:
                 spinCarriage(Settings.Carriage.INTAKE_OUT_COMMAND);
                 System.out.println(timestamp + " : " + state.timestamp);
-                if (timestamp - state.timestamp > Settings.SuperStructure.OUTTAKE_TIME_SECONDS) {
+                if (timestamp - state.timestamp > Settings.Carriage.OUTTAKE_TIME_SECONDS) {
                     setState(State.StateEnum.CLOSED, timestamp);
                 }
                 break;
@@ -85,7 +86,7 @@ public class StandardSuperstructure implements Superstructure {
                 break;
             case ZEROING:
                 carriage.setSpeedToProximitySensor();
-                incrementHeight(Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
+                setHeight(getHeight() - Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
                 if (lift.zeroLowerIfNecessary()) {
                     setHeight(0);
                     setState(State.StateEnum.CLOSED, timestamp);
@@ -128,32 +129,6 @@ public class StandardSuperstructure implements Superstructure {
     }
 
     @Override
-    public void setWantScaleHeight() {
-        this.goalHeight = Settings.SuperStructure.SCALE_HEIGHT_TICKS;
-    }
-
-    @Override
-    public void setWantLowHeight() {
-        this.goalHeight = Settings.SuperStructure.LOW_HEIGHT_TICKS;
-    }
-
-    @Override
-    public void setWantSwitchHeight() {
-        this.goalHeight = Settings.SuperStructure.SWITCH_HEIGHT_TICKS;
-    }
-
-    @Override
-    public void incrementHeight(int increment) {
-        if (increment > 0 && lift.upperLimitSwitch()) {
-            return;
-        } else if (increment < 0 && lift.lowerLimitSwitch()) {
-            return;
-        }
-
-        setHeight(this.goalHeight + increment);
-    }
-
-    @Override
     public int getHeight() {
         return lift.getHeight();
     }
@@ -176,5 +151,21 @@ public class StandardSuperstructure implements Superstructure {
     @Override
     public void actuateIntakeLift(Carriage.ElevationStage stage) {
         carriage.actuateLift(stage);
+    }
+
+    @Override
+    public void setOuttakeSpeed(double command) {
+        this.outtakeSpeed = command;
+    }
+
+    @Override
+    public void setHeightFraction(double fraction) {
+        // TODO dyanmically updating top
+        setHeight((int)(Settings.Lift.MAX_HEIGHT_TICKS * fraction));
+    }
+
+    @Override
+    public void setManualControl(double speed) {
+        lift.manualControl(speed);
     }
 }

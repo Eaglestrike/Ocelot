@@ -1,27 +1,31 @@
 package org.team114.ocelot.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
-import org.team114.ocelot.modules.Carriage;
+import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.settings.Settings;
-import org.team114.ocelot.util.PercentageRange;
 
-/**
- * Our primary controller, based upon two joysticks and an xbox controller.
- */
-public class DualController implements Controller {
+import java.util.Objects;
+
+public class StickDriveOiPanel implements Controller {
 
     private final Joystick left;
     private final Joystick right;
-    private final XboxController xbox;
+    private final Joystick oi;
 
-    private Carriage.ElevationStage lastState;
+    private final EdgeDetector.EdgeType toDetect = EdgeDetector.EdgeType.RISING;
 
-    public DualController(Joystick left, Joystick right, XboxController xbox) {
+    // controller curves here
+    private double driveCurve(double x) {
+        return x;
+    }
+
+    public StickDriveOiPanel(Joystick left, Joystick right, Joystick oi) {
+        Objects.requireNonNull(left, "The left cannot be null!");
+        Objects.requireNonNull(right, "The right cannot be null!");
+        Objects.requireNonNull(oi, "The oi cannot be null!");
         this.left = left;
         this.right = right;
-        this.xbox = xbox;
-
-        lastState = Carriage.ElevationStage.RAISED;
+        this.oi = oi;
     }
 
     // ====== UTIL ======
@@ -53,18 +57,18 @@ public class DualController implements Controller {
     }
 
     @Override
-    public PercentageRange throttle() {
-        return new PercentageRange(adjustThrottle(band(left.getY())));
+    public double throttle() {
+        return adjustThrottle(band(left.getY()));
     }
 
     @Override
-    public PercentageRange wheel() {
-        return new PercentageRange(adjustWheel(band(right.getX() * -1)));
+    public double wheel() {
+        return adjustWheel(band(right.getX() * -1));
     }
 
     // right trigger
     @Override
-    public boolean quickTurn() {
+    public boolean wantQuickTurn() {
         return right.getRawButton(1);
     }
 
@@ -79,59 +83,74 @@ public class DualController implements Controller {
     // carriage states
     @Override
     public boolean carriageOpen() {
-        return xbox.b();
+        return oi.getRawButtonPressed(10);
     }
 
     @Override
     public boolean carriageIntake()  {
-        return xbox.a();
+        return oi.getRawButtonPressed(1);
     }
 
     @Override
     public boolean carriageClose()  {
-        return xbox.y();
+        return oi.getRawButtonPressed(4);
     }
 
     @Override
     public boolean carriageOuttake() {
-        return xbox.x();
+        return oi.getRawButtonPressed(7);
     }
 
     @Override
-    public Carriage.ElevationStage intakeElevation() {
-        if (xbox.leftBumper()) {
-            return lastState = Carriage.ElevationStage.RAISED;
-        } else if (xbox.leftTrigger() > 0.75) {
-            return lastState = Carriage.ElevationStage.MIDDLE;
-        } else if (xbox.rightTrigger() > 0.75) {
-            return lastState = Carriage.ElevationStage.LOWERED;
-        }
-        return lastState;
+    public boolean cairrageUp() {
+        return oi.getRawButtonPressed(2);
+    }
+
+    @Override
+    public boolean cairrageMiddle() {
+        return oi.getRawButtonPressed(5);
+    }
+
+    @Override
+    public boolean cairrageDown() {
+        return oi.getRawButtonPressed(8);
     }
 
     // lift height
     @Override
-    public double liftIncrement() {
-        return bandBigger(-xbox.rightYAxis());
-    }
-
-    @Override
-    public boolean lowHeight() {
-        return xbox.arrowPad() == 180;
-    }
-
-    @Override
-    public boolean switchHeight() {
-        return xbox.arrowPad() == 270;
-    }
-
-    @Override
-    public boolean scaleHeight() {
-        return xbox.arrowPad() == 0;
-    }
-
-    @Override
     public boolean liftZeroCalibration() {
-        return xbox.rightStickPressed();
+        return oi.getRawButtonPressed(11);
+    }
+
+    @Override
+    public double liftHeightSetPoint() {
+        return oi.getY();
+    }
+
+    @Override
+    public boolean wantManualLiftHeight() {
+        return oi.getRawButton(3);
+    }
+
+    // TODO verify these two button ids
+    @Override
+    public boolean manualLiftUp() {
+        return oi.getRawButton(13);
+    }
+
+    @Override
+    public boolean manualLiftDown() {
+        return oi.getRawButton(16);
+    }
+
+    // ====== MISC =====
+    @Override
+    public boolean speedFaster() {
+        return oi.getRawButton(6);
+    }
+
+    @Override
+    public boolean speedSlower() {
+        return oi.getRawButton(9);
     }
 }

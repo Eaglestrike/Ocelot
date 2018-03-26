@@ -91,6 +91,11 @@ public final class Settings {
     }
 
     public static final class Carriage {
+        public static final double OUTTAKE_SPEED_FAST = 0.75;
+        public static final double OUTTAKE_SPEED_NORMAL = 0.5;
+        public static final double OUTTAKE_SPEED_SLOW = 0.25;
+        public static final double OUTTAKE_TIME_SECONDS = 0.5;
+
         private Carriage() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
@@ -107,7 +112,7 @@ public final class Settings {
     }
 
     public static final class SuperStructure {
-        public static final double OUTTAKE_TIME_SECONDS = 0.5;
+
         public static final int ZEROING_INCREMENT_TICKS = -100;
         public static final int LOW_HEIGHT_TICKS = 0;
         public static final int SWITCH_HEIGHT_TICKS = 10_000;

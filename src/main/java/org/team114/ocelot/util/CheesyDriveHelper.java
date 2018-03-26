@@ -5,10 +5,10 @@ import org.team114.ocelot.settings.Settings;
 public class CheesyDriveHelper {
     private double quickStopAccumulator;
 
-    public DriveSignal cheesyDrive(PercentageRange throttlePercentage, PercentageRange wheelPercentage, boolean isQuickTurn) {
+    public DriveSignal cheesyDrive(double throttlePercentage, double wheelPercentage, boolean isQuickTurn) {
 
-        double wheel = wheelPercentage.unscaled();
-        double throttle = throttlePercentage.unscaled();
+        double wheel = wheelPercentage;
+        double throttle = throttlePercentage;
 
         double overPower, angularPower;
 

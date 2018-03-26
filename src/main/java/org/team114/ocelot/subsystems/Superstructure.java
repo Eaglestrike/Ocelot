@@ -11,12 +11,6 @@ public interface Superstructure extends Subsystem {
     int getHeight();
 
     /**
-     * Shift the setpoint of the lift.
-     * @param increment height by which to move the lift up, in ticks.
-     */
-    void incrementHeight(int increment);
-
-    /**
      * Set the lift height.
      * @param setPoint goal height in ticks.
      */
@@ -71,17 +65,9 @@ public interface Superstructure extends Subsystem {
      */
     void setWantZero();
 
-    /**
-     * Moves the lift to the height of the scale for outtaking
-     */
-    void setWantScaleHeight();
-    /**
-     * Moves the lift to the low height for intaking
-     */
-    void setWantLowHeight();
+    void setOuttakeSpeed(double command);
 
-    /**
-     * Moves the lift to the height of the switch for outtaking
-     */
-    void setWantSwitchHeight();
+    void setHeightFraction(double fraction);
+
+    void setManualControl(double speed);
 }

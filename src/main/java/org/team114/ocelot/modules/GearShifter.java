@@ -1,11 +1,9 @@
 package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import org.team114.ocelot.subsystems.Drive;
 
 public class GearShifter {
-    public enum State {
-        HIGH, LOW
-    }
 
     private final DoubleSolenoid gearSolenoid;
 
@@ -13,7 +11,7 @@ public class GearShifter {
         this.gearSolenoid = gearSolenoid;
     }
 
-    public void set(State state) {
+    public void set(Drive.State state) {
         switch (state) {
             case HIGH:
                 gearSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -24,14 +22,14 @@ public class GearShifter {
         }
     }
 
-    public State get() {
+    public Drive.State get() {
         switch (gearSolenoid.get()) {
             case kForward:
-                return State.LOW;
+                return Drive.State.LOW;
             case kReverse:
-                return State.HIGH;
+                return Drive.State.HIGH;
             default: // maybe throw exception?
-                return State.HIGH;
+                return Drive.State.HIGH;
         }
     }
 }

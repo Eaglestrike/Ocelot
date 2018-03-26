@@ -8,10 +8,7 @@ import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.controllers.EdgeDetectingController;
 import org.team114.ocelot.controllers.Controller;
-import org.team114.ocelot.controllers.DualController;
-import org.team114.ocelot.controllers.XboxController;
 import org.team114.ocelot.factory.ControllerFactory;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
@@ -50,10 +47,8 @@ public class Robot extends IterativeRobot {
     private Carriage carriage;
     private Lift lift;
 
-    // driver-facing
-    private Controller controller;
-    private CheesyDriveHelper cheesyDrive;
     private PneumaticPressureSensor pressureSensor;
+    private TeleopInputDelegator teleopInputDelegator;
 
     // testing
     TalonSRX liftMaster;
@@ -69,8 +64,6 @@ public class Robot extends IterativeRobot {
 
         // create driver-facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
-        cheesyDrive = new CheesyDriveHelper();
-        controller = new EdgeDetectingController(ControllerFactory.dualController(), EdgeDetector.EdgeType.RISING);
 
         // create modules
         gyro = NavXGyro.shared;
@@ -133,6 +126,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        // TODO use auto mode selector
         drive.prepareForAuto();
 
         autoModeExecutor.setAutoMode(new TestMode(drive, robotState));
@@ -142,9 +136,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         autoModeExecutor.stop();
-        //TODO add more reset stuff
+        //TODO VENTURA add more reset stuff
         drive.prepareForTeleop();
         superstructure.setWantZero();
+        this.teleopInputDelegator = new TeleopInputDelegator(drive, superstructure,
+                ControllerFactory.stickDriveOiPanel(), new CheesyDriveHelper());
     }
 
     @Override
@@ -175,35 +171,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        // ==== DRIVER ====
-        drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.quickTurn()));
-        drive.setGear(controller.wantLowGear() ? GearShifter.State.LOW : GearShifter.State.HIGH);
-
-        // ==== OPERATOR ====
-
-        // carriage
-        superstructure.actuateIntakeLift(controller.intakeElevation());
-        if (controller.carriageClose()) {
-            superstructure.setWantClosed();
-        } else if (controller.carriageOuttake()) {
-            superstructure.setWantClosedOuttaking();
-        } else if (controller.carriageIntake()) {
-            superstructure.setWantIntake();
-        } else if (controller.carriageOpen()) {
-            superstructure.setWantOpenIdle();
-        } else if (controller.liftZeroCalibration()) {
-            superstructure.setWantZero();
-        }
-
-        // lift height
-        if (controller.lowHeight()) {
-            superstructure.setWantLowHeight();
-        } else if (controller.switchHeight()) {
-            superstructure.setWantSwitchHeight();
-        } else if (controller.scaleHeight()) {
-            superstructure.setWantScaleHeight();
-        }
-        superstructure.incrementHeight((int)(controller.liftIncrement() * Settings.Lift.NORMAL_SPEED));
+        this.teleopInputDelegator.defaultStep();
     }
 
     @Override
@@ -219,6 +187,5 @@ public class Robot extends IterativeRobot {
         System.out.println(testing.getRawAxis(1));
         SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
         SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
-
     }
 }

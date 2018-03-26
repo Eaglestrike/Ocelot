@@ -91,6 +91,11 @@ public class Lift {
         masterTalon.set(ControlMode.MotionMagic, height);
     }
 
+    //TODO add p controller to this mode
+    public void manualControl(double command) {
+        masterTalon.set(ControlMode.PercentOutput, command);
+    }
+
     //get the height in feet
     public int getHeight() {
         return masterTalon.getSelectedSensorPosition(0);

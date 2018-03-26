@@ -98,7 +98,7 @@ public class StandardDrive implements Drive {
     }
 
     @Override
-    public synchronized void setGear(GearShifter.State state) {
+    public synchronized void setGear(State state) {
         shifter.set(state);
     }
 

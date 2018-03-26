@@ -1,19 +1,16 @@
 package org.team114.ocelot.controllers;
 
-import org.team114.ocelot.modules.Carriage;
-import org.team114.ocelot.util.PercentageRange;
-
 /**
  * Translates requests for functional control input into bindings.
  */
 public interface Controller {
     // ====== DRIVER ======
 
-    PercentageRange throttle();
+    double throttle();
 
-    PercentageRange wheel();
+    double wheel();
 
-    boolean quickTurn();
+    boolean wantQuickTurn();
 
     boolean wantLowGear();
 
@@ -28,16 +25,24 @@ public interface Controller {
 
     boolean carriageOuttake();
 
-    Carriage.ElevationStage intakeElevation();
+    boolean cairrageUp();
+
+    boolean cairrageMiddle();
+
+    boolean cairrageDown();
 
     // lift height
-    double liftIncrement();
+    double liftHeightSetPoint();
 
-    boolean lowHeight();
+    boolean wantManualLiftHeight();
 
-    boolean switchHeight();
+    boolean manualLiftUp();
 
-    boolean scaleHeight();
+    boolean manualLiftDown();
+
+    boolean speedFaster();
+
+    boolean speedSlower();
 
     boolean liftZeroCalibration();
 }
