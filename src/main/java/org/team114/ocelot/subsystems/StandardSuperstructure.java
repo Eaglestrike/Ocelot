@@ -3,6 +3,7 @@ package org.team114.ocelot.subsystems;
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.modules.Carriage;
+import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.modules.Lift;
 import org.team114.ocelot.settings.Settings;
 
@@ -69,7 +70,7 @@ public class StandardSuperstructure implements Superstructure {
                 carriage.setSpeedToProximitySensor();
                 break;
             case INTAKING:
-                actuateIntakeLift(Carriage.ElevationStage.LOWERED);
+                actuateIntakeLift(CarriageElevationStage.LOWERED);
                 actuateCarriage(true);
                 spinCarriage(Settings.Carriage.INTAKE_IN_COMMAND);
                 break;
@@ -149,7 +150,7 @@ public class StandardSuperstructure implements Superstructure {
     }
 
     @Override
-    public void actuateIntakeLift(Carriage.ElevationStage stage) {
+    public void actuateIntakeLift(CarriageElevationStage stage) {
         carriage.actuateLift(stage);
     }
 

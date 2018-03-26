@@ -1,7 +1,7 @@
 package org.team114.ocelot.subsystems;
 
 import org.team114.lib.subsystem.Subsystem;
-import org.team114.ocelot.modules.Carriage;
+import org.team114.ocelot.modules.CarriageElevationStage;
 
 public interface Superstructure extends Subsystem {
     /**
@@ -32,7 +32,7 @@ public interface Superstructure extends Subsystem {
      * Lift the carriage to the selected stage.
      * @param stage which height the carriage should go to
      */
-    void actuateIntakeLift(Carriage.ElevationStage stage);
+    void actuateIntakeLift(CarriageElevationStage stage);
 
     /**
      * Configures the carriage for intaking boxes

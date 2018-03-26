@@ -1,7 +1,7 @@
 package org.team114.ocelot;
 
 import org.team114.ocelot.controllers.Controller;
-import org.team114.ocelot.modules.Carriage;
+import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
@@ -35,11 +35,11 @@ public class TeleopInputDelegator {
         // ==== OPERATOR ====
         // carriage
         if (controller.cairrageUp()) {
-            superstructure.actuateIntakeLift(Carriage.ElevationStage.RAISED);
+            superstructure.actuateIntakeLift(CarriageElevationStage.RAISED);
         } else if (controller.cairrageMiddle()) {
-            superstructure.actuateIntakeLift(Carriage.ElevationStage.MIDDLE);
+            superstructure.actuateIntakeLift(CarriageElevationStage.MIDDLE);
         } else if (controller.cairrageDown()) {
-            superstructure.actuateIntakeLift(Carriage.ElevationStage.LOWERED);
+            superstructure.actuateIntakeLift(CarriageElevationStage.LOWERED);
         }
 
         if (controller.carriageClose()) {

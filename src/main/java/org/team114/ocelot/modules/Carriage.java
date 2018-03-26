@@ -10,9 +10,6 @@ import org.team114.ocelot.settings.Settings;
  * The grabber/thrower unit of the robot.
  */
 public class Carriage {
-    public enum ElevationStage {
-        RAISED, MIDDLE, LOWERED
-    }
 
     private final Solenoid intake;
     private final Solenoid liftStageOne;
@@ -20,7 +17,7 @@ public class Carriage {
     private final TalonSRX leftSpinner;
     private final TalonSRX rightSpinner;
     private final ProximitySensor distanceSensor;
-    private ElevationStage currentStage = ElevationStage.RAISED;
+    private CarriageElevationStage currentStage = CarriageElevationStage.RAISED;
 
     public Carriage(Solenoid intake,
                     Solenoid liftStageOne,
@@ -46,7 +43,7 @@ public class Carriage {
         }
     }
 
-    public void actuateLift(ElevationStage stage) {
+    public void actuateLift(CarriageElevationStage stage) {
         if (stage == currentStage) {
             return;
         }
