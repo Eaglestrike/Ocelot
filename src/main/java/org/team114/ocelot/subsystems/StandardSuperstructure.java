@@ -2,6 +2,7 @@ package org.team114.ocelot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.util.DashboardHandle;
+import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.modules.Carriage;
 import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.modules.Lift;
@@ -167,6 +168,10 @@ public class StandardSuperstructure implements Superstructure {
 
     @Override
     public void setManualControl(double speed) {
+        if (Epsilon.epsilonEquals(speed, 0)) {
+            lift.goToHeight(lift.getHeight());
+            return;
+        }
         lift.manualControl(speed);
     }
 }

@@ -91,9 +91,9 @@ public final class Settings {
     }
 
     public static final class Carriage {
-        public static final double OUTTAKE_SPEED_FAST = 0.75;
-        public static final double OUTTAKE_SPEED_NORMAL = 0.5;
-        public static final double OUTTAKE_SPEED_SLOW = 0.25;
+        public static final double OUTTAKE_COMMAND_FAST = 1.0;
+        public static final double OUTTAKE_COMMAND_NORMAL = 0.5;
+        public static final double OUTTAKE_COMMAND_SLOW = 0.25;
         public static final double OUTTAKE_TIME_SECONDS = 0.5;
 
         private Carriage() {

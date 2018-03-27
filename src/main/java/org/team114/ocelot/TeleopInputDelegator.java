@@ -56,24 +56,24 @@ public class TeleopInputDelegator {
         switch ((controller.speedFaster() ? 1 : 0) +
                 (controller.speedSlower() ? -1 : 0)) {
             case 1:
-                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_SPEED_FAST);
-                liftSpeed = 0.75;
+                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_COMMAND_FAST);
+                liftSpeed = 1;
                 break;
             case -1:
-                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_SPEED_SLOW);
+                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_COMMAND_SLOW);
                 liftSpeed = 0.25;
                 break;
             default:
                 liftSpeed = 0.5;
-                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_SPEED_NORMAL);
+                superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_COMMAND_NORMAL);
                 break;
         }
 
         if (controller.wantManualLiftHeight()) {
-            superstructure.setManualControl(liftSpeed *
+            superstructure.setManualControl(liftSpeed * (
                     (controller.manualLiftUp() ? 1 : 0) +
-                    (controller.manualLiftDown() ? -1 : 0));
-        } else { // not manual control
+                    (controller.manualLiftDown() ? -1 : 0)));
+        } else { // do not want manual control
             superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
         }
     }

@@ -31,7 +31,7 @@ public class Lift {
                 Settings.TALON_CONFIG_TIMEOUT_MS);
         this.masterTalon.setSensorPhase(true);
 
-        // VENTURA: switch back
+        // TODO VENTURA: switch back
         // competition
 //        this.masterTalon.setInverted(false);
 //        this.slaveTalon.setInverted(true);
@@ -55,11 +55,11 @@ public class Lift {
 
 		// set closed loop gains in slot0 - see documentation
         this.masterTalon.selectProfileSlot(Settings.Lift.MAGIC_PID_SLOT_INDEX, Settings.Lift.MAGIC_PID_LOOP_INDEX);
-        this.masterTalon.config_kF(0, 0.730714286, Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.masterTalon.config_kP(0, 4.8, Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.masterTalon.config_kI(0, 0.05, Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.masterTalon.config_IntegralZone(0, 35, Settings.TALON_CONFIG_TIMEOUT_MS);
-        this.masterTalon.config_kD(0, 18, Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.config_kF(Settings.Lift.MAGIC_PID_SLOT_INDEX, 0.730714286, Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.config_kP(Settings.Lift.MAGIC_PID_SLOT_INDEX, 4.8, Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.config_kI(Settings.Lift.MAGIC_PID_SLOT_INDEX, 0.05, Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.config_IntegralZone(Settings.Lift.MAGIC_PID_SLOT_INDEX, 35, Settings.TALON_CONFIG_TIMEOUT_MS);
+        this.masterTalon.config_kD(Settings.Lift.MAGIC_PID_SLOT_INDEX, 18, Settings.TALON_CONFIG_TIMEOUT_MS);
 		/* set acceleration and vcruise velocity - see documentation */
         this.masterTalon.configMotionCruiseVelocity(1300, Settings.TALON_CONFIG_TIMEOUT_MS);
         this.masterTalon.configMotionAcceleration(1800, Settings.TALON_CONFIG_TIMEOUT_MS);
@@ -69,7 +69,7 @@ public class Lift {
     public boolean zeroLowerIfNecessary() {
         if (masterTalon.getSensorCollection().isRevLimitSwitchClosed()) {
             //TODO is it really zero?
-            masterTalon.setSelectedSensorPosition(0, 0, 0);
+            masterTalon.setSelectedSensorPosition(0, Settings.Lift.MAGIC_PID_LOOP_INDEX, 0);
             return true;
         }
         return false;
@@ -93,14 +93,14 @@ public class Lift {
 
     //TODO add p controller to this mode
     public void manualControl(double command) {
-//        masterTalon.set(ControlMode.PercentOutput, command);
+        masterTalon.set(ControlMode.PercentOutput, command);
 //        slaveTalon.set(ControlMode.PercentOutput, command);
 //        System.out.println(command);
     }
 
     //get the height in feet
     public int getHeight() {
-        return masterTalon.getSelectedSensorPosition(0);
+        return masterTalon.getSelectedSensorPosition(Settings.Lift.MAGIC_PID_LOOP_INDEX);
     }
 
     public boolean upperLimitSwitch() {
