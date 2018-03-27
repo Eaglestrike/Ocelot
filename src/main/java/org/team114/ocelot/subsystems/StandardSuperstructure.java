@@ -10,24 +10,6 @@ import org.team114.ocelot.settings.Settings;
 
 public class StandardSuperstructure implements Superstructure {
 
-    private static class State {
-        enum StateEnum {
-            CLOSED,
-            OPEN_IDLE,
-            INTAKING,
-            OUTTAKING,
-            ZEROING
-        }
-
-        final StateEnum state;
-        final double timestamp;
-
-        State(StateEnum state, double currentTime) {
-            this.timestamp = currentTime;
-            this.state = state;
-        }
-    }
-
     private State state;
 
     private final DashboardHandle currentHeightDB = new DashboardHandle("Current Height");
@@ -148,6 +130,11 @@ public class StandardSuperstructure implements Superstructure {
     @Override
     public void spinCarriage(double command) {
         carriage.setSpin(command);
+    }
+
+    @Override
+    public boolean isZeroing() {
+        return this.state.state == State.StateEnum.ZEROING;
     }
 
     @Override

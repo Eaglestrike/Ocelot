@@ -65,9 +65,29 @@ public interface Superstructure extends Subsystem {
      */
     void setWantZero();
 
+    boolean isZeroing();
+
     void setOuttakeSpeed(double command);
 
     void setHeightFraction(double fraction);
 
     void setManualControl(double speed);
+
+    class State {
+        public enum StateEnum {
+            CLOSED,
+            OPEN_IDLE,
+            INTAKING,
+            OUTTAKING,
+            ZEROING
+        }
+
+        final StateEnum state;
+        final double timestamp;
+
+        public State(StateEnum state, double currentTime) {
+            this.timestamp = currentTime;
+            this.state = state;
+        }
+    }
 }

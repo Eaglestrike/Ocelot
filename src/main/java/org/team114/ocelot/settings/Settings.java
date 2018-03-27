@@ -112,6 +112,7 @@ public final class Settings {
 
     public static final class SuperStructure {
 
+        public static final int COMPLETE_ACTION_THRESHOLD_TICKS = 100;
         public static final int ZEROING_INCREMENT_TICKS = -100;
         public static final int LOW_HEIGHT_TICKS = 0;
         public static final int SWITCH_HEIGHT_TICKS = 10_000;

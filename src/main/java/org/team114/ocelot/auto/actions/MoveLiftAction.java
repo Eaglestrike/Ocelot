@@ -1,6 +1,7 @@
 package org.team114.ocelot.auto.actions;
 
 import org.team114.lib.auto.actions.Action;
+import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Superstructure;
 
@@ -20,8 +21,7 @@ public class MoveLiftAction implements Action {
 
     @Override
     public boolean finished() {
-        int delta = superstructure.getHeight() - ticks;
-        return Math.abs(delta) <= Math.abs(Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
+        return Epsilon.epsilonEquals(superstructure.getHeight(), ticks, Settings.SuperStructure.COMPLETE_ACTION_THRESHOLD_TICKS);
     }
 
     /**
@@ -32,12 +32,8 @@ public class MoveLiftAction implements Action {
         superstructure.setHeight(ticks);
     }
 
-    /**
-     * Stop moving the lift (remain at current height)
-     */
     @Override
     public void stop() {
-        superstructure.setHeight(superstructure.getHeight());
     }
 
     @Override

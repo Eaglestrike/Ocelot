@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.lib.util.EdgeDetector;
 import org.team114.ocelot.auto.AutoModeExecutor;
+import org.team114.ocelot.auto.AutoModeSelector;
 import org.team114.ocelot.auto.modes.TestMode;
 import org.team114.ocelot.controllers.Controller;
 import org.team114.ocelot.factory.ControllerFactory;
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
     // general
     private SubsystemManager subsystemManager;
     private AutoModeExecutor autoModeExecutor;
+    private AutoModeSelector autoModeSelector;
     private RobotState robotState = new RobotState();
 
     // subsystems
@@ -109,6 +111,7 @@ public class Robot extends IterativeRobot {
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
+        autoModeSelector = new AutoModeSelector(drive, superstructure);
         subsystemManager = new SubsystemManager(
                 drive,
                 superstructure,
@@ -126,10 +129,9 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        // TODO use auto mode selector
         drive.prepareForAuto();
 
-        autoModeExecutor.setAutoMode(new TestMode(drive, robotState));
+        autoModeExecutor.setAutoMode(autoModeSelector.getAutoMode());
         autoModeExecutor.start();
     }
 
