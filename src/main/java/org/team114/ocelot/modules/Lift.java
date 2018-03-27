@@ -93,7 +93,9 @@ public class Lift {
 
     //TODO add p controller to this mode
     public void manualControl(double command) {
-        masterTalon.set(ControlMode.PercentOutput, command);
+//        masterTalon.set(ControlMode.PercentOutput, command);
+//        slaveTalon.set(ControlMode.PercentOutput, command);
+//        System.out.println(command);
     }
 
     //get the height in feet

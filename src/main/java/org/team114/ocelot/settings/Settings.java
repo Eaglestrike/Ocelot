@@ -105,7 +105,6 @@ public final class Settings {
         public static final int LEFT_SPINNER = 7;
         public static final int RIGHT_SPINNER = 8;
         public static final double INTAKE_IN_COMMAND = -0.5;
-        public static final double INTAKE_OUT_COMMAND = 0.5;
         //TODO tune these two
         public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -4.0 / 12.0;
         public static final double BOX_DISTANCE_INTAKE_THRESHOLD_CM = 20.0;

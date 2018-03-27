@@ -19,18 +19,14 @@ public class TeleopInputDelegator {
         this.controller = controller;
         this.cheesyDrive = cheesyDrive;
     }
-
-    public TeleopInputDelegator(Drive drive, Superstructure superstructure, Controller controller) {
-        this.drive = drive;
-        this.superstructure = superstructure;
-        this.controller = controller;
-    }
     
     public void defaultStep() {
         //TODO break into sub methods
         // ==== DRIVER ====
         drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.wantQuickTurn()));
-        drive.setGear(controller.wantLowGear() ? Drive.State.LOW : Drive.State.HIGH);
+        // TODO VENTURA practice bot is inverted
+        // currently set for pb to be proper
+        drive.setGear(!controller.wantLowGear() ? Drive.State.LOW : Drive.State.HIGH);
 
         // ==== OPERATOR ====
         // carriage
@@ -78,7 +74,7 @@ public class TeleopInputDelegator {
                     (controller.manualLiftUp() ? 1 : 0) +
                     (controller.manualLiftDown() ? -1 : 0));
         } else { // not manual control
-            superstructure.setHeightFraction(controller.liftHeightSetPoint());
+            superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
         }
     }
 }

@@ -135,12 +135,12 @@ public class StickDriveOiPanel implements Controller {
     // TODO verify these two button ids
     @Override
     public boolean manualLiftUp() {
-        return oi.getRawButton(13);
+        return oi.getRawButton(15);
     }
 
     @Override
     public boolean manualLiftDown() {
-        return oi.getRawButton(16);
+        return oi.getRawButton(14);
     }
 
     // ====== MISC =====
