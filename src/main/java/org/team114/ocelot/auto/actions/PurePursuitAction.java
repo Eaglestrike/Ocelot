@@ -9,16 +9,16 @@ import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitController;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
 
-public class FollowPathTestAction implements Action {
+public class PurePursuitAction implements Action {
     private final Drive drive;
     private final RobotState robotState;
     private final PurePursuitController controller;
 
-    public FollowPathTestAction(Drive drive, RobotState robotState, PathPointList path,
-                                double lookAheadDistance, double finishMargin) {
+    public PurePursuitAction(Drive drive, RobotState robotState, PathPointList path,
+                             double lookAheadDistance) {
         this.drive = drive;
         this.robotState = robotState;
-        this.controller = PurePursuitFactory.startPurePursuit(path, lookAheadDistance, finishMargin);
+        this.controller = PurePursuitFactory.startPurePursuit(path, lookAheadDistance);
     }
 
     @Override
@@ -37,9 +37,6 @@ public class FollowPathTestAction implements Action {
 
     @Override
     public void step() {
-        PurePursuitController.DriveArcCommand command = controller.getCommand(
-                robotState.getPose(),
-                Timer.getFPGATimestamp());
-        drive.setDriveArcCommand(command);
+        drive.setDriveArcCommand(controller.getCommand(robotState.getPose()));
     }
 }

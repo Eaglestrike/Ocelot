@@ -22,14 +22,12 @@ public class PurePursuitController {
 
     private boolean isFinished = false;
     private int lastLookAheadIndex;
-    private double finishMargin;
     
     double pathLength;
 
-    public PurePursuitController(PathPointList path, double lookAheadDistance, double finishMargin, double finalVelocity) {
+    public PurePursuitController(PathPointList path, double lookAheadDistance) {
         this.lookAheadDistance = lookAheadDistance;
         this.path = path;
-        this.finishMargin = finishMargin;
 
         this.lastLookAheadIndex = 0;
         pathLength = this.path.goalComponent.getDistance();
@@ -48,7 +46,7 @@ public class PurePursuitController {
         return path.get(search);
     }
 
-    public DriveArcCommand getCommand(Pose pose, double timestamp) {
+    public DriveArcCommand getCommand(Pose pose) {
         // closest point to pose along path
         PathComponent targetComponent = getLookAheadPoint(pose);
 

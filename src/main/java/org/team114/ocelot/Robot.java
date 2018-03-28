@@ -111,7 +111,7 @@ public class Robot extends IterativeRobot {
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
-        autoModeSelector = new AutoModeSelector(drive, superstructure);
+        autoModeSelector = new AutoModeSelector(drive, superstructure, robotState);
         subsystemManager = new SubsystemManager(
                 drive,
                 superstructure,

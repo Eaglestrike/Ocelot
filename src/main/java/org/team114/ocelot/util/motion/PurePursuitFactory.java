@@ -43,11 +43,7 @@ public abstract class PurePursuitFactory {
         ));
     }
 
-    public static PurePursuitController startPurePursuit(PathPointList path, double lookAheadDistance, double finishMargin) {
-        return startPurePursuit(path, lookAheadDistance, finishMargin, 0);
-    }
-
-    public static PurePursuitController startPurePursuit(PathPointList path, double lookAheadDistance, double finishMargin, double finalVelocity) {
-        return new PurePursuitController(path, lookAheadDistance, finishMargin, finalVelocity);
+    public static PurePursuitController startPurePursuit(PathPointList path, double lookAheadDistance) {
+        return new PurePursuitController(path, lookAheadDistance);
     }
 }

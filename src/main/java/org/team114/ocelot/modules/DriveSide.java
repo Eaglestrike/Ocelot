@@ -37,7 +37,7 @@ public class DriveSide {
     }
 
     public void configureForTeleop() {
-        master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 50, 0);
+        master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 25, 0);
     }
 
     public void configureForAuto() {
