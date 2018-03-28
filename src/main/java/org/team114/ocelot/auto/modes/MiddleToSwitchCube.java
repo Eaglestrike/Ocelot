@@ -18,7 +18,7 @@ public class MiddleToSwitchCube extends AutoModeBase {
     Superstructure sstruct;
     RobotState rstate;
 
-    public MiddleToSwitchCube(Drive drive, Superstructure sstruct, RobotState rstate;) {
+    public MiddleToSwitchCube(Drive drive, Superstructure sstruct, RobotState rstate) {
         this.drive = drive;
         this.sstruct = sstruct;
         this.rstate = rstate;
