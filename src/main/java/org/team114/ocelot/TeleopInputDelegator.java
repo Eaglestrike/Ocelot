@@ -23,10 +23,9 @@ public class TeleopInputDelegator {
     public void defaultStep() {
         //TODO break into sub methods
         // ==== DRIVER ====
-        drive.setDriveSignal(cheesyDrive.cheesyDrive(controller.throttle(), controller.wheel(), controller.wantQuickTurn()));
-        // TODO VENTURA practice bot is inverted
-        // currently set for pb to be proper
-        drive.setGear(!controller.wantLowGear() ? Drive.State.LOW : Drive.State.HIGH);
+        drive.setDriveSignal(cheesyDrive.cheesyDrive(-controller.throttle(), -controller.wheel(), controller.wantQuickTurn()));
+
+        drive.setGear(controller.wantLowGear() ? Drive.State.LOW : Drive.State.HIGH);
 
         // ==== OPERATOR ====
         // carriage

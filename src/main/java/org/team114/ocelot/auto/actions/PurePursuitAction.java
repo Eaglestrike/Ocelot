@@ -28,6 +28,7 @@ public class PurePursuitAction implements Action {
 
     @Override
     public void start() {
+        drive.setGear(Drive.State.LOW);
     }
 
     @Override

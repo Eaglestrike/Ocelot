@@ -14,7 +14,7 @@ public class Lift {
 
     public Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
         this.masterTalon = masterTalon;
-        
+
         this.slaveTalon = slaveTalon;
         this.slaveTalon.set(ControlMode.Follower, masterTalon.getDeviceID());
         
@@ -31,13 +31,8 @@ public class Lift {
                 Settings.TALON_CONFIG_TIMEOUT_MS);
         this.masterTalon.setSensorPhase(true);
 
-        // TODO VENTURA: switch back
-        // competition
-//        this.masterTalon.setInverted(false);
-//        this.slaveTalon.setInverted(true);
-        // practice
-        this.masterTalon.setInverted(true);
-        this.slaveTalon.setInverted(false);
+        this.masterTalon.setInverted(false);
+        this.slaveTalon.setInverted(true);
 
         // neutral modes
         this.masterTalon.setNeutralMode(NeutralMode.Brake);

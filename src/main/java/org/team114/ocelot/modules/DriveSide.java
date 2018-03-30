@@ -1,6 +1,7 @@
 package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -25,6 +26,19 @@ public class DriveSide {
         this.slave.set(ControlMode.Follower, master.getDeviceID());
         this.master.setNeutralMode(NeutralMode.Brake);
         this.slave.setNeutralMode(NeutralMode.Brake);
+
+        this.master.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Settings.DriveSide.LOW_GEAR_VEL_PID_IDX, 10);
+        this.master.setSensorPhase(false);
+
+        this.master.configNominalOutputForward(0, 10);
+        this.master.configNominalOutputReverse(0, 10);
+        this.master.configPeakOutputForward(1, 10);
+        this.master.configPeakOutputReverse(-1, 10);
+
+        this.master.config_kF(Settings.DriveSide.LOW_GEAR_VEL_PID_IDX, 0.279714286, 10);
+        this.master.config_kP(0, 0.5, 10);
+        this.master.config_kI(0, 0, 10);
+        this.master.config_kD(0, 2.5, 10);
     }
 
     /**
@@ -46,6 +60,10 @@ public class DriveSide {
 
     public void setPercentOutput(double percentage) {
         master.set(ControlMode.PercentOutput, percentage);
+    }
+
+    public void setVelocity(double velocity_units_per_100ms) {
+        master.set(ControlMode.Velocity, velocity_units_per_100ms);
     }
 
     /**

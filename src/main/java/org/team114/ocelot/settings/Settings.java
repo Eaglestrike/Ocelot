@@ -61,6 +61,8 @@ public final class Settings {
         public static final int RIGHT_MASTER = 10;
         public static final int RIGHT_SLAVE = 9;
 
+        public static final int LOW_GEAR_VEL_PID_IDX = 0;
+
         // amps
         public static final int CURRENT_LIMIT_THRESHOLD = 60;
         public static final int CURRENT_LIMIT = 50;
@@ -75,7 +77,7 @@ public final class Settings {
         public static final int MASTER = 3;
         public static final int SLAVE = 4;
 
-        public static final int MAX_HEIGHT_TICKS = 36_000; // CAD estimate from Kat
+        public static final int MAX_HEIGHT_TICKS = 35_000; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
         //TODO tune
         public static final int NORMAL_SPEED = 100;
@@ -113,7 +115,7 @@ public final class Settings {
     public static final class SuperStructure {
 
         public static final int COMPLETE_ACTION_THRESHOLD_TICKS = 100;
-        public static final int ZEROING_INCREMENT_TICKS = -100;
+        public static final int ZEROING_INCREMENT_TICKS = -250;
         public static final int LOW_HEIGHT_TICKS = 0;
         public static final int SWITCH_HEIGHT_TICKS = 10_000;
         public static final int SCALE_HEIGHT_TICKS = 20_000;

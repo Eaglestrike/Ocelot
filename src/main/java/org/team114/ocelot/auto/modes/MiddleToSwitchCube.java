@@ -28,18 +28,18 @@ public class MiddleToSwitchCube extends AutoModeBase {
     protected void routine() {
         runAction(new ZeroLiftOneShotAction(sstruct));
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
-        if (side == MatchData.OwnedSide.LEFT) {
-            runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
-        } else if (side == MatchData.OwnedSide.RIGHT) {
+//        if (side == MatchData.OwnedSide.LEFT) {
+//            runAction(new PurePursuitAction(drive, rstate,
+//                    PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
+//        } else if (side == MatchData.OwnedSide.RIGHT) {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("middleToRightSwitch"), 2));
-        } else {
-            // WHAT - cross baseline
-            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-            runAction(new WaitAction(3));
-            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
-        }
+//        } else {
+//             WHAT - cross baseline
+//            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
+//            runAction(new WaitAction(3));
+//            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
+//        }
         runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.LOWERED));
         runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, 0.5));
     }

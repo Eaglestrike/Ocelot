@@ -55,8 +55,8 @@ public class Carriage {
                 liftStageTwo.set(false);
                 break;
             case MIDDLE:
-                liftStageOne.set(true);
-                liftStageTwo.set(false);
+                liftStageOne.set(false);
+                liftStageTwo.set(true);
                 break;
             case LOWERED:
                 liftStageOne.set(true);
@@ -80,6 +80,5 @@ public class Carriage {
         } else {
             setSpin(0);
         }
-        System.out.println("distance:" + distanceSensor.get());
     }
 }

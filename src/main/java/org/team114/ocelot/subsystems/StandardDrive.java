@@ -1,5 +1,6 @@
 package org.team114.ocelot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.modules.DriveSide;
@@ -41,7 +42,7 @@ public class StandardDrive implements Drive {
 
         this.shifter = shifter;
 
-        rightSide.setInverted(true);
+        leftSide.setInverted(true);
         prepareForAuto();
     }
 
@@ -63,6 +64,8 @@ public class StandardDrive implements Drive {
         double distance = (leftDistance + rightDistance - lastLeftAccumulated - lastRightAccumulated) / 2;
         lastLeftAccumulated = leftDistance;
         lastRightAccumulated = rightDistance;
+        SmartDashboard.putNumber("left enc", lastLeftAccumulated);
+        SmartDashboard.putNumber("right enc", lastRightAccumulated);
 
         robotState.addObservation(new Pose(
             latestState.getX() + (distance * Math.cos(angle)),

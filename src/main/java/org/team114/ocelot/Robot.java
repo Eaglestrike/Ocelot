@@ -105,9 +105,9 @@ public class Robot extends IterativeRobot {
         pneumatics = new StandardPneumatics(
                 new Compressor(),
                 pressureSensor);
-        //TODO refactor these somewhere in settings and find the actual values
-        pneumatics.setMinimumPressure(80);
-        pneumatics.setPressureMargin(20);
+
+        pneumatics.setMinimumPressure(45);
+        pneumatics.setMinimumPressure(85);
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
@@ -140,7 +140,6 @@ public class Robot extends IterativeRobot {
         autoModeExecutor.stop();
         //TODO VENTURA add more reset stuff
         drive.prepareForTeleop();
-        superstructure.setWantZero();
         this.teleopInputDelegator = new TeleopInputDelegator(drive, superstructure,
                 ControllerFactory.stickDriveOiPanel(), new CheesyDriveHelper());
     }
@@ -178,16 +177,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void testInit() {
-        testing = new Joystick(2);
-        subsystemManager.stop();
+        pneumatics.setMinimumPressure(-1);
     }
 
     @Override
     public void testPeriodic() {
-        subsystemManager.stop();
-        liftMaster.set(ControlMode.PercentOutput, testing.getRawAxis(1) * 1.0);
-        System.out.println(testing.getRawAxis(1));
-        SmartDashboard.putBoolean("fwd switch", liftMaster.getSensorCollection().isFwdLimitSwitchClosed());
-        SmartDashboard.putBoolean("rev switch", liftMaster.getSensorCollection().isRevLimitSwitchClosed());
     }
 }
+

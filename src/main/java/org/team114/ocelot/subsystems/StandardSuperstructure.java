@@ -1,6 +1,7 @@
 package org.team114.ocelot.subsystems;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.modules.Carriage;
@@ -44,6 +45,7 @@ public class StandardSuperstructure implements Superstructure {
 
         currentHeightDB.put(lift.getHeight());
         goalHeightDB.put(goalHeight);
+        SmartDashboard.putString("sstruct mode", state.state.name());
         distanceSensorDB.put(carriage.getDistance());
 
         // handle intake transitions
@@ -70,7 +72,7 @@ public class StandardSuperstructure implements Superstructure {
                 break;
             case ZEROING:
                 carriage.setSpeedToProximitySensor();
-                setHeight(getHeight() - Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
+                setHeight(getHeight() + Settings.SuperStructure.ZEROING_INCREMENT_TICKS);
                 if (lift.zeroLowerIfNecessary()) {
                     setHeight(0);
                     setState(State.StateEnum.CLOSED, timestamp);
