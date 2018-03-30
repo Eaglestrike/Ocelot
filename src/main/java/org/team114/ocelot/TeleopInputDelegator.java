@@ -75,7 +75,7 @@ public class TeleopInputDelegator {
                     (controller.manualLiftUp() ? 1 : 0) +
                     (controller.manualLiftDown() ? -1 : 0)));
         } else { // do not want manual control
-//            superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
+            superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
         }
     }
 }

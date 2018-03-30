@@ -113,20 +113,31 @@ public class StandardDrive implements Drive {
 
     @Override
     public void setDriveArcCommand(PurePursuitController.DriveArcCommand a) {
+//        double L, R;
+//        // convert TICKS / 100ms to ft/s
+//        double vel = a.vel * 10 * Settings.Drive.DRIVE_ENCODER_TICKS_PER_FOOT;
+//        if (Epsilon.epsilonEquals(a.curvature, 0)) {
+//            L = R = vel;
+//        } else {
+//            L = vel * a.curvature * (1/a.curvature + halfOfWheelbase);
+//            R = vel * a.curvature * (1/a.curvature - halfOfWheelbase);
+//        }
+////        //TODO replace with vel config
+//
+//        leftSide.setVelocity(L);
+//        rightSide.setVelocity(R); //TODO check
+        double Kv = 1/9.5; //TODO replace primitive speed controller with talon velocity control on main robot
         double L, R;
-        // convert TICKS / 100ms to ft/s
-        double vel = a.vel * 10 * Settings.Drive.DRIVE_ENCODER_TICKS_PER_FOOT;
         if (Epsilon.epsilonEquals(a.curvature, 0)) {
-            L = R = vel;
+            L = Kv * a.vel;
+            R = L;
         } else {
-            L = vel * a.curvature * (1/a.curvature + halfOfWheelbase);
-            R = vel * a.curvature * (1/a.curvature - halfOfWheelbase);
+            L = Kv * a.vel * a.curvature * (1/a.curvature + halfOfWheelbase);
+            R = Kv * a.vel * a.curvature * (1/a.curvature - halfOfWheelbase);
         }
-//        //TODO replace with vel config
-//        leftSide.setPercentOutput(L);
-//        rightSide.setPercentOutput(R);
-        leftSide.setVelocity(L);
-        rightSide.setVelocity(-R); //TODO check
+        //TODO replace with vel config
+        leftSide.setPercentOutput(L);
+        rightSide.setPercentOutput(R);
     }
 
     @Override

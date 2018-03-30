@@ -87,7 +87,7 @@ public class Lift {
         masterTalon.set(ControlMode.MotionMagic, height);
         SmartDashboard.putNumber("master current", this.masterTalon.getOutputCurrent());
         SmartDashboard.putNumber("slave current", this.slaveTalon.getOutputCurrent());
-        System.out.println("M, S:: "+ this.masterTalon.getOutputCurrent() + "    " + this.slaveTalon.getOutputCurrent());
+//        System.out.println("M, S:: "+ this.masterTalon.getOutputCurrent() + "    " + this.slaveTalon.getOutputCurrent());
     }
 
     //TODO add p controller to this mode

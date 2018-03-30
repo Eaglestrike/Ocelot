@@ -61,7 +61,7 @@ public class StandardSuperstructure implements Superstructure {
                 break;
             case OUTTAKING:
                 spinCarriage(outtakeSpeed);
-                System.out.println(timestamp + " : " + state.timestamp);
+//                System.out.println(timestamp + " : " + state.timestamp);
                 if (timestamp - state.timestamp > Settings.Carriage.OUTTAKE_TIME_SECONDS) {
                     setState(State.StateEnum.CLOSED, timestamp);
                 }

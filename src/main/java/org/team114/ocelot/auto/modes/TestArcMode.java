@@ -1,10 +1,7 @@
 package org.team114.ocelot.auto.modes;
 
 import org.team114.ocelot.auto.AutoModeBase;
-import org.team114.ocelot.auto.actions.DriveArcAction;
-import org.team114.ocelot.auto.actions.SetDriveCommandAction;
-import org.team114.ocelot.auto.actions.WaitAction;
-import org.team114.ocelot.auto.actions.ZeroLiftOneShotAction;
+import org.team114.ocelot.auto.actions.*;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
@@ -21,6 +18,7 @@ public class TestArcMode extends AutoModeBase {
 
     @Override
     protected void routine() {
+        runAction(new ShiftGearAction(drive, Drive.State.LOW));
         runAction(new ZeroLiftOneShotAction(sstruct));
         runAction(new DriveArcAction(drive, new PurePursuitController.DriveArcCommand(0.2, 4)));
         runAction(new WaitAction(2));

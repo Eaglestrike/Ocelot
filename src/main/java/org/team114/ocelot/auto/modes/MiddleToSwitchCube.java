@@ -34,6 +34,7 @@ public class MiddleToSwitchCube extends AutoModeBase {
 //        } else if (side == MatchData.OwnedSide.RIGHT) {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("middleToRightSwitch"), 2));
+            System.out.println("ALKSDLKASJDLK\n\n\n\n\n\n\n\nASJLKDJASLKDJLKSAJd");
 //        } else {
 //             WHAT - cross baseline
 //            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
