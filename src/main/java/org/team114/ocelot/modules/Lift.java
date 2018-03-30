@@ -3,6 +3,7 @@ package org.team114.ocelot.modules;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.settings.Settings;
 
 /**
@@ -84,6 +85,9 @@ public class Lift {
      */
     public void goToHeight(int height) {
         masterTalon.set(ControlMode.MotionMagic, height);
+        SmartDashboard.putNumber("master current", this.masterTalon.getOutputCurrent());
+        SmartDashboard.putNumber("slave current", this.slaveTalon.getOutputCurrent());
+        System.out.println("M, S:: "+ this.masterTalon.getOutputCurrent() + "    " + this.slaveTalon.getOutputCurrent());
     }
 
     //TODO add p controller to this mode

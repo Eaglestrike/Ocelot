@@ -17,8 +17,10 @@ public interface Controller {
     // ====== OPERATOR ======
 
     // carriage states
-    boolean carriageOpen();
+    boolean carriageOpenLowSpeed();
 
+    boolean carriageOpenIdle();
+    
     boolean carriageIntake();
 
     boolean carriageClose();

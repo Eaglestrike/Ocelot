@@ -59,6 +59,8 @@ public interface Superstructure extends Subsystem {
      */
     void setWantClosedOuttaking();
 
+    void setWantOpenLowSpeed();
+
     /**
      * Configures the carriage for intaking boxes
      * Open and Motors running
@@ -77,6 +79,7 @@ public interface Superstructure extends Subsystem {
         public enum StateEnum {
             CLOSED,
             OPEN_IDLE,
+            OPEN_LOW_SPEED_DROP,
             INTAKING,
             OUTTAKING,
             ZEROING

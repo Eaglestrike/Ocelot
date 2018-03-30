@@ -26,6 +26,10 @@ public final class Settings {
                 (1.0 / ENCODER_TICKS_PER_REVOLUTION) *
                         (24.0 / 60.0) *
                         (0.5 * Math.PI);
+
+        public static final double DRIVE_ENCODER_TICKS_PER_FOOT = ENCODER_TICKS_PER_REVOLUTION *
+                (60.0 / 24.0) /
+                (0.5 * Math.PI);
     }
 
     public static final class PurePursuit {
@@ -84,9 +88,9 @@ public final class Settings {
         public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
 
         // amps
-        public static final int CURRENT_LIMIT_THRESHOLD = 200;
-        public static final int CURRENT_LIMIT = 180;
-        public static final int CURRENT_LIMIT_DURATION_MS = 200;
+        public static final int CURRENT_LIMIT_THRESHOLD = 27;
+        public static final int CURRENT_LIMIT = 23;
+        public static final int CURRENT_LIMIT_DURATION_MS = 500;
 
         public static final int MAGIC_PID_SLOT_INDEX = 0;
         public static final int MAGIC_PID_LOOP_INDEX = 0;
@@ -97,6 +101,7 @@ public final class Settings {
         public static final double OUTTAKE_COMMAND_NORMAL = 0.5;
         public static final double OUTTAKE_COMMAND_SLOW = 0.25;
         public static final double OUTTAKE_TIME_SECONDS = 0.5;
+        public static final double OUTTAKE_COMMAND_RISING_OPEN_IDLE = 0.3;
 
         private Carriage() {
             throw new AssertionError("Constructor must not be called on utility class.");
@@ -113,12 +118,8 @@ public final class Settings {
     }
 
     public static final class SuperStructure {
-
         public static final int COMPLETE_ACTION_THRESHOLD_TICKS = 100;
         public static final int ZEROING_INCREMENT_TICKS = -250;
-        public static final int LOW_HEIGHT_TICKS = 0;
-        public static final int SWITCH_HEIGHT_TICKS = 10_000;
-        public static final int SCALE_HEIGHT_TICKS = 20_000;
     }
 
     public static final class DistanceSensor {

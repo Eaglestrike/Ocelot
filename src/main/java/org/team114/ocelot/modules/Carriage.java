@@ -75,10 +75,11 @@ public class Carriage {
     }
 
     public void setSpeedToProximitySensor() {
-        if (distanceSensor.get() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD_CM) {
-            setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
-        } else {
-            setSpin(0);
-        }
+//        if (distanceSensor.get() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD_CM) {
+//            setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
+//        } else {
+//            setSpin(0);
+//        }
+        setSpin(-2.5 / 12.0);
     }
 }

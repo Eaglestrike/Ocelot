@@ -82,8 +82,13 @@ public class StickDriveOiPanel implements Controller {
 
     // carriage states
     @Override
-    public boolean carriageOpen() {
+    public boolean carriageOpenLowSpeed() {
         return oi.getRawButtonPressed(10);
+    }
+
+    @Override
+    public boolean carriageOpenIdle() {
+        return oi.getRawButtonPressed(12);
     }
 
     @Override
@@ -135,12 +140,14 @@ public class StickDriveOiPanel implements Controller {
     // TODO verify these two button ids
     @Override
     public boolean manualLiftUp() {
-        return oi.getRawButton(15);
+//        return oi.getRawButton(15);
+        return false;
     }
 
     @Override
     public boolean manualLiftDown() {
-        return oi.getRawButton(14);
+//        return oi.getRawButton(14);
+        return false;
     }
 
     // ====== MISC =====

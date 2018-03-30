@@ -43,8 +43,10 @@ public class TeleopInputDelegator {
             superstructure.setWantClosedOuttaking();
         } else if (controller.carriageIntake()) {
             superstructure.setWantIntake();
-        } else if (controller.carriageOpen()) {
+        } else if (controller.carriageOpenIdle()) {
             superstructure.setWantOpenIdle();
+        } else if (controller.carriageOpenLowSpeed()) {
+            superstructure.setWantOpenLowSpeed();
         } else if (controller.liftZeroCalibration()) {
             superstructure.setWantZero();
         }
@@ -60,7 +62,7 @@ public class TeleopInputDelegator {
                 break;
             case -1:
                 superstructure.setOuttakeSpeed(Settings.Carriage.OUTTAKE_COMMAND_SLOW);
-                liftSpeed = 0.25;
+                liftSpeed = 0.3;
                 break;
             default:
                 liftSpeed = 0.5;
@@ -73,7 +75,7 @@ public class TeleopInputDelegator {
                     (controller.manualLiftUp() ? 1 : 0) +
                     (controller.manualLiftDown() ? -1 : 0)));
         } else { // do not want manual control
-            superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
+//            superstructure.setHeightFraction((1 + controller.liftHeightSetPoint()) / 2.0);
         }
     }
 }

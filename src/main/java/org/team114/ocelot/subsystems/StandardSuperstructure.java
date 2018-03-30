@@ -66,6 +66,13 @@ public class StandardSuperstructure implements Superstructure {
                     setState(State.StateEnum.CLOSED, timestamp);
                 }
                 break;
+            case OPEN_LOW_SPEED_DROP:
+                actuateCarriage(true);
+                if (Timer.getFPGATimestamp() - state.timestamp < 0.5) {
+                    spinCarriage(Settings.Carriage.OUTTAKE_COMMAND_RISING_OPEN_IDLE);
+                } else {
+                    spinCarriage(0);
+                }
             case OPEN_IDLE:
                 actuateCarriage(true);
                 spinCarriage(0);
@@ -112,6 +119,11 @@ public class StandardSuperstructure implements Superstructure {
     @Override
     public void setWantZero() {
         setState(State.StateEnum.ZEROING);
+    }
+
+    @Override
+    public void setWantOpenLowSpeed() {
+        setState(State.StateEnum.OPEN_LOW_SPEED_DROP);
     }
 
     @Override
