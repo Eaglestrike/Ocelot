@@ -1,5 +1,6 @@
 package org.team114.ocelot.auto.modes;
 
+import edu.wpi.first.wpilibj.Timer;
 import openrio.powerup.MatchData;
 import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotState;
@@ -27,21 +28,23 @@ public class MiddleToSwitchCube extends AutoModeBase {
     @Override
     protected void routine() {
         runAction(new ZeroLiftOneShotAction(sstruct));
+        System.out.println(Timer.getFPGATimestamp() + "1231");
+        runAction(new MoveLiftAction(sstruct, 10_000));
+        System.out.println(Timer.getFPGATimestamp() + "1231");
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
-//        if (side == MatchData.OwnedSide.LEFT) {
-//            runAction(new PurePursuitAction(drive, rstate,
-//                    PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
-//        } else if (side == MatchData.OwnedSide.RIGHT) {
+        if (side == MatchData.OwnedSide.LEFT) {
             runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("middleToRightSwitch"), 2));
-            System.out.println("ALKSDLKASJDLK\n\n\n\n\n\n\n\nASJLKDJASLKDJLKSAJd");
-//        } else {
-//             WHAT - cross baseline
-//            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-//            runAction(new WaitAction(3));
-//            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
-//        }
+                    PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
+        } else if (side == MatchData.OwnedSide.RIGHT) {
+            runActionTimeout(new PurePursuitAction(drive, rstate,
+                    PurePursuitFactory.loadPath("middleToRightSwitch"), 2), 5);
+        } else {
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
+            runAction(new WaitAction(3));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
+        }
         runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.LOWERED));
-        runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, 0.5));
+        runAction(new WaitAction(0.5));
+        runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, 0.75));
     }
 }

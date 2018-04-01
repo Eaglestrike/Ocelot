@@ -20,8 +20,8 @@ public class CrossBaseLine extends AutoModeBase {
     @Override
     protected void routine() {
         runAction(new ZeroLiftOneShotAction(sstruct));
-        runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-        runAction(new WaitAction(2));
+        runAction(new SetDriveCommandAction(drive, new DriveSignal(-0.5, -0.5)));
+        runAction(new WaitAction(3));
         runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
     }
 }

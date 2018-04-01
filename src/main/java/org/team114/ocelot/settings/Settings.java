@@ -78,8 +78,8 @@ public final class Settings {
         private Lift() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final int MASTER = 3;
-        public static final int SLAVE = 4;
+        public static final int MASTER = 4;
+        public static final int SLAVE = 6;
 
         public static final int MAX_HEIGHT_TICKS = 35_000; // CAD estimate from Kat
         public static final double CLIMBER_FEET_PER_REVOLUTION = 3.63168 / 12; // CAD estimate from Albert
