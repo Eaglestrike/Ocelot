@@ -23,7 +23,7 @@ public class PurePursuitController {
     private boolean isFinished = false;
     private int lastLookAheadIndex;
     
-    double pathLength;
+    private double pathLength;
 
     public PurePursuitController(PathPointList path, double lookAheadDistance) {
         this.lookAheadDistance = lookAheadDistance;

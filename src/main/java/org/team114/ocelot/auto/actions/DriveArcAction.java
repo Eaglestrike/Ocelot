@@ -4,8 +4,8 @@ import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
 public class DriveArcAction extends OneShotAction {
-    Drive drive;
-    PurePursuitController.DriveArcCommand command;
+    private Drive drive;
+    private PurePursuitController.DriveArcCommand command;
 
     public DriveArcAction(Drive drive, PurePursuitController.DriveArcCommand command) {
         this.drive = drive;

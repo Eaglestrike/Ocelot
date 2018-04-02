@@ -73,6 +73,7 @@ public class StandardSuperstructure implements Superstructure {
                 } else {
                     spinCarriage(0);
                 }
+                break;
             case OPEN_IDLE:
                 actuateCarriage(true);
                 spinCarriage(0);

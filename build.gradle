@@ -1,3 +1,7 @@
+import jaci.openrio.gradle.frc.RoboRIO
+import jaci.openrio.gradle.frc.FRCJavaArtifact
+import jaci.openrio.gradle.GradleRIOPlugin
+
 plugins {
     id "java"
     id "eclipse"
@@ -16,12 +20,12 @@ repositories {
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
     targets {
-        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+        target("roborio", RoboRIO) {
             team = 114
         }
     }
     artifacts {
-        artifact("frcJava", jaci.openrio.gradle.frc.FRCJavaArtifact) {
+        artifact("frcJava", FRCJavaArtifact) {
             targets << "roborio"
             if (project.hasProperty("debug")) {
                 project.logger.lifecycle("\\ Debugging has been enabled!")
@@ -62,12 +66,16 @@ test {
     outputs.upToDateWhen { false }
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ["-Xep:FallThrough:ERROR"]
+}
+
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest("org.team114.ocelot.Robot")
+    manifest GradleRIOPlugin.javaManifest("org.team114.ocelot.Robot")
 }
 
 task wrapper(type: Wrapper) {

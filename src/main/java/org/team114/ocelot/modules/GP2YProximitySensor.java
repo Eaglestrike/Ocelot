@@ -2,8 +2,8 @@ package org.team114.ocelot.modules;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team114.lib.util.InterpolatingTreeMap;
 import org.team114.lib.util.InterpolatingDouble;
+import org.team114.lib.util.InterpolatingTreeMap;
 
 public class GP2YProximitySensor implements ProximitySensor {
 

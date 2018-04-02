@@ -3,7 +3,6 @@ package org.team114.ocelot.factory;
 import edu.wpi.first.wpilibj.Joystick;
 import org.team114.ocelot.controllers.Controller;
 import org.team114.ocelot.controllers.StickDriveOiPanel;
-import org.team114.ocelot.controllers.XboxController;
 
 public final class ControllerFactory {
 

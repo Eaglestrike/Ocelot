@@ -2,7 +2,6 @@ package org.team114.ocelot.modules;
 
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.settings.Settings;
 

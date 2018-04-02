@@ -4,7 +4,7 @@ import org.team114.ocelot.subsystems.Superstructure;
 
 public class TriggerIntakeOneShotAction extends OneShotAction {
 
-    public final Superstructure.State.StateEnum status;
+    private final Superstructure.State.StateEnum status;
     private final Superstructure superstructure;
     private final double outtakeCommand;
 
@@ -29,6 +29,12 @@ public class TriggerIntakeOneShotAction extends OneShotAction {
                 break;
             case INTAKING:
                 superstructure.setWantIntake();
+                break;
+            case ZEROING:
+                superstructure.setWantZero();
+                break;
+            case OPEN_LOW_SPEED_DROP:
+                superstructure.setWantOpenLowSpeed();
                 break;
         }
     }

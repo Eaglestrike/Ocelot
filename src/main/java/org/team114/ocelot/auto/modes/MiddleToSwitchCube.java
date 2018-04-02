@@ -2,7 +2,6 @@ package org.team114.ocelot.auto.modes;
 
 import edu.wpi.first.wpilibj.Timer;
 import openrio.powerup.MatchData;
-import org.team114.ocelot.Robot;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.*;
@@ -10,14 +9,13 @@ import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
-import org.team114.ocelot.util.motion.PathPointList;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 public class MiddleToSwitchCube extends AutoModeBase {
 
-    Drive drive;
-    Superstructure sstruct;
-    RobotState rstate;
+    private final Drive drive;
+    private final Superstructure sstruct;
+    private final RobotState rstate;
 
     public MiddleToSwitchCube(Drive drive, Superstructure sstruct, RobotState rstate) {
         this.drive = drive;

@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.auto.actions.Action;
 
 public class WaitAction implements Action {
-    double initial;
-    double seconds;
+    private double initial;
+    private double seconds;
+
     public WaitAction(double seconds) {
         this.seconds = seconds;
     }

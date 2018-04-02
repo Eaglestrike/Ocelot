@@ -12,7 +12,7 @@ import org.team114.ocelot.subsystems.Superstructure;
 import java.util.function.Supplier;
 
 public class AutoModeSelector {
-    private final SendableChooser<Supplier<AutoModeBase>> chooser = new SendableChooser();
+    private final SendableChooser<Supplier<AutoModeBase>> chooser = new SendableChooser<>();
 
     public AutoModeSelector(Drive drive, Superstructure sstruct, RobotState rstate) {
         chooser.addDefault("Baseline", () -> new CrossBaseLine(drive, sstruct));

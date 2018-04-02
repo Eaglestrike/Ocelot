@@ -1,21 +1,16 @@
 package org.team114.ocelot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.subsystem.SubsystemManager;
-import org.team114.lib.util.EdgeDetector;
+import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.AutoModeSelector;
-import org.team114.ocelot.auto.modes.TestMode;
-import org.team114.ocelot.controllers.Controller;
 import org.team114.ocelot.factory.ControllerFactory;
 import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
 import org.team114.ocelot.util.CheesyDriveHelper;
-import org.team114.lib.util.DashboardHandle;
 
 import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
 import static org.team114.ocelot.factory.TalonFactory.newCimTalon;

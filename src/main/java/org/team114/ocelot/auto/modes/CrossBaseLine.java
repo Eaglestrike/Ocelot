@@ -9,8 +9,8 @@ import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
 
 public class CrossBaseLine extends AutoModeBase {
-    Drive drive;
-    Superstructure sstruct;
+    private final Drive drive;
+    private final Superstructure sstruct;
 
     public CrossBaseLine(Drive drive, Superstructure sstruct) {
         this.drive = drive;

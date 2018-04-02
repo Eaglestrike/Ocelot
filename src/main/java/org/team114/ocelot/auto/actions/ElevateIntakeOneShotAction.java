@@ -5,7 +5,7 @@ import org.team114.ocelot.subsystems.Superstructure;
 
 public class ElevateIntakeOneShotAction extends OneShotAction {
 
-    public final CarriageElevationStage stage;
+    private final CarriageElevationStage stage;
     private final Superstructure superstructure;
 
     public ElevateIntakeOneShotAction(Superstructure sstruct, CarriageElevationStage stage) {

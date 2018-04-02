@@ -1,16 +1,15 @@
 package org.team114.ocelot.auto.actions;
 
 import org.team114.lib.auto.actions.Action;
-import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Superstructure;
 
 public class ZeroLiftAndBlockAction implements Action {
+
+    private Superstructure superstructure;
     /**
      * Given the superstructure, constructs an instance.
      * @param superstructure the superstructure
      */
-
-    Superstructure superstructure;
     public ZeroLiftAndBlockAction(Superstructure superstructure) {
         this.superstructure = superstructure;
     }

@@ -1,15 +1,17 @@
 package org.team114.ocelot.auto.modes;
 
 import org.team114.ocelot.auto.AutoModeBase;
-import org.team114.ocelot.auto.actions.*;
+import org.team114.ocelot.auto.actions.DriveArcAction;
+import org.team114.ocelot.auto.actions.ShiftGearAction;
+import org.team114.ocelot.auto.actions.WaitAction;
+import org.team114.ocelot.auto.actions.ZeroLiftOneShotAction;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
-import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
 public class TestArcMode extends AutoModeBase {
-    Drive drive;
-    Superstructure sstruct;
+    private final Drive drive;
+    private final Superstructure sstruct;
 
     public TestArcMode(Drive drive, Superstructure sstruct) {
         this.drive = drive;

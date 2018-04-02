@@ -1,6 +1,5 @@
 package org.team114.ocelot.factory;
 
-import com.ctre.phoenix.ParamEnum;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.team114.ocelot.settings.Settings;

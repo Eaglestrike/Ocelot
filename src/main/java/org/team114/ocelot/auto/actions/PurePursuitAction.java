@@ -1,6 +1,5 @@
 package org.team114.ocelot.auto.actions;
 
-import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.auto.actions.Action;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.subsystems.Drive;
