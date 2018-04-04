@@ -7,6 +7,8 @@ import org.team114.ocelot.util.motion.PurePursuitController;
 public interface Drive extends Subsystem {
     void setGear(State state);
 
+    State getGear();
+
     void setDriveSignal(DriveSignal signal);
 
     void setDriveArcCommand(PurePursuitController.DriveArcCommand arc);

@@ -7,7 +7,7 @@ public class ElevateIntakeOneShotAction extends OneShotAction {
 
     private final CarriageElevationStage stage;
     private final Superstructure superstructure;
-    
+
     public ElevateIntakeOneShotAction(Superstructure sstruct, CarriageElevationStage stage) {
         superstructure = sstruct;
         this.stage = stage;

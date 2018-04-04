@@ -8,10 +8,13 @@ import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
 
+import javax.inject.Inject;
+
 public class CrossBaseLine extends AutoModeBase {
     private final Drive drive;
     private final Superstructure sstruct;
 
+    @Inject
     public CrossBaseLine(Drive drive, Superstructure sstruct) {
         this.drive = drive;
         this.sstruct = sstruct;

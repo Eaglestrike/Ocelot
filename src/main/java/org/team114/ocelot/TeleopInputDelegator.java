@@ -7,12 +7,15 @@ import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.CheesyDriveHelper;
 
+import javax.inject.Inject;
+
 public class TeleopInputDelegator {
     private final Drive drive;
     private final Superstructure superstructure;
     private final Controller controller;
     private final CheesyDriveHelper cheesyDrive;
 
+    @Inject
     public TeleopInputDelegator(Drive drive, Superstructure superstructure, Controller controller, CheesyDriveHelper cheesyDrive) {
         this.drive = drive;
         this.superstructure = superstructure;

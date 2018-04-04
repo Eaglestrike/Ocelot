@@ -11,12 +11,15 @@ import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
 
+import javax.inject.Inject;
+
 public class MiddleToSwitchCube extends AutoModeBase {
 
     private final Drive drive;
     private final Superstructure sstruct;
     private final RobotState rstate;
 
+    @Inject
     public MiddleToSwitchCube(Drive drive, Superstructure sstruct, RobotState rstate) {
         this.drive = drive;
         this.sstruct = sstruct;

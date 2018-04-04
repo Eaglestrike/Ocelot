@@ -9,15 +9,18 @@ import org.team114.ocelot.auto.modes.TestArcMode;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 
+import javax.inject.Inject;
 import java.util.function.Supplier;
 
 public class AutoModeSelector {
     private final SendableChooser<Supplier<AutoModeBase>> chooser = new SendableChooser<>();
 
-    public AutoModeSelector(Drive drive, Superstructure sstruct, RobotState rstate) {
-        chooser.addDefault("Baseline", () -> new CrossBaseLine(drive, sstruct));
-        chooser.addObject("Middle to Switch Sides", () -> new MiddleToSwitchCube(drive, sstruct, rstate));
-        chooser.addObject("Test Arc", () -> new TestArcMode(drive, sstruct));
+    @Inject
+    public AutoModeSelector(CrossBaseLine crossBaseLine, MiddleToSwitchCube middleToSwitchCube,
+                            TestArcMode testArcMode) {
+        chooser.addDefault("Baseline", () -> crossBaseLine);
+        chooser.addObject("Middle to Switch Sides", () -> middleToSwitchCube);
+        chooser.addObject("Test Arc", () -> testArcMode);
         SmartDashboard.putData("Auto Mode Selector", chooser);
     }
 

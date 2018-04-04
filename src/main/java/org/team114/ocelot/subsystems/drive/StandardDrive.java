@@ -111,6 +111,11 @@ public class StandardDrive implements Drive {
     }
 
     @Override
+    public synchronized State getGear() {
+        return shifter.get();
+    }
+
+    @Override
     public void setDriveSignal(DriveSignal signal) {
         leftSide.setPercentOutput(signal.getLeft());
         rightSide.setPercentOutput(signal.getRight());
