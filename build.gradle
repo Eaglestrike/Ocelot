@@ -10,6 +10,7 @@ plugins {
     id "net.ltgt.errorprone" version "0.0.13"
 }
 
+// bytecode version for robot
 sourceCompatibility = 1.8
 
 repositories {
@@ -52,10 +53,10 @@ dependencies {
             ['com.google.code.findbugs:annotations:2.0.1']
     )
 
-    // dagger
+    // dagger and autofactory
+    // note that dagger has some runtime dependcies, whereas autofactory is compile-time only
     compile 'com.google.dagger:dagger:2.+'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
-
     compileOnly 'com.google.auto.factory:auto-factory:1.0-beta5'
     annotationProcessor 'com.google.auto.factory:auto-factory:1.0-beta5'
 
@@ -75,12 +76,17 @@ test {
 }
 
 tasks.withType(JavaCompile) {
+    // errorprone options
     options.compilerArgs += ["-Xep:FallThrough:ERROR"]
+
+    // tell javac where to put generated code
     options.compilerArgs += ["-s", "${buildDir}/gen"]
 }
 idea {
     module {
+        // tell IntelliJ where the generated source goes
         sourceDirs += file("${buildDir}/gen")
+        generatedSourceDirs += [file("${buildDir}/gen")]
     }
 }
 
