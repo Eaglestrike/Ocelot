@@ -7,9 +7,15 @@ import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.AutoModeSelector;
 import org.team114.ocelot.factory.ControllerFactory;
-import org.team114.ocelot.modules.*;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.*;
+import org.team114.ocelot.subsystems.drive.*;
+import org.team114.ocelot.subsystems.pneumatics.PneumaticPressureSensor;
+import org.team114.ocelot.subsystems.pneumatics.StandardPneumatics;
+import org.team114.ocelot.subsystems.superstructure.Carriage;
+import org.team114.ocelot.subsystems.superstructure.GP2YProximitySensor;
+import org.team114.ocelot.subsystems.superstructure.Lift;
+import org.team114.ocelot.subsystems.superstructure.StandardSuperstructure;
 import org.team114.ocelot.util.CheesyDriveHelper;
 
 import static org.team114.ocelot.factory.TalonFactory.new775ProTalon;
@@ -58,7 +64,6 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-
         // create driver-facing stuff
         pressureSensor = new PneumaticPressureSensor(new AnalogInput(Settings.Pneumatics.PNEUMATIC_PRESSURE_SENSOR_ID));
 

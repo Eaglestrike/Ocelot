@@ -1,4 +1,4 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

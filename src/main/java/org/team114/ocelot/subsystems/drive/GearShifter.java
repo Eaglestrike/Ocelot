@@ -1,8 +1,11 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.drive;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.team114.ocelot.subsystems.Drive;
 
+import javax.inject.Singleton;
+
+@Singleton
 public class GearShifter {
 
     private final DoubleSolenoid gearSolenoid;

@@ -1,15 +1,20 @@
-package org.team114.ocelot.subsystems;
+package org.team114.ocelot.subsystems.pneumatics;
 
 import edu.wpi.first.wpilibj.Compressor;
-import org.team114.ocelot.modules.PneumaticPressureSensor;
 import org.team114.ocelot.settings.Settings;
+import org.team114.ocelot.subsystems.Pneumatics;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class StandardPneumatics implements Pneumatics {
     private final Compressor compressor;
     private final PneumaticPressureSensor pressureSensor;
     private double activationPressure = -1;
     private double pressureMargin = Settings.Pneumatics.DEFAULT_PRESSURE_MARGIN;
 
+    @Inject
     public StandardPneumatics(Compressor compressor, PneumaticPressureSensor pressureSensor) {
         this.compressor = compressor;
         this.pressureSensor = pressureSensor;

@@ -1,13 +1,16 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.superstructure;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
 
+import javax.inject.Singleton;
+
 /**
  * The grabber/thrower unit of the robot.
  */
+@Singleton
 public class Carriage {
 
     private final Solenoid intake;

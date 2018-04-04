@@ -5,7 +5,7 @@ import openrio.powerup.MatchData;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.*;
-import org.team114.ocelot.modules.CarriageElevationStage;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.DriveSignal;
