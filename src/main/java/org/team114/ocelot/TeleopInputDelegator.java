@@ -1,10 +1,10 @@
 package org.team114.ocelot;
 
 import org.team114.ocelot.controllers.Controller;
-import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 import org.team114.ocelot.util.CheesyDriveHelper;
 
 import javax.inject.Inject;

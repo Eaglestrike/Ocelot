@@ -1,12 +1,15 @@
 package org.team114.ocelot;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import org.team114.lib.subsystem.SubsystemManager;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.ocelot.auto.AutoModeExecutor;
 import org.team114.ocelot.auto.AutoModeSelector;
 import org.team114.ocelot.settings.Settings;
-import org.team114.ocelot.subsystems.*;
+import org.team114.ocelot.subsystems.Drive;
+import org.team114.ocelot.subsystems.Pneumatics;
+import org.team114.ocelot.subsystems.Superstructure;
 
 /**
  * Main ocelot class, which acts as the root for ownership and control of the ocelot.

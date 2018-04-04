@@ -3,7 +3,6 @@ package org.team114.ocelot.subsystems.pneumatics;
 import edu.wpi.first.wpilibj.AnalogInput;
 import org.team114.ocelot.settings.Settings;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton

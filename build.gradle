@@ -53,19 +53,14 @@ dependencies {
             ['com.google.code.findbugs:annotations:2.0.1']
     )
 
-    // dagger and autofactory
-    // note that dagger has some runtime dependcies, whereas autofactory is compile-time only
+    // dagger
     compile 'com.google.dagger:dagger:2.+'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
-    compileOnly 'com.google.auto.factory:auto-factory:1.0-beta5'
-    annotationProcessor 'com.google.auto.factory:auto-factory:1.0-beta5'
-
 
     // testing and mocking
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-
     testCompile "org.mockito:mockito-core:2.+"
 }
 
