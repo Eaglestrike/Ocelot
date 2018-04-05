@@ -36,8 +36,8 @@ public class StandardDrive implements Drive {
     private double lastRightAccumulated;
 
     @Inject
-    public StandardDrive(RobotState robotState, Gyro gyro, @Left DriveSide leftSide,
-                         @Right DriveSide rightSide, GearShifter shifter) {
+    StandardDrive(RobotState robotState, Gyro gyro, @Left DriveSide leftSide,
+                  @Right DriveSide rightSide, GearShifter shifter) {
 
         this.robotState = robotState;
         this.gyro = gyro;

@@ -10,7 +10,7 @@ import org.team114.ocelot.settings.Settings;
 /**
  * Represents a side of the drive train, and encapsulates the required talons/
  */
-public class DriveSide {
+class DriveSide {
     private final TalonSRX master;
     private final TalonSRX slave;
 
@@ -19,7 +19,7 @@ public class DriveSide {
      * @param master the master talon
      * @param slave the slave talon
      */
-    public DriveSide(TalonSRX master, TalonSRX slave) {
+    DriveSide(TalonSRX master, TalonSRX slave) {
         this.master = master;
         this.slave = slave;
 
@@ -45,24 +45,24 @@ public class DriveSide {
      * Inverts or un-inverts control.
      * @param inverted whether control should be inverted or not
      */
-    public void setInverted(boolean inverted) {
+    void setInverted(boolean inverted) {
         master.setInverted(inverted);
         slave.setInverted(inverted);
     }
 
-    public void configureForTeleop() {
+    void configureForTeleop() {
         master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 25, 0);
     }
 
-    public void configureForAuto() {
+    void configureForAuto() {
         master.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 3, 0);
     }
 
-    public void setPercentOutput(double percentage) {
+    void setPercentOutput(double percentage) {
         master.set(ControlMode.PercentOutput, percentage);
     }
 
-    public void setVelocity(double velocity_units_per_100ms) {
+    void setVelocity(double velocity_units_per_100ms) {
         master.set(ControlMode.Velocity, velocity_units_per_100ms);
     }
 
@@ -70,7 +70,7 @@ public class DriveSide {
      * Returns encoder position.
      * @return encoder position in feet
      */
-    public double getPosition() {
+    double getPosition() {
         return master.getSelectedSensorPosition(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 
@@ -78,7 +78,7 @@ public class DriveSide {
      * Returns encoder velocity.
      * @return velocity in feet per second
      */
-    public double getVelocity() {
+    double getVelocity() {
         return master.getSelectedSensorVelocity(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
     }
 }

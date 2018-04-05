@@ -15,7 +15,7 @@ public class StandardPneumatics implements Pneumatics {
     private double pressureMargin = Settings.Pneumatics.DEFAULT_PRESSURE_MARGIN;
 
     @Inject
-    public StandardPneumatics(Compressor compressor, PneumaticPressureSensor pressureSensor) {
+    StandardPneumatics(Compressor compressor, PneumaticPressureSensor pressureSensor) {
         this.compressor = compressor;
         this.pressureSensor = pressureSensor;
     }

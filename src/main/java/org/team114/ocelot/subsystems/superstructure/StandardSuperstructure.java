@@ -28,7 +28,7 @@ public class StandardSuperstructure implements Superstructure {
 
 
     @Inject
-    public StandardSuperstructure(Carriage carriage, Lift lift) {
+    StandardSuperstructure(Carriage carriage, Lift lift) {
         this.carriage = carriage;
         this.lift = lift;
     }

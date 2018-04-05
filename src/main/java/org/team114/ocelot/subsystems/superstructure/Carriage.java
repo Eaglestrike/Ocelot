@@ -21,12 +21,12 @@ public class Carriage {
     private final ProximitySensor distanceSensor;
     private CarriageElevationStage currentStage = CarriageElevationStage.RAISED;
 
-    public Carriage(Solenoid intake,
-                    Solenoid liftStageOne,
-                    Solenoid liftStageTwo,
-                    TalonSRX leftSpinner,
-                    TalonSRX rightSpinner,
-                    ProximitySensor distanceSensor) {
+    Carriage(Solenoid intake,
+             Solenoid liftStageOne,
+             Solenoid liftStageTwo,
+             TalonSRX leftSpinner,
+             TalonSRX rightSpinner,
+             ProximitySensor distanceSensor) {
         this.intake = intake;
         this.liftStageOne = liftStageOne;
         this.liftStageTwo = liftStageTwo;
@@ -39,13 +39,13 @@ public class Carriage {
         this.distanceSensor = distanceSensor;
     }
 
-    public void actuateIntake(boolean actuate) {
+    void actuateIntake(boolean actuate) {
         if (intake.get() != actuate) {
             intake.set(actuate);
         }
     }
 
-    public void actuateLift(CarriageElevationStage stage) {
+    void actuateLift(CarriageElevationStage stage) {
         if (stage == currentStage) {
             return;
         }
@@ -67,7 +67,7 @@ public class Carriage {
         }
     }
 
-    public void setSpin(double command) {
+    void setSpin(double command) {
         leftSpinner.set(ControlMode.PercentOutput, command);
         rightSpinner.set(ControlMode.PercentOutput, command);
     }
@@ -76,7 +76,7 @@ public class Carriage {
         return distanceSensor.get();
     }
 
-    public void setSpeedToProximitySensor() {
+    void setSpeedToProximitySensor() {
 //        if (distanceSensor.get() < Settings.Carriage.BOX_DISTANCE_INTAKE_THRESHOLD_CM) {
 //            setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
 //        } else {

@@ -4,10 +4,10 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class NavXGyro implements Gyro {
-    // having multiple gyro instances is dangerous
-    public final static NavXGyro shared = new NavXGyro();
+@Singleton
+class NavXGyro implements Gyro {
 
     private final AHRS navx;
     private boolean isCalibrating;

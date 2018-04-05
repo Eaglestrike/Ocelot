@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.InterpolatingDouble;
 import org.team114.lib.util.InterpolatingTreeMap;
 
-public class GP2YProximitySensor implements ProximitySensor {
+class GP2YProximitySensor implements ProximitySensor {
 
     private final AnalogInput distanceSensor;
     private final InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> voltageToDistanceCm;
@@ -14,7 +14,7 @@ public class GP2YProximitySensor implements ProximitySensor {
      * Represents a GP2Y0A41SK0F proximity sensor.
      * @param distanceSensor sensor to be contained
      */
-    public GP2YProximitySensor(AnalogInput distanceSensor) {
+    GP2YProximitySensor(AnalogInput distanceSensor) {
         this.distanceSensor = distanceSensor;
         voltageToDistanceCm = new InterpolatingTreeMap<>();
 

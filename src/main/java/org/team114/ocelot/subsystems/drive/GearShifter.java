@@ -6,11 +6,11 @@ import org.team114.ocelot.subsystems.Drive;
 import javax.inject.Singleton;
 
 @Singleton
-public class GearShifter {
+class GearShifter {
 
     private final DoubleSolenoid gearSolenoid;
 
-    public GearShifter(DoubleSolenoid gearSolenoid) {
+    GearShifter(DoubleSolenoid gearSolenoid) {
         this.gearSolenoid = gearSolenoid;
     }
 

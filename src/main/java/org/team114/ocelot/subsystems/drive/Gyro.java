@@ -1,13 +1,10 @@
 package org.team114.ocelot.subsystems.drive;
 
-import javax.inject.Singleton;
-
 /**
  * A gyroscope.
  * All angles are CCW.
  */
-@Singleton
-public interface Gyro {
+interface Gyro {
     /**
      * Returns the heading according the gyroscope in radians.
      * @return heading of the gyroscope in radians

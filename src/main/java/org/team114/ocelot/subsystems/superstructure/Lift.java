@@ -11,11 +11,11 @@ import javax.inject.Singleton;
  * The elevator for the robot.
  */
 @Singleton
-public class Lift {
+class Lift {
     private final TalonSRX masterTalon;
     private final TalonSRX slaveTalon;
 
-    public Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
+    Lift(TalonSRX masterTalon, TalonSRX slaveTalon) {
         this.masterTalon = masterTalon;
 
         this.slaveTalon = slaveTalon;
@@ -64,7 +64,7 @@ public class Lift {
 		/* zero the sensor */
     }
 
-    public boolean zeroLowerIfNecessary() {
+    boolean zeroLowerIfNecessary() {
         if (masterTalon.getSensorCollection().isRevLimitSwitchClosed()) {
             //TODO is it really zero?
             masterTalon.setSelectedSensorPosition(0, Settings.Lift.MAGIC_PID_LOOP_INDEX, 0);
@@ -85,7 +85,7 @@ public class Lift {
      * Sets the setpoint of the lift.
      * @param height measured in ticks
      */
-    public void goToHeight(int height) {
+    void goToHeight(int height) {
         masterTalon.set(ControlMode.MotionMagic, height);
         SmartDashboard.putNumber("master current", this.masterTalon.getOutputCurrent());
         SmartDashboard.putNumber("slave current", this.slaveTalon.getOutputCurrent());
@@ -93,14 +93,14 @@ public class Lift {
     }
 
     //TODO add p controller to this mode
-    public void manualControl(double command) {
+    void manualControl(double command) {
         masterTalon.set(ControlMode.PercentOutput, command);
 //        slaveTalon.set(ControlMode.PercentOutput, command);
 //        System.out.println(command);
     }
 
     //get the height in feet
-    public int getHeight() {
+    int getHeight() {
         return masterTalon.getSelectedSensorPosition(Settings.Lift.MAGIC_PID_LOOP_INDEX);
     }
 
