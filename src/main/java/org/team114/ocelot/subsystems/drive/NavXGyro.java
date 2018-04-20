@@ -1,16 +1,19 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.drive;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI.Port;
 
-public class NavXGyro implements Gyro {
-    // having multiple gyro instances is dangerous
-    public final static NavXGyro shared = new NavXGyro();
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+class NavXGyro implements Gyro {
 
     private final AHRS navx;
     private boolean isCalibrating;
 
-    private NavXGyro() {
+    @Inject
+    NavXGyro() {
         navx = new AHRS(Port.kMXP);
         // we want the angle to read 90 after a zero yaw, but our reading is negated below, so the offset is -90.
         navx.setAngleAdjustment(-90.0);

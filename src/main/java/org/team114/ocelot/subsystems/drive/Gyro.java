@@ -1,10 +1,10 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.drive;
 
 /**
  * A gyroscope.
  * All angles are CCW.
  */
-public interface Gyro {
+interface Gyro {
     /**
      * Returns the heading according the gyroscope in radians.
      * @return heading of the gyroscope in radians

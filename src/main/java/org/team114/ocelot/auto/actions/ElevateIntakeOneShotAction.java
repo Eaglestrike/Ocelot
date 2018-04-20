@@ -1,7 +1,7 @@
 package org.team114.ocelot.auto.actions;
 
-import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 
 public class ElevateIntakeOneShotAction extends OneShotAction {
 

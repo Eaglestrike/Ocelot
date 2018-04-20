@@ -1,17 +1,21 @@
-package org.team114.ocelot.subsystems;
+package org.team114.ocelot.subsystems.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.lib.util.Epsilon;
 import org.team114.ocelot.RobotState;
-import org.team114.ocelot.modules.DriveSide;
-import org.team114.ocelot.modules.GearShifter;
-import org.team114.ocelot.modules.Gyro;
+import org.team114.ocelot.dagger.Left;
+import org.team114.ocelot.dagger.Right;
 import org.team114.ocelot.settings.Settings;
+import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.Pose;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class StandardDrive implements Drive {
 
     private final DashboardHandle xPositionDB = new DashboardHandle("Pose X");
@@ -31,8 +35,9 @@ public class StandardDrive implements Drive {
     private double lastLeftAccumulated;
     private double lastRightAccumulated;
 
-    public StandardDrive(RobotState robotState, Gyro gyro, DriveSide leftSide,
-                         DriveSide rightSide, GearShifter shifter) {
+    @Inject
+    StandardDrive(RobotState robotState, Gyro gyro, @Left DriveSide leftSide,
+                  @Right DriveSide rightSide, GearShifter shifter) {
 
         this.robotState = robotState;
         this.gyro = gyro;
@@ -103,6 +108,11 @@ public class StandardDrive implements Drive {
     @Override
     public synchronized void setGear(State state) {
         shifter.set(state);
+    }
+
+    @Override
+    public synchronized State getGear() {
+        return shifter.get();
     }
 
     @Override

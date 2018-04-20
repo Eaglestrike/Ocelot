@@ -1,7 +1,7 @@
 package org.team114.ocelot.subsystems;
 
 import org.team114.lib.subsystem.Subsystem;
-import org.team114.ocelot.modules.CarriageElevationStage;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 
 public interface Superstructure extends Subsystem {
     /**
@@ -85,8 +85,8 @@ public interface Superstructure extends Subsystem {
             ZEROING
         }
 
-        final StateEnum state;
-        final double timestamp;
+        public final StateEnum state;
+        public final double timestamp;
 
         public State(StateEnum state, double currentTime) {
             this.timestamp = currentTime;

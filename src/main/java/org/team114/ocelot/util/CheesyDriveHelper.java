@@ -2,9 +2,13 @@ package org.team114.ocelot.util;
 
 import org.team114.ocelot.settings.Settings;
 
+import javax.inject.Inject;
+
 public class CheesyDriveHelper {
     private double quickStopAccumulator;
 
+    @Inject
+    public CheesyDriveHelper() {}
 
     public DriveSignal cheesyDrive(double throttlePercentage, double wheelPercentage, boolean isQuickTurn) {
 

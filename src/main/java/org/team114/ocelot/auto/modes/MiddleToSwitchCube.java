@@ -5,11 +5,13 @@ import openrio.powerup.MatchData;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.*;
-import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
+
+import javax.inject.Inject;
 
 public class MiddleToSwitchCube extends AutoModeBase {
 
@@ -17,6 +19,7 @@ public class MiddleToSwitchCube extends AutoModeBase {
     private final Superstructure sstruct;
     private final RobotState rstate;
 
+    @Inject
     public MiddleToSwitchCube(Drive drive, Superstructure sstruct, RobotState rstate) {
         this.drive = drive;
         this.sstruct = sstruct;

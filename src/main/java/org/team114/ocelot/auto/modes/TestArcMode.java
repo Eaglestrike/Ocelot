@@ -9,10 +9,13 @@ import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
+import javax.inject.Inject;
+
 public class TestArcMode extends AutoModeBase {
     private final Drive drive;
     private final Superstructure sstruct;
 
+    @Inject
     public TestArcMode(Drive drive, Superstructure sstruct) {
         this.drive = drive;
         this.sstruct = sstruct;

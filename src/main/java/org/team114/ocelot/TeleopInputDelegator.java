@@ -1,11 +1,13 @@
 package org.team114.ocelot;
 
 import org.team114.ocelot.controllers.Controller;
-import org.team114.ocelot.modules.CarriageElevationStage;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
+import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
 import org.team114.ocelot.util.CheesyDriveHelper;
+
+import javax.inject.Inject;
 
 public class TeleopInputDelegator {
     private final Drive drive;
@@ -13,6 +15,7 @@ public class TeleopInputDelegator {
     private final Controller controller;
     private final CheesyDriveHelper cheesyDrive;
 
+    @Inject
     public TeleopInputDelegator(Drive drive, Superstructure superstructure, Controller controller, CheesyDriveHelper cheesyDrive) {
         this.drive = drive;
         this.superstructure = superstructure;

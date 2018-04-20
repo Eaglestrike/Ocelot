@@ -1,14 +1,16 @@
-package org.team114.ocelot.subsystems;
+package org.team114.ocelot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.lib.util.DashboardHandle;
 import org.team114.lib.util.Epsilon;
-import org.team114.ocelot.modules.Carriage;
-import org.team114.ocelot.modules.CarriageElevationStage;
-import org.team114.ocelot.modules.Lift;
 import org.team114.ocelot.settings.Settings;
+import org.team114.ocelot.subsystems.Superstructure;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class StandardSuperstructure implements Superstructure {
 
     private State state;
@@ -24,7 +26,9 @@ public class StandardSuperstructure implements Superstructure {
     private int goalHeight;
     private double outtakeSpeed;
 
-    public StandardSuperstructure(Carriage carriage, Lift lift) {
+
+    @Inject
+    StandardSuperstructure(Carriage carriage, Lift lift) {
         this.carriage = carriage;
         this.lift = lift;
     }

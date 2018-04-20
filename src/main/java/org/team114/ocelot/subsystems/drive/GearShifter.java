@@ -1,13 +1,16 @@
-package org.team114.ocelot.modules;
+package org.team114.ocelot.subsystems.drive;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.team114.ocelot.subsystems.Drive;
 
-public class GearShifter {
+import javax.inject.Singleton;
+
+@Singleton
+class GearShifter {
 
     private final DoubleSolenoid gearSolenoid;
 
-    public GearShifter(DoubleSolenoid gearSolenoid) {
+    GearShifter(DoubleSolenoid gearSolenoid) {
         this.gearSolenoid = gearSolenoid;
     }
 

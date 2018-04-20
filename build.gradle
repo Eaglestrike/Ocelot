@@ -10,6 +10,7 @@ plugins {
     id "net.ltgt.errorprone" version "0.0.13"
 }
 
+// bytecode version for robot
 sourceCompatibility = 1.8
 
 repositories {
@@ -52,11 +53,14 @@ dependencies {
             ['com.google.code.findbugs:annotations:2.0.1']
     )
 
+    // dagger
+    compile 'com.google.dagger:dagger:2.+'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
+
     // testing and mocking
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-
     testCompile "org.mockito:mockito-core:2.+"
 }
 
@@ -67,8 +71,20 @@ test {
 }
 
 tasks.withType(JavaCompile) {
+    // errorprone options
     options.compilerArgs += ["-Xep:FallThrough:ERROR"]
+
+    // tell javac where to put generated code
+    options.compilerArgs += ["-s", "${buildDir}/gen"]
 }
+idea {
+    module {
+        // tell IntelliJ where the generated source goes
+        sourceDirs += file("${buildDir}/gen")
+        generatedSourceDirs += [file("${buildDir}/gen")]
+    }
+}
+
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib

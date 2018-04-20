@@ -4,11 +4,14 @@ import org.team114.ocelot.RobotState;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.subsystems.Drive;
 
+import javax.inject.Inject;
+
 // this is just to test the functionality of game sides
 public class TestMode extends AutoModeBase {
     private final Drive drive;
     private final RobotState robotState;
 
+    @Inject
     public TestMode(Drive drive, RobotState robotState) {
         this.drive = drive;
         this.robotState = robotState;
