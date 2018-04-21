@@ -32,7 +32,7 @@ public abstract class PurePursuitFactory {
             ));
             // if we're not in linear-interp land update the goal point
             if (!Boolean.parseBoolean(line[3])) {
-                goalPointIndex = i;
+                goalPointIndex = i - 1; // -1 because i is a line index, but we want an array index
             }
         }
 
