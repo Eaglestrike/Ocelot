@@ -82,6 +82,6 @@ public class Carriage {
 //        } else {
 //            setSpin(0);
 //        }
-        setSpin(-2.5 / 12.0);
+        setSpin(0);
     }
 }
