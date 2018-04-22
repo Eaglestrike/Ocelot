@@ -61,8 +61,11 @@ public class PurePursuitController {
         //TODO: replace with a motion profile?
         double targetVelocity = Math.min(Settings.PurePursuit.CRUISE_VELOCITY,
                 // might get jittery with very few points, can replace lookAheadDistance with actual distance
-                Settings.PurePursuit.DISTANCE_DECAY_CONSTANT *
-                        (lookAheadDistance + pathLength - targetComponent.getDistance())
+                Math.max(
+                        Settings.PurePursuit.DISTANCE_DECAY_CONSTANT *
+                                (lookAheadDistance + pathLength - targetComponent.getDistance()),
+                        Settings.PurePursuit.MIN_SPEED
+                )
         );
 
         return new DriveArcCommand(signedCurvature, targetVelocity);

@@ -38,6 +38,7 @@ public final class Settings {
         }
         public static final double CRUISE_VELOCITY = 5.0;
         public static final double DISTANCE_DECAY_CONSTANT = 1.5;
+        public static final double MIN_SPEED = 2;
     }
 
     public static final class Pneumatics {

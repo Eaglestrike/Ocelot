@@ -29,16 +29,14 @@ public class MiddleToSwitchCube extends AutoModeBase {
     @Override
     protected void routine() {
         runAction(new ZeroLiftOneShotAction(sstruct));
-        System.out.println(Timer.getFPGATimestamp() + "1231");
         runAction(new MoveLiftAction(sstruct, 10_000));
-        System.out.println(Timer.getFPGATimestamp() + "1231");
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
         if (side == MatchData.OwnedSide.LEFT) {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
         } else if (side == MatchData.OwnedSide.RIGHT) {
-            runActionTimeout(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("middleToRightSwitch"), 2), 5);
+            runAction(new PurePursuitAction(drive, rstate,
+                    PurePursuitFactory.loadPath("middleToRightSwitch"), 2));
         } else {
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
             runAction(new WaitAction(3));
