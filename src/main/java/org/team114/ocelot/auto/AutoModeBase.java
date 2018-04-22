@@ -29,25 +29,15 @@ public abstract class AutoModeBase {
     }
 
     public void runAction(Action action) {
-        action.start();
-
-        while (isActive() && !action.finished()) {
-            action.step();
-            long waitTime = (long) (updateRate * 1000.0);
-
-            try {
-                Thread.sleep(waitTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        action.stop();
+        runActionTimeout(action, Double.POSITIVE_INFINITY);
     }
 
     public void runActionTimeout(Action action, double seconds) {
+        if (!isActive()) {
+            return;
+        }
         double start = Timer.getFPGATimestamp();
         action.start();
-
         while (isActive() && !action.finished() && (Timer.getFPGATimestamp() - start < seconds)) {
             action.step();
             long waitTime = (long) (updateRate * 1000.0);

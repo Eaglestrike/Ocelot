@@ -23,6 +23,9 @@ public class AutoModeExecutor {
         if (autoMode != null) {
             autoMode.stop();
         }
+        if (thread != null) {
+            thread.interrupt();
+        }
         thread = null;
     }
 }
