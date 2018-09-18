@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.settings.Settings;
 
 /**
@@ -72,6 +73,10 @@ class DriveSide {
      */
     double getPosition() {
         return master.getSelectedSensorPosition(0) * Settings.Drive.DRIVE_ENCODER_FEET_PER_TICK;
+    }
+
+    double getPositionTicks() {
+        return master.getSelectedSensorPosition(0);
     }
 
     /**

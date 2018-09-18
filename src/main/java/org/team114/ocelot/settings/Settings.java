@@ -22,10 +22,8 @@ public final class Settings {
         public static final double WHEELBASE_WIDTH_FT = 2.6233;
         public static final int ENCODER_TICKS_PER_REVOLUTION = 4096;
         // x ticks -> * rev/tick  * sprocket/rev  * 0.5PI ft / sprocket  = y ft
-        public static final double DRIVE_ENCODER_FEET_PER_TICK =
-                (1.0 / ENCODER_TICKS_PER_REVOLUTION) *
-                        (24.0 / 60.0) *
-                        (0.5 * Math.PI);
+        // empirically determined
+        public static final double DRIVE_ENCODER_FEET_PER_TICK = (284.5 / 12) / 156_439;
 
         public static final double DRIVE_ENCODER_TICKS_PER_FOOT = ENCODER_TICKS_PER_REVOLUTION *
                 (60.0 / 24.0) /
@@ -36,7 +34,7 @@ public final class Settings {
         private PurePursuit() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final double CRUISE_VELOCITY = 5.0;
+        public static final double CRUISE_VELOCITY = 10.0;
         public static final double DISTANCE_DECAY_CONSTANT = 1.5;
         public static final double MIN_SPEED = 2;
     }
