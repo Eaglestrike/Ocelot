@@ -40,8 +40,8 @@ public class Carriage {
     }
 
     void actuateIntake(boolean actuate) {
-        if (intake.get() != actuate) {
-            intake.set(actuate);
+        if (intake.get() == actuate) {
+            intake.set(!actuate);
         }
     }
 
@@ -53,22 +53,22 @@ public class Carriage {
         currentStage = stage;
         switch (currentStage) {
             case RAISED:
-                liftStageOne.set(false);
-                liftStageTwo.set(false);
-                break;
-            case MIDDLE:
-                liftStageOne.set(false);
-                liftStageTwo.set(true);
-                break;
-            case LOWERED:
                 liftStageOne.set(true);
                 liftStageTwo.set(true);
+                break;
+            case MIDDLE:
+                liftStageOne.set(true);
+                liftStageTwo.set(false);
+                break;
+            case LOWERED:
+                liftStageOne.set(false);
+                liftStageTwo.set(false);
                 break;
         }
     }
 
     void setSpin(double command) {
-        leftSpinner.set(ControlMode.PercentOutput, command);
+        leftSpinner.set(ControlMode.PercentOutput, -command);
         rightSpinner.set(ControlMode.PercentOutput, command);
     }
 

@@ -96,23 +96,23 @@ public final class Settings {
     }
 
     public static final class Carriage {
-        public static final double OUTTAKE_COMMAND_FAST = 1.0;
-        public static final double OUTTAKE_COMMAND_NORMAL = 0.5;
-        public static final double OUTTAKE_COMMAND_SLOW = 0.25;
-        public static final double OUTTAKE_TIME_SECONDS = 0.5;
-        public static final double OUTTAKE_COMMAND_RISING_OPEN_IDLE = 0.3;
-
         private Carriage() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
+        public static final double OUTTAKE_COMMAND_FAST = -1.0;
+        public static final double OUTTAKE_COMMAND_NORMAL = -0.5;
+        public static final double OUTTAKE_COMMAND_SLOW = -0.25;
+        public static final double OUTTAKE_TIME_SECONDS = 0.5;
+
+        public static final double OUTTAKE_COMMAND_RISING_OPEN_IDLE = -0.3;
         public static final int INTAKE_CHANNEL = 7;
         public static final int LIFT_STAGE_ONE = 2;
         public static final int LIFT_STAGE_TWO = 3;
         public static final int LEFT_SPINNER = 7;
         public static final int RIGHT_SPINNER = 8;
-        public static final double INTAKE_IN_COMMAND = -0.5;
+        public static final double INTAKE_IN_COMMAND = 0.5;
         //TODO tune these two
-        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = -4.0 / 12.0;
+        public static final double INTAKE_IN_LOW_VOLTAGE_COMMAND = 4.0 / 12.0;
         public static final double BOX_DISTANCE_INTAKE_THRESHOLD_CM = 20.0;
     }
 
