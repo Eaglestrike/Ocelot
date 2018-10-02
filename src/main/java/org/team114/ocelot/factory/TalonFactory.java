@@ -42,7 +42,7 @@ public final class TalonFactory {
         talon.configContinuousCurrentLimit(Settings.DriveSide.CURRENT_LIMIT, TALON_CONFIG_TIMEOUT_MS);
         talon.enableCurrentLimit(true);
 
-        return new TalonSRX(id);
+        return talon;
     }
 
     private static void commonConfig(TalonSRX talon) {

@@ -25,8 +25,6 @@ class DriveSide {
         this.slave = slave;
 
         this.slave.set(ControlMode.Follower, master.getDeviceID());
-        this.master.setNeutralMode(NeutralMode.Brake);
-        this.slave.setNeutralMode(NeutralMode.Brake);
 
         this.master.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Settings.DriveSide.LOW_GEAR_VEL_PID_IDX, 10);
         this.master.setSensorPhase(false);
