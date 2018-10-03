@@ -52,8 +52,8 @@ public class Robot extends IterativeRobot {
         superstructure = robotComponent.superstructure();
         pneumatics = robotComponent.pneumatics();
 
-        pneumatics.setMinimumPressure(45);
-        pneumatics.setMinimumPressure(85);
+        pneumatics.setMinimumPressure(50);
+        pneumatics.setPressureMargin(40);
 
         // create general stuff
         autoModeExecutor = new AutoModeExecutor();
