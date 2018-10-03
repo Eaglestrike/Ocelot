@@ -20,6 +20,7 @@ public class Carriage {
     private final TalonSRX rightSpinner;
     private final ProximitySensor distanceSensor;
     private CarriageElevationStage currentStage = CarriageElevationStage.RAISED;
+    private boolean intakePneumatic = false;
 
     Carriage(Solenoid intake,
              Solenoid liftStageOne,
@@ -40,9 +41,11 @@ public class Carriage {
     }
 
     void actuateIntake(boolean actuate) {
-        if (intake.get() == actuate) {
-            intake.set(!actuate);
+        if (intakePneumatic == actuate) {
+            return;
         }
+        intakePneumatic = actuate;
+        intake.set(actuate);
     }
 
     void actuateLift(CarriageElevationStage stage) {
@@ -53,22 +56,22 @@ public class Carriage {
         currentStage = stage;
         switch (currentStage) {
             case RAISED:
-                liftStageOne.set(true);
-                liftStageTwo.set(true);
-                break;
-            case MIDDLE:
-                liftStageOne.set(true);
-                liftStageTwo.set(false);
-                break;
-            case LOWERED:
                 liftStageOne.set(false);
                 liftStageTwo.set(false);
+                break;
+            case MIDDLE:
+                liftStageOne.set(false);
+                liftStageTwo.set(true);
+                break;
+            case LOWERED:
+                liftStageOne.set(true);
+                liftStageTwo.set(true);
                 break;
         }
     }
 
     void setSpin(double command) {
-        leftSpinner.set(ControlMode.PercentOutput, -command);
+        leftSpinner.set(ControlMode.PercentOutput, -command*0.75);
         rightSpinner.set(ControlMode.PercentOutput, command);
     }
 
