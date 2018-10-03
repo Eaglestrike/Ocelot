@@ -11,7 +11,6 @@ import org.team114.ocelot.util.motion.PurePursuitFactory;
 
 import javax.inject.Inject;
 
-// this is just to test the functionality of game sides
 public class TestMode extends AutoModeBase {
     private final Drive drive;
     private final RobotState robotState;

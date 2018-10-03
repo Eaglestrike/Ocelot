@@ -2,10 +2,7 @@ package org.team114.ocelot.auto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team114.ocelot.auto.modes.CrossBaseLine;
-import org.team114.ocelot.auto.modes.MiddleToSwitchCube;
-import org.team114.ocelot.auto.modes.TestArcMode;
-import org.team114.ocelot.auto.modes.TestMode;
+import org.team114.ocelot.auto.modes.*;
 
 import javax.inject.Inject;
 import java.util.function.Supplier;
@@ -15,10 +12,11 @@ public class AutoModeSelector {
 
     @Inject
     public AutoModeSelector(CrossBaseLine crossBaseLine, MiddleToSwitchCube middleToSwitchCube,
-                            TestMode testMode) {
+                            TestMode testMode, RightSideToScaleMode rightToScale) {
         chooser.addDefault("Baseline", () -> crossBaseLine);
         chooser.addObject("Middle to Switch Sides", () -> middleToSwitchCube);
         chooser.addObject("Test Mode", () -> testMode);
+        chooser.addObject("Right Side to Scale", () -> rightToScale);
         SmartDashboard.putData("Auto Mode Selector", chooser);
     }
 
