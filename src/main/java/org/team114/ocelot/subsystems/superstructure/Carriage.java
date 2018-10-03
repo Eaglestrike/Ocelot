@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Solenoid;
+import org.team114.ocelot.settings.Settings;
 
 import javax.inject.Singleton;
 
@@ -85,6 +86,6 @@ public class Carriage {
 //        } else {
 //            setSpin(0);
 //        }
-        setSpin(0);
+        setSpin(Settings.Carriage.INTAKE_IN_LOW_VOLTAGE_COMMAND);
     }
 }
