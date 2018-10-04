@@ -119,6 +119,8 @@ public final class Settings {
     public static final class SuperStructure {
         public static final int COMPLETE_ACTION_THRESHOLD_TICKS = 100;
         public static final int ZEROING_INCREMENT_TICKS = -250;
+        public static final int AUT0_SCALE_HEIGHT_TICKS = 34_000;
+        public static final int AUTO_SWITCH_HEIGHT_TICKS = 15_000;
     }
 
     public static final class DistanceSensor {

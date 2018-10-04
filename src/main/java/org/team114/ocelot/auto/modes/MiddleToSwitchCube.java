@@ -5,6 +5,7 @@ import openrio.powerup.MatchData;
 import org.team114.ocelot.RobotState;
 import org.team114.ocelot.auto.AutoModeBase;
 import org.team114.ocelot.auto.actions.*;
+import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
@@ -29,12 +30,14 @@ public class MiddleToSwitchCube extends AutoModeBase {
     @Override
     protected void routine() {
         runAction(new ZeroLiftOneShotAction(sstruct));
-        runAction(new MoveLiftAction(sstruct, 10_000));
+        runAction(new WaitAction(0.3));
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
         if (side == MatchData.OwnedSide.LEFT) {
+            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("middleToLeftSwitch"), 2));
         } else if (side == MatchData.OwnedSide.RIGHT) {
+            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("middleToRightSwitch"), 2));
         } else {
@@ -42,8 +45,8 @@ public class MiddleToSwitchCube extends AutoModeBase {
                     PurePursuitFactory.loadPath("crossAutoLine"), 2));
             return;
         }
-        runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.LOWERED));
+        runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
         runAction(new WaitAction(0.5));
-        runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, 0.75));
+        runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
     }
 }

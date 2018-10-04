@@ -29,7 +29,9 @@ public class RightSideToScaleMode extends AutoModeBase {
         runAction(new ZeroLiftOneShotAction(sstruct));
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
         if (side == MatchData.OwnedSide.LEFT) {
-            ;
+            runAction(new PurePursuitAction(drive, rstate,
+                    PurePursuitFactory.loadPath("crossAutoLine"), 2));
+            return;
         } else if (side == MatchData.OwnedSide.RIGHT) {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("rightToRightScale"), 2));
@@ -38,7 +40,7 @@ public class RightSideToScaleMode extends AutoModeBase {
                     PurePursuitFactory.loadPath("crossAutoLine"), 2));
             return;
         }
-        runAction(new MoveLiftAction(sstruct, 25_000));
+        runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
         runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
         runAction(new WaitAction(0.5));
         runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
