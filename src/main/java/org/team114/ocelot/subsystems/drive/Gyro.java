@@ -17,6 +17,9 @@ interface Gyro {
      */
     double getYawDegrees();
 
+
+    void reset();
+
     /**
      * Runs initial setup for the gyroscope.
      * After this method is run, the gyro points at 90 degrees.

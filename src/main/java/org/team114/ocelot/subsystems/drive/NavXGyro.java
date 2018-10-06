@@ -25,6 +25,11 @@ class NavXGyro implements Gyro {
         return ((angle + 180) % 360 + 360) % 360 - 180;
     }
 
+    @Override
+    public void reset() {
+        zeroYaw();
+    }
+
     /**
      * Returns the heading according the gyroscope.
      * @return heading of the navx chip in radians

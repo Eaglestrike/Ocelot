@@ -5,6 +5,8 @@ import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitController;
 
 public interface Drive extends Subsystem {
+    void zeroAllSensors();
+    
     void setGear(State state);
 
     State getGear();

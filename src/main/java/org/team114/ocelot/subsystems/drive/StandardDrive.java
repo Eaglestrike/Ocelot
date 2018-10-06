@@ -106,6 +106,13 @@ public class StandardDrive implements Drive {
     }
 
     @Override
+    public void zeroAllSensors() {
+        // zero gyro and position tracking
+        gyro.reset();
+        robotState.addObservation(new Pose(0,0,gyro.getYaw(), 0));
+    }
+
+    @Override
     public synchronized void setGear(State state) {
         shifter.set(state);
     }

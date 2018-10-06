@@ -75,6 +75,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        drive.zeroAllSensors();
         drive.prepareForAuto();
 
         autoModeExecutor.setAutoMode(autoModeSelector.getAutoMode());
