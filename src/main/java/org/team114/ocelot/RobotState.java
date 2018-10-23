@@ -10,13 +10,13 @@ public class RobotState {
     @Inject
     RobotState() {}
 
-    private volatile Pose latest;
+    private Pose latest;
 
-    public void addObservation(Pose pose) {
+    public synchronized void addObservation(Pose pose) {
         latest = pose;
     }
 
-    public Pose getPose() {
+    public synchronized Pose getPose() {
         return latest;
     }
 }

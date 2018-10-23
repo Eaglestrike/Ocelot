@@ -75,6 +75,8 @@ public interface Superstructure extends Subsystem {
 
     void setManualControl(double speed);
 
+    void setState(State.StateEnum state);
+
     class State {
         public enum StateEnum {
             CLOSED,

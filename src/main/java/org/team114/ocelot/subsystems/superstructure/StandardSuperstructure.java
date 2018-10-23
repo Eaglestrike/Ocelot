@@ -93,7 +93,8 @@ public class StandardSuperstructure implements Superstructure {
         }
     }
 
-    private void setState(State.StateEnum state) {
+    @Override
+    public void setState(State.StateEnum state) {
         setState(state, Timer.getFPGATimestamp());
     }
 

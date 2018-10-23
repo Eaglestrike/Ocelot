@@ -3,6 +3,8 @@ package org.team114.ocelot.auto.actions;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.util.DriveSignal;
 
+import javax.inject.Inject;
+
 public class SetDriveCommandAction extends OneShotAction {
     private final Drive drive;
     private final DriveSignal signal;

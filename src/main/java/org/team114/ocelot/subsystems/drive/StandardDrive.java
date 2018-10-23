@@ -164,6 +164,11 @@ public class StandardDrive implements Drive {
     }
 
     @Override
+    public void setPose(Pose pose) {
+        robotState.addObservation(pose);
+    }
+
+    @Override
     public synchronized void prepareForTeleop() {
         leftSide.configureForTeleop();
         rightSide.configureForTeleop();
