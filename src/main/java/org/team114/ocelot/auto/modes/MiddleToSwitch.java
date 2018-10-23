@@ -9,17 +9,19 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
+import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
+
 import javax.inject.Inject;
 
-public class RightSideToScaleMode extends AutoModeBase {
+public class MiddleToSwitch extends AutoModeBase {
 
     private final Drive drive;
     private final Superstructure sstruct;
     private final RobotState rstate;
 
     @Inject
-    public RightSideToScaleMode(Drive drive, Superstructure sstruct, RobotState rstate) {
+    public MiddleToSwitch(Drive drive, Superstructure sstruct, RobotState rstate) {
         this.drive = drive;
         this.sstruct = sstruct;
         this.rstate = rstate;
@@ -27,28 +29,29 @@ public class RightSideToScaleMode extends AutoModeBase {
 
     @Override
     protected void routine() {
-        runAction(new SetKnownStateAction(drive, sstruct, StartingPoses.rightSideStart, CarriageElevationStage.RAISED, Superstructure.State.StateEnum.CLOSED));
+        runAction(new SetKnownStateAction(drive, sstruct, StartingPoses.centerStart, CarriageElevationStage.RAISED, Superstructure.State.StateEnum.CLOSED));
         runAction(new ZeroLiftOneShotAction(sstruct));
+        runAction(new WaitAction(0.2));
 
-        MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
+        MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
         if (side == MatchData.OwnedSide.LEFT) {
-            System.out.println("Running path to left scale");
+            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("rightToLeftScale"), 2));
-            return;
+                    PurePursuitFactory.loadPath("centerToLeftSwitch"), 2));
         } else if (side == MatchData.OwnedSide.RIGHT) {
-            System.out.println("Running path to right scale");
+            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("rightToRightScale"), 2));
+                    PurePursuitFactory.loadPath("centerToRightSwitch"), 2));
         } else {
 //            runAction(new PurePursuitAction(drive, rstate,
 //                    PurePursuitFactory.loadPath("crossAutoLine"), 2));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
+            runAction(new WaitAction(3));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
             return;
         }
-        runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
-        System.out.println("FINISHED MOVING THE LIFT");
         runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
-        runAction(new WaitAction(0.7));
+        runAction(new WaitAction(0.5));
         runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
     }
 }

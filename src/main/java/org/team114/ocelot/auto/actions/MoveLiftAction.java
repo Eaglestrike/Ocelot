@@ -21,6 +21,7 @@ public class MoveLiftAction implements Action {
 
     @Override
     public boolean finished() {
+        System.out.println("Lift err: " + (superstructure.getHeight() - ticks) + " < " + Settings.SuperStructure.COMPLETE_ACTION_THRESHOLD_TICKS);
         return Epsilon.epsilonEquals(superstructure.getHeight(), ticks, Settings.SuperStructure.COMPLETE_ACTION_THRESHOLD_TICKS);
     }
 

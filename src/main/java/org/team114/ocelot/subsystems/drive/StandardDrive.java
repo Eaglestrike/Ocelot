@@ -51,7 +51,7 @@ public class StandardDrive implements Drive {
         prepareForAuto();
     }
 
-    private Pose addPoseObservation() {
+    private synchronized Pose addPoseObservation() {
         Pose latestState = robotState.getPose();
 
         double newHeading = gyro.getYaw();
@@ -164,7 +164,7 @@ public class StandardDrive implements Drive {
     }
 
     @Override
-    public void setPose(Pose pose) {
+    public synchronized void setPose(Pose pose) {
         robotState.addObservation(pose);
     }
 

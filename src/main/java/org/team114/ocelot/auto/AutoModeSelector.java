@@ -11,12 +11,13 @@ public class AutoModeSelector {
     private final SendableChooser<Supplier<AutoModeBase>> chooser = new SendableChooser<>();
 
     @Inject
-    public AutoModeSelector(CrossBaseLine crossBaseLine, MiddleToSwitchCube middleToSwitchCube,
-                            TestMode testMode, RightSideToScaleMode rightToScale) {
+    public AutoModeSelector(CrossBaseLine crossBaseLine, MiddleToSwitch middleToSwitchCube,
+                            TestMode testMode, RightSideToScaleMode rightToScale, LeftSideToScaleMode leftToScale) {
         chooser.addDefault("Baseline", () -> crossBaseLine);
-        chooser.addObject("Middle to Switch Sides", () -> middleToSwitchCube);
-        chooser.addObject("Test Mode", () -> testMode);
+        chooser.addObject("Middle to Switch", () -> middleToSwitchCube);
+        chooser.addObject("Left Side to Scale", () -> leftToScale);
         chooser.addObject("Right Side to Scale", () -> rightToScale);
+        chooser.addObject("Test Mode", () -> testMode);
         SmartDashboard.putData("Auto Mode Selector", chooser);
     }
 

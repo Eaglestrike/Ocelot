@@ -74,9 +74,9 @@ public class PurePursuitController {
 
     private boolean testIsFinished(Pose pose) {
         // if we finish for real, our lookahead is past the goal and our robot has crossed the finish line
-        if (lastLookAheadIndex > path.goalComponentIndex) {
-            System.out.println("asjdlksad");
-        }
+//        if (lastLookAheadIndex > path.goalComponentIndex) {
+//            System.out.println("asjdlksad");
+//        }
         isFinished = (isFinished ||
             path.mainPathPoints.isEmpty() ||
                 (lastLookAheadIndex > path.goalComponentIndex && path.isPastFinishLine(pose.getPoint()))
