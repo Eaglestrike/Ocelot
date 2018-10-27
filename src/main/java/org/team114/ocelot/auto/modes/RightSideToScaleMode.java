@@ -9,6 +9,7 @@ import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Drive;
 import org.team114.ocelot.subsystems.Superstructure;
 import org.team114.ocelot.subsystems.superstructure.CarriageElevationStage;
+import org.team114.ocelot.util.DriveSignal;
 import org.team114.ocelot.util.motion.PurePursuitFactory;
 import javax.inject.Inject;
 
@@ -35,14 +36,14 @@ public class RightSideToScaleMode extends AutoModeBase {
             System.out.println("Running path to left scale");
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("rightToLeftScale"), 2));
-            return;
         } else if (side == MatchData.OwnedSide.RIGHT) {
             System.out.println("Running path to right scale");
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("rightToRightScale"), 2));
-        } else {
-//            runAction(new PurePursuitAction(drive, rstate,
-//                    PurePursuitFactory.loadPath("crossAutoLine"), 2));
+        } else {            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
+            runAction(new WaitAction(3));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
             return;
         }
         runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));

@@ -43,8 +43,6 @@ public class MiddleToSwitch extends AutoModeBase {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("centerToRightSwitch"), 2));
         } else {
-//            runAction(new PurePursuitAction(drive, rstate,
-//                    PurePursuitFactory.loadPath("crossAutoLine"), 2));
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
             runAction(new WaitAction(3));
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
