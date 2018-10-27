@@ -33,25 +33,35 @@ public class LeftSideToScaleMode extends AutoModeBase {
         runAction(new ZeroLiftOneShotAction(sstruct));
 
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
-        if (side == MatchData.OwnedSide.LEFT) {
-            System.out.println("Running path to left scale");
-            runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("leftToLeftScale"), 2));
-        } else if (side == MatchData.OwnedSide.RIGHT) {
+        if (side == MatchData.OwnedSide.RIGHT) {
+            // drive the path
             System.out.println("Running path to right scale");
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("leftToRightScale"), 2));
+            // move the lift up
+            runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
+            System.out.println("FINISHED MOVING THE LIFT");
+            // drive forward shortly
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.3, 0.3)));
+            runAction(new WaitAction(0.5));
+            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
+            // outtake the cube
+            runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
+            runAction(new WaitAction(0.5));
+            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
+        } else if (side == MatchData.OwnedSide.LEFT) {
+            System.out.println("Running path to left scale");
+            runAction(new PurePursuitAction(drive, rstate,
+                    PurePursuitFactory.loadPath("leftToLeftScale"), 2));
+            runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
+            System.out.println("FINISHED MOVING THE LIFT");
+            runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
+            runAction(new WaitAction(0.7));
+            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
         } else {
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
             runAction(new WaitAction(3));
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
-            return;
         }
-        System.out.println("PATH FINISHED");
-        runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
-        System.out.println("FINISHED MOVING THE LIFT");
-        runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
-        runAction(new WaitAction(0.7));
-        runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
     }
 }
