@@ -31,6 +31,7 @@ public class RightSideOnlyMode extends AutoModeBase {
     protected void routine() {
         runAction(new SetKnownStateAction(drive, sstruct, StartingPoses.rightSideStart, CarriageElevationStage.RAISED, Superstructure.State.StateEnum.CLOSED));
         runAction(new ZeroLiftOneShotAction(sstruct));
+        runAction(new WaitAction(0.5));
 
         MatchData.OwnedSide scale = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
         MatchData.OwnedSide switch_ = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
