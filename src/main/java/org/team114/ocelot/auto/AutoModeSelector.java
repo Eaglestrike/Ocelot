@@ -12,12 +12,13 @@ public class AutoModeSelector {
 
     @Inject
     public AutoModeSelector(CrossBaseLine crossBaseLine, MiddleToSwitch middleToSwitchCube,
-                            TestMode testMode, RightSideToScaleMode rightToScale, LeftSideToScaleMode leftToScale, RightSideOnlyMode rightOnly) {
+                            TestMode testMode, RightSideToScaleMode rightToScale, LeftSideToScaleMode leftToScale, RightSideOnlyMode rightOnly, LeftSideOnlyMode leftOnly) {
         chooser.addDefault("Baseline", () -> crossBaseLine);
         chooser.addObject("Middle to Switch", () -> middleToSwitchCube);
         chooser.addObject("Left Side to Scale", () -> leftToScale);
         chooser.addObject("Right Side to Scale", () -> rightToScale);
         chooser.addObject("Right Side Only", () -> rightOnly);
+        chooser.addObject("LeftSide Only", () -> leftOnly);
         chooser.addObject("Test Mode", () -> testMode);
         SmartDashboard.putData("Auto Mode Selector", chooser);
     }
