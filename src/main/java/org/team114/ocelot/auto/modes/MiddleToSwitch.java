@@ -30,8 +30,7 @@ public class MiddleToSwitch extends AutoModeBase {
     @Override
     protected void routine() {
         runAction(new SetKnownStateAction(drive, sstruct, StartingPoses.centerStart, CarriageElevationStage.RAISED, Superstructure.State.StateEnum.CLOSED));
-        runAction(new ZeroLiftOneShotAction(sstruct));
-        runAction(new WaitAction(0.2));
+        runAction(new ZeroLiftAndBlockAction(sstruct));
 
         MatchData.OwnedSide side = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
         if (side == MatchData.OwnedSide.LEFT) {
@@ -43,9 +42,7 @@ public class MiddleToSwitch extends AutoModeBase {
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("centerToRightSwitch"), 2));
         } else {
-            runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-            runAction(new WaitAction(3));
-            runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
+            // don't hit the cubes
             return;
         }
         runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
