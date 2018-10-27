@@ -124,6 +124,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void testInit() {
         pneumatics.setMinimumPressure(-1);
+        superstructure.setWantOpenIdle();
     }
 
     @Override
