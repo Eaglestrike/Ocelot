@@ -60,7 +60,7 @@ public class LeftSideOnlyMode extends AutoModeBase {
             return;
         } else { // cross baseline
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-            runAction(new WaitAction(3));
+            runAction(new WaitAction(2.9));
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
             return;
         }

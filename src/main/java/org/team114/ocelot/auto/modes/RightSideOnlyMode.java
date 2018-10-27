@@ -48,7 +48,8 @@ public class RightSideOnlyMode extends AutoModeBase {
             runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
             runAction(new WaitAction(0.7));
             return;
-        } else if (switch_ == MatchData.OwnedSide.RIGHT) { // near switch
+        } else
+            if (switch_ == MatchData.OwnedSide.RIGHT) { // near switch
             runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("rightToRightSwitch"), 2));
@@ -59,7 +60,7 @@ public class RightSideOnlyMode extends AutoModeBase {
             return;
         } else { // cross baseline
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
-            runAction(new WaitAction(3));
+            runAction(new WaitAction(2.9));
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0, 0)));
             return;
         }

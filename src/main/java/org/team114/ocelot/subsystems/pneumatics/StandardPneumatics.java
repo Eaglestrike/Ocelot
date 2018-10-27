@@ -1,6 +1,7 @@
 package org.team114.ocelot.subsystems.pneumatics;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team114.ocelot.settings.Settings;
 import org.team114.ocelot.subsystems.Pneumatics;
 
@@ -31,17 +32,20 @@ public class StandardPneumatics implements Pneumatics {
         // give control to compressor look if desired
         if (activationPressure < 0) {
             compressor.start();
+            SmartDashboard.putBoolean("willCompress", true);
             return;
         }
 
         // handle thresholding
         if (getPressure() < activationPressure && !compressor.getClosedLoopControl()) {
             compressor.start();
+            SmartDashboard.putBoolean("willCompress", true);
             return;
         }
 
         if (getPressure() > (activationPressure + pressureMargin) && compressor.getClosedLoopControl()) {
             compressor.stop();
+            SmartDashboard.putBoolean("willCompress", false);
             return;
         }
     }
