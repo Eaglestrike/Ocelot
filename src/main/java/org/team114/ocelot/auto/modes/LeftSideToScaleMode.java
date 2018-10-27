@@ -48,7 +48,7 @@ public class LeftSideToScaleMode extends AutoModeBase {
             // outtake the cube
             runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
             runAction(new WaitAction(0.5));
-            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
+            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_SLOW));
         } else if (side == MatchData.OwnedSide.LEFT) {
             System.out.println("Running path to left scale");
             runAction(new PurePursuitAction(drive, rstate,
