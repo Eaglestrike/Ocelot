@@ -35,7 +35,16 @@ public class RightSideOnlyMode extends AutoModeBase {
         MatchData.OwnedSide scale = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
         MatchData.OwnedSide switch_ = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
 
-        if (scale == MatchData.OwnedSide.RIGHT) { // near side scale
+        if (switch_ == MatchData.OwnedSide.RIGHT) { // near switch
+            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
+            runAction(new PurePursuitAction(drive, rstate,
+                    PurePursuitFactory.loadPath("rightToRightSwitch"), 2));
+            runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
+            runAction(new WaitAction(0.5));
+            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
+            runAction(new WaitAction(0.7));
+            return;
+        } else if (scale == MatchData.OwnedSide.RIGHT) { // near side scale
             System.out.println("Running path to right scale");
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("rightToRightScale"), 2));
@@ -44,16 +53,6 @@ public class RightSideOnlyMode extends AutoModeBase {
             System.out.println("FINISHED MOVING THE LIFT");
             runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
             runAction(new WaitAction(0.7));
-            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
-            runAction(new WaitAction(0.7));
-            return;
-        } else
-            if (switch_ == MatchData.OwnedSide.RIGHT) { // near switch
-            runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
-            runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("rightToRightSwitch"), 2));
-            runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
-            runAction(new WaitAction(0.5));
             runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
             runAction(new WaitAction(0.7));
             return;

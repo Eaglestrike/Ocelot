@@ -35,19 +35,7 @@ public class LeftSideOnlyMode extends AutoModeBase {
         MatchData.OwnedSide scale = MatchData.getOwnedSide(MatchData.GameFeature.SCALE);
         MatchData.OwnedSide switch_ = MatchData.getOwnedSide(MatchData.GameFeature.SWITCH_NEAR);
 
-        if (scale == MatchData.OwnedSide.LEFT) { // near side scale
-            System.out.println("Running path to left scale");
-            runAction(new PurePursuitAction(drive, rstate,
-                    PurePursuitFactory.loadPath("leftToLeftScale"), 2));
-            System.out.println("PATH FINISHED");
-            runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
-            System.out.println("FINISHED MOVING THE LIFT");
-            runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
-            runAction(new WaitAction(0.7));
-            runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
-            runAction(new WaitAction(0.7));
-            return;
-        } else if (switch_ == MatchData.OwnedSide.LEFT) { // near switch
+        if (switch_ == MatchData.OwnedSide.LEFT) { // near switch
             runAction(new MoveLiftOneShotAction(sstruct, Settings.SuperStructure.AUTO_SWITCH_HEIGHT_TICKS));
             runAction(new PurePursuitAction(drive, rstate,
                     PurePursuitFactory.loadPath("leftToLeftSwitch"), 2));
@@ -56,6 +44,18 @@ public class LeftSideOnlyMode extends AutoModeBase {
             runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
             runAction(new WaitAction(0.7));
             return;
+        } else if (scale == MatchData.OwnedSide.LEFT) { // near side scale
+                System.out.println("Running path to left scale");
+                runAction(new PurePursuitAction(drive, rstate,
+                        PurePursuitFactory.loadPath("leftToLeftScale"), 2));
+                System.out.println("PATH FINISHED");
+                runAction(new MoveLiftAction(sstruct, Settings.SuperStructure.AUT0_SCALE_HEIGHT_TICKS));
+                System.out.println("FINISHED MOVING THE LIFT");
+                runAction(new ElevateIntakeOneShotAction(sstruct, CarriageElevationStage.MIDDLE));
+                runAction(new WaitAction(0.7));
+                runAction(new TriggerIntakeOneShotAction(sstruct, Superstructure.State.StateEnum.OUTTAKING, Settings.Carriage.OUTTAKE_COMMAND_NORMAL));
+                runAction(new WaitAction(0.7));
+                return;
         } else { // cross baseline
             runAction(new SetDriveCommandAction(drive, new DriveSignal(0.5, 0.5)));
             runAction(new WaitAction(2.9));

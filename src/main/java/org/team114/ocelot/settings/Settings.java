@@ -34,9 +34,9 @@ public final class Settings {
         private PurePursuit() {
             throw new AssertionError("Constructor must not be called on utility class.");
         }
-        public static final double CRUISE_VELOCITY = 8.0;
-        public static final double DISTANCE_DECAY_CONSTANT = 1.5;
-        public static final double MIN_SPEED = 2.3;
+        public static final double CRUISE_VELOCITY = 10.0;
+        public static final double DISTANCE_DECAY_CONSTANT = 1.4;
+        public static final double MIN_SPEED = 2.4;
     }
 
     public static final class Pneumatics {
